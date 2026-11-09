@@ -1,0 +1,31 @@
+/**
+ * DATOS DE DEMOSTRACIÓN — no son información comercial real.
+ * Todos se marcan con isDemo = true y el prefijo [DEMO] en su nombre.
+ * Precios y stock son ilustrativos para probar la plataforma.
+ */
+export const demoProducts = [
+  { sku: "DEMO-CPU-001", category: "procesadores", brand: "AMD", model: "Ryzen 5 (ejemplo)", name: "[DEMO] Procesador 6 núcleos", price: 650, compareAt: 720, stock: 6, featured: true, warranty: 12,
+    specs: [["Núcleos / hilos", "6 / 12"], ["Socket", "AM4"], ["Frecuencia", "Hasta 4.4 GHz"]] },
+  { sku: "DEMO-RAM-001", category: "memoria-ram", brand: "Kingston", model: "DDR4 (ejemplo)", name: "[DEMO] Memoria RAM 16 GB DDR4", price: 165, stock: 15, featured: true, warranty: 36,
+    specs: [["Capacidad", "16 GB"], ["Tipo", "DDR4"], ["Velocidad", "3200 MHz"]] },
+  { sku: "DEMO-SSD-001", category: "ssd-nvme", brand: "Samsung", model: "NVMe (ejemplo)", name: "[DEMO] SSD NVMe 1 TB", price: 320, compareAt: 360, stock: 8, featured: true, warranty: 36,
+    specs: [["Capacidad", "1 TB"], ["Interfaz", "PCIe 4.0 x4 NVMe"], ["Formato", "M.2 2280"]] },
+  { sku: "DEMO-SSD-002", category: "ssd-nvme", brand: "Crucial", model: "SATA (ejemplo)", name: "[DEMO] SSD SATA 500 GB", price: 150, stock: 2, warranty: 36,
+    specs: [["Capacidad", "500 GB"], ["Interfaz", "SATA III"], ["Formato", "2.5\""]] },
+  { sku: "DEMO-GPU-001", category: "tarjetas-graficas", brand: "NVIDIA", model: "GeForce (ejemplo)", name: "[DEMO] Tarjeta gráfica 8 GB", price: 1450, stock: 3, featured: true, warranty: 24,
+    specs: [["Memoria", "8 GB GDDR6"], ["Salidas", "HDMI, DisplayPort"], ["Consumo", "Aprox. 170 W"]] },
+  { sku: "DEMO-MON-001", category: "monitores", brand: "LG", model: "IPS 24 (ejemplo)", name: "[DEMO] Monitor 24\" IPS Full HD", price: 480, stock: 5, featured: true, warranty: 12,
+    specs: [["Tamaño", "24\""], ["Resolución", "1920 × 1080"], ["Panel", "IPS 75 Hz"]] },
+  { sku: "DEMO-KBD-001", category: "teclados", brand: "Logitech", model: "Mecánico (ejemplo)", name: "[DEMO] Teclado mecánico", price: 210, stock: 0, warranty: 12,
+    specs: [["Tipo", "Mecánico"], ["Conexión", "USB"], ["Distribución", "Español"]] },
+  { sku: "DEMO-MSE-001", category: "mouse", brand: "Logitech", model: "Inalámbrico (ejemplo)", name: "[DEMO] Mouse inalámbrico", price: 75, stock: 20, warranty: 12,
+    specs: [["Conexión", "Inalámbrica 2.4 GHz"], ["DPI", "Hasta 4000"]] },
+  { sku: "DEMO-PRN-001", category: "impresoras", brand: "Epson", model: "Tinta continua (ejemplo)", name: "[DEMO] Impresora multifuncional tinta continua", price: 899, stock: 4, featured: true, warranty: 12,
+    specs: [["Funciones", "Imprime, copia, escanea"], ["Conectividad", "USB, Wi-Fi"]] },
+  { sku: "DEMO-PSU-001", category: "fuentes", brand: "Corsair", model: "650W (ejemplo)", name: "[DEMO] Fuente de poder 650 W 80 Plus", price: 340, stock: 7, warranty: 36,
+    specs: [["Potencia", "650 W"], ["Certificación", "80 Plus Bronze"]] },
+  { sku: "DEMO-FAN-001", category: "refrigeracion", brand: "Cooler Master", model: "Torre (ejemplo)", name: "[DEMO] Disipador por aire tipo torre", price: 120, stock: 9, warranty: 12,
+    specs: [["Tipo", "Aire"], ["Ventilador", "120 mm"]] },
+  { sku: "DEMO-ACC-001", category: "accesorios", brand: "Genérico", model: "USB-C (ejemplo)", name: "[DEMO] Hub USB-C 6 en 1", price: 95, stock: 12, warranty: 6,
+    specs: [["Puertos", "HDMI, 3× USB-A, SD, USB-C PD"]] },
+] as const;

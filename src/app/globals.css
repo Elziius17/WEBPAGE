@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   ELZIIUS — Sistema de diseño
+   Paleta derivada del logotipo oficial (sin modificar sus colores):
+     navy   #0B223F  fondo del logotipo
+     bolt   #0099FF → #00D2FF → #66F0FF  rayo
+     slash  #0088EE → #00E5FF            doble barra
+   ============================================================================= */
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* Marca */
+  --color-brand-navy: #0b223f;
+  --color-brand-blue: #0099ff;
+  --color-brand-cyan: #00d2ff;
+  --color-brand-ice: #66f0ff;
+  --color-brand-slash: #00e5ff;
+  --color-brand-deep: #0088ee;
+
+  /* Superficies (derivadas del navy del logo) */
+  --color-ink-950: #040c18;
+  --color-ink-900: #071629;
+  --color-ink-850: #0b223f;
+  --color-ink-800: #0f2b4d;
+  --color-ink-700: #16385f;
+  --color-ink-600: #204a7a;
+  --color-ink-500: #2f5f95;
+
+  /* Texto */
+  --color-fg: #eaf2fb;
+  --color-fg-muted: #a3b6cd;
+  --color-fg-subtle: #6f88a6;
+
+  /* Estados */
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #38bdf8;
+
+  --radius-card: 1rem;
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pulse-glow: pulse-glow 3.5s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-brand-cyan) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-cyan);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  input[type="number"]::-webkit-inner-spin-button {
+    opacity: 0.4;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    background: linear-gradient(100deg, var(--color-brand-blue), var(--color-brand-cyan) 55%, var(--color-brand-ice));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .surface {
+    background: linear-gradient(180deg, rgb(15 43 77 / 0.55), rgb(11 34 63 / 0.35));
+    border: 1px solid rgb(255 255 255 / 0.07);
+    border-radius: var(--radius-card);
+  }
+  .surface-hover {
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .surface-hover:hover {
+    transform: translateY(-2px);
+    border-color: rgb(0 210 255 / 0.35);
+    box-shadow: 0 12px 40px -18px rgb(0 153 255 / 0.55);
+  }
+  .prose-legal h2 {
+    @apply mt-10 mb-3 text-xl font-semibold text-fg;
+  }
+  .prose-legal h3 {
+    @apply mt-6 mb-2 font-semibold text-fg;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    @apply leading-relaxed text-fg-muted;
+  }
+  .prose-legal ul {
+    @apply my-3 list-disc space-y-1.5 pl-6;
+  }
+  .prose-legal p {
+    @apply my-3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
