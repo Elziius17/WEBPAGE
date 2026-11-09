@@ -1,6 +1,6 @@
 import {
   Box, Building2, Cable, CircuitBoard, Code2, Cpu, Disc3, Fan, Gpu, HardDrive, Headset, Keyboard,
-  MemoryStick, Monitor, Mouse, PlugZap, Printer, Rocket, ShieldCheck, Wrench, Package, ScanSearch, Radar, BadgeCheck, Truck, type LucideIcon, type LucideProps,
+  MemoryStick, Monitor, Mouse, PlugZap, Printer, Rocket, ShieldCheck, Wrench, Package, ScanSearch, Radar, BadgeCheck, Truck, ClipboardList, PackageCheck, Lock, LayoutTemplate, Building, BookOpen, ShoppingBag, FormInput, MessageCircle, Smartphone, SearchCheck, Globe, type LucideIcon, type LucideProps,
 } from "lucide-react";
 
 /** Mapa estático de íconos usados en contenido dinámico (servicios, categorías). */
@@ -29,11 +29,23 @@ const ICONS: Record<string, LucideIcon> = {
   radar: Radar,
   "badge-check": BadgeCheck,
   truck: Truck,
+  "clipboard-list": ClipboardList,
+  "package-check": PackageCheck,
+  lock: Lock,
+  "layout-template": LayoutTemplate,
+  building: Building,
+  "book-open": BookOpen,
+  "shopping-bag": ShoppingBag,
+  "form-input": FormInput,
+  "message-circle": MessageCircle,
+  smartphone: Smartphone,
+  "search-check": SearchCheck,
+  globe: Globe,
 };
 
 export const ICON_NAMES = Object.keys(ICONS);
 
-export function DynamicIcon({ name, ...props }: { name?: string | null } & LucideProps) {
+export function DynamicIcon({ name, ...props }: { name?: string | null } & Omit<LucideProps, "name">) {
   const Icon = (name && ICONS[name]) || Package;
   return <Icon aria-hidden {...props} />;
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { consentSchema, nameSchema, optionalEmail, optionalText, phoneSchema, requiredEmail } from "./common";
+import { consentSchema, nameSchema, optionalEmail, optionalEnum, optionalText, phoneSchema, requiredEmail } from "./common";
 
 export const requestKinds = ["SERVICE", "QUOTE", "CONTACT", "PRODUCT_INQUIRY", "WEB_PROJECT", "COMPLAINT"] as const;
 
@@ -14,7 +14,7 @@ export const publicRequestSchema = z.object({
   deviceType: optionalText(60),
   subject: optionalText(150),
   message: z.string().trim().min(10, "Cuéntanos un poco más (mínimo 10 caracteres)").max(2000),
-  preferredContact: z.enum(["WHATSAPP", "PHONE", "EMAIL"]).optional(),
+  preferredContact: optionalEnum(["WHATSAPP", "PHONE", "EMAIL"]),
   consent: consentSchema,
   /** Campo trampa anti-bots: debe llegar vacío. */
   website: z.string().max(0).optional(),
@@ -52,3 +52,22 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Ingresa tu contraseña").max(128),
 });
 export type LoginInput = z.input<typeof loginSchema>;
+
+export const complaintSchema = z.object({
+  type: z.enum(["RECLAMO", "QUEJA"]),
+  name: nameSchema,
+  documentType: z.enum(["DNI", "CE", "PASSPORT", "RUC"]),
+  documentNumber: z.string().trim().min(6, "Documento inválido").max(15),
+  address: z.string().trim().min(5, "Ingresa tu domicilio").max(200),
+  phone: phoneSchema,
+  email: requiredEmail,
+  guardian: optionalText(120),
+  goodType: z.enum(["PRODUCTO", "SERVICIO"]),
+  amount: optionalText(20),
+  goodDescription: z.string().trim().min(3, "Describe el producto o servicio").max(300),
+  detail: z.string().trim().min(10, "Describe el detalle (mínimo 10 caracteres)").max(2000),
+  request: z.string().trim().min(5, "Indica tu pedido").max(1000),
+  consent: consentSchema,
+  website: z.string().max(0).optional(),
+});
+export type ComplaintInput = z.input<typeof complaintSchema>;

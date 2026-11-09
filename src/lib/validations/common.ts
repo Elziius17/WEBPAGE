@@ -72,3 +72,10 @@ export const checkbox = z
   .transform((v) => v === "on" || v === "true" || v === true);
 
 export const idSchema = z.string().min(1).max(40);
+
+/** Enum opcional que acepta "" (select vacío) como undefined. */
+export const optionalEnum = <const T extends readonly [string, ...string[]]>(values: T) =>
+  z
+    .union([z.enum(values), z.literal("")])
+    .optional()
+    .transform((v) => (v ? (v as T[number]) : undefined));
