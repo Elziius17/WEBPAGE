@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  NEXT_TELEMETRY_DISABLED: "1"
+  # Valores de relleno SOLO para compilar/probar en CI. No son secretos reales.
+  BETTER_AUTH_SECRET: ci-only-placeholder-secret-not-used-in-production-000000
+  BETTER_AUTH_URL: http://localhost:3000
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+jobs:
+  quality:
+    name: Tipos, lint, pruebas unitarias y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Verificar TypeScript
+        run: npm run typecheck
+      - name: ESLint
+        run: npm run lint
+      - name: Formato (Prettier)
+        run: npm run format:check
+      - name: Pruebas unitarias
+        run: npm test
+      - name: Build de producción
+        run: npm run build
+
+  integration:
+    name: Pruebas de integración (PostgreSQL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: elziius
+          POSTGRES_PASSWORD: elziius_ci
+          POSTGRES_DB: elziius_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U elziius" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL_TEST: postgresql://elziius:elziius_ci@localhost:5432/elziius_test?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Pruebas de integración
+        run: npm run test:integration
+
+  e2e:
+    name: Pruebas E2E (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: quality
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: elziius
+          POSTGRES_PASSWORD: elziius_ci
+          POSTGRES_DB: elziius
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U elziius" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      CI: "true"
+      DATABASE_URL: postgresql://elziius:elziius_ci@localhost:5432/elziius?schema=public
+      SEED_ADMIN_EMAIL: admin@elziius.local
+      SEED_ADMIN_PASSWORD: CiAdminPassword#2026
+      SEED_DEMO_DATA: "true"
+      STORAGE_DRIVER: local
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Migraciones y datos iniciales
+        run: npx prisma migrate deploy && npm run db:seed
+      - run: npm run build
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Ejecutar E2E
+        run: npm run test:e2e -- --trace off
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7

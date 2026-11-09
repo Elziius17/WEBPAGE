@@ -1,0 +1,988 @@
+// =============================================================================
+// ELZIIUS — Esquema de base de datos (PostgreSQL + Prisma 7)
+// Convenciones:
+//   * Montos en céntimos de PEN (Int) para evitar errores de coma flotante.
+//   * Fechas en UTC; se presentan en America/Lima.
+//   * Eliminación lógica (deletedAt) en entidades de catálogo y clientes.
+//   * Restricciones CHECK adicionales (stock >= 0, etc.) en las migraciones SQL.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// Identidad, autenticación (Better Auth) y RBAC
+// -----------------------------------------------------------------------------
+
+enum RoleKey {
+  ADMIN
+  TECHNICIAN
+  SALES
+  CUSTOMER
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  key         RoleKey          @unique
+  name        String
+  description String?
+  users       User[]
+  permissions RolePermission[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  key         String           @unique // p.ej. "products:write"
+  description String?
+  roles       RolePermission[]
+  createdAt   DateTime         @default(now())
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+/// Usuario de la plataforma (tabla gestionada también por Better Auth).
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  role          RoleKey  @default(CUSTOMER)
+  roleRef       Role     @relation(fields: [role], references: [key])
+  active        Boolean  @default(true)
+  phone         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions   Session[]
+  accounts   Account[]
+  customer   Customer?
+  technician Technician?
+
+  auditLogs           AuditLog[]
+  inventoryMovements  InventoryMovement[]
+  serviceOrderHistory ServiceOrderHistory[]
+  createdOrders       ServiceOrder[]          @relation("ServiceOrderCreatedBy")
+  diagnoses           Diagnosis[]
+  approvalsRecorded   ServiceApproval[]
+  repairTasks         RepairTask[]
+  qualityChecks       QualityChecklist[]
+  attachments         Attachment[]
+  orderHistory        OrderHistory[]
+  paymentsVerified    Payment[]
+  shipmentEvents      ShipmentTracking[]
+  notifications       Notification[]
+  configUpdates       BusinessConfiguration[]
+
+  @@index([role])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  /// Hash de la contraseña (scrypt, gestionado por Better Auth). Nunca texto plano.
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+/// Ventana de rate limiting (compartida por Better Auth y el limitador propio).
+model RateLimit {
+  id          String @id
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+}
+
+// -----------------------------------------------------------------------------
+// Clientes y técnicos
+// -----------------------------------------------------------------------------
+
+enum CustomerType {
+  PERSON
+  COMPANY
+}
+
+enum DocumentType {
+  DNI
+  RUC
+  CE
+  PASSPORT
+}
+
+model Customer {
+  id             String        @id @default(cuid())
+  userId         String?       @unique
+  user           User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type           CustomerType  @default(PERSON)
+  fullName       String
+  companyName    String?
+  documentType   DocumentType?
+  documentNumber String?
+  email          String?
+  phone          String
+  /// Notas internas: nunca se exponen al cliente.
+  internalNotes  String?
+  isDemo         Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  addresses       Address[]
+  orders          Order[]
+  serviceOrders   ServiceOrder[]
+  serviceRequests ServiceRequest[]
+  notifications   Notification[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([fullName])
+}
+
+model Technician {
+  id        String         @id @default(cuid())
+  userId    String         @unique
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty String?
+  active    Boolean        @default(true)
+  orders    ServiceOrder[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model Address {
+  id            String     @id @default(cuid())
+  customerId    String
+  customer      Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  label         String?
+  recipientName String
+  phone         String
+  line1         String
+  line2         String?
+  district      String
+  province      String
+  department    String
+  reference     String?
+  postalCode    String?
+  deliveries    Delivery[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([customerId])
+}
+
+// -----------------------------------------------------------------------------
+// Catálogo e inventario
+// -----------------------------------------------------------------------------
+
+model Category {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  name        String
+  description String?
+  icon        String?
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children    Category[] @relation("CategoryTree")
+  sortOrder   Int        @default(0)
+  active      Boolean    @default(true)
+  products    Product[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
+}
+
+model Supplier {
+  id          String              @id @default(cuid())
+  name        String
+  ruc         String?             @unique
+  contactName String?
+  phone       String?
+  email       String?
+  address     String?
+  notes       String?
+  active      Boolean             @default(true)
+  products    Product[]
+  movements   InventoryMovement[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
+
+enum ProductCondition {
+  NEW
+  REFURBISHED
+  USED
+}
+
+model Product {
+  id                  String           @id @default(cuid())
+  sku                 String           @unique
+  slug                String           @unique
+  name                String
+  brand               String
+  model               String?
+  categoryId          String
+  category            Category         @relation(fields: [categoryId], references: [id])
+  supplierId          String?
+  supplier            Supplier?        @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  shortDescription    String?
+  description         String
+  /// Lista de especificaciones [{ label, value }].
+  specs               Json             @default("[]")
+  priceCents          Int
+  /// Precio anterior para mostrar promociones (opcional).
+  compareAtPriceCents Int?
+  costCents           Int?
+  /// Existencias físicas.
+  stock               Int              @default(0)
+  /// Unidades reservadas por pedidos confirmados aún no entregados.
+  reserved            Int              @default(0)
+  minStock            Int              @default(1)
+  status              ProductStatus    @default(DRAFT)
+  condition           ProductCondition @default(NEW)
+  featured            Boolean          @default(false)
+  warrantyMonths      Int              @default(0)
+  warrantyNotes       String?
+  weightGrams         Int?
+  isDemo              Boolean          @default(false)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  deletedAt           DateTime?
+
+  images          ProductImage[]
+  movements       InventoryMovement[]
+  orderItems      OrderItem[]
+  replacementUses ReplacementPart[]
+  inquiries       ServiceRequest[]
+
+  @@index([categoryId])
+  @@index([status, featured])
+  @@index([brand])
+  @@index([name])
+}
+
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url        String
+  storageKey String?
+  alt        String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([productId])
+}
+
+enum InventoryMovementType {
+  ENTRY // Ingreso de mercadería
+  EXIT // Salida manual (merma, uso interno)
+  ADJUSTMENT // Ajuste de conteo (requiere motivo)
+  RESERVATION // Reserva por pedido confirmado
+  RELEASE // Liberación de reserva (cancelación)
+  SALE // Venta entregada (descuenta stock y reserva)
+  RETURN // Devolución al inventario
+  SERVICE_USE // Repuesto usado en una orden de servicio
+}
+
+model InventoryMovement {
+  id             String                @id @default(cuid())
+  productId      String
+  product        Product               @relation(fields: [productId], references: [id])
+  type           InventoryMovementType
+  /// Variación aplicada al stock físico (puede ser 0 en reservas).
+  stockDelta     Int
+  /// Variación aplicada a las unidades reservadas.
+  reservedDelta  Int                   @default(0)
+  stockAfter     Int
+  reservedAfter  Int
+  unitCostCents  Int?
+  reason         String?
+  reference      String?
+  userId         String?
+  user           User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+  supplierId     String?
+  supplier       Supplier?             @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  orderId        String?
+  order          Order?                @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  serviceOrderId String?
+  serviceOrder   ServiceOrder?         @relation(fields: [serviceOrderId], references: [id], onDelete: SetNull)
+  createdAt      DateTime              @default(now())
+
+  @@index([productId, createdAt])
+  @@index([type])
+  @@index([orderId])
+}
+
+// -----------------------------------------------------------------------------
+// Pedidos, pagos y entregas
+// -----------------------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING_CONFIRMATION
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum DeliveryMethod {
+  PICKUP
+  COURIER
+}
+
+model Order {
+  id             String         @id @default(cuid())
+  code           String         @unique
+  customerId     String
+  customer       Customer       @relation(fields: [customerId], references: [id])
+  status         OrderStatus    @default(PENDING_CONFIRMATION)
+  deliveryMethod DeliveryMethod
+  subtotalCents  Int
+  /// Costo de envío: null hasta que ELZIIUS lo cotice.
+  shippingCents  Int?
+  totalCents     Int
+  contactName    String
+  contactEmail   String?
+  contactPhone   String
+  customerNotes  String?
+  internalNotes  String?
+  /// Clave de idempotencia generada en el checkout para evitar duplicados.
+  idempotencyKey String         @unique
+  confirmedAt    DateTime?
+  completedAt    DateTime?
+  cancelledAt    DateTime?
+  cancelReason   String?
+  isDemo         Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  items     OrderItem[]
+  payments  Payment[]
+  delivery  Delivery?
+  history   OrderHistory[]
+  movements InventoryMovement[]
+
+  @@index([status, createdAt])
+  @@index([customerId])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id             String  @id @default(cuid())
+  orderId        String
+  order          Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product @relation(fields: [productId], references: [id])
+  /// Instantánea del producto al momento del pedido.
+  productName    String
+  sku            String
+  unitPriceCents Int
+  quantity       Int
+  lineTotalCents Int
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderHistory {
+  id         String       @id @default(cuid())
+  orderId    String
+  order      Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  fromStatus OrderStatus?
+  toStatus   OrderStatus
+  note       String?
+  userId     String?
+  user       User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime     @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+enum PaymentMethod {
+  WHATSAPP_COORDINATION
+  BANK_TRANSFER
+  DIGITAL_WALLET
+  CASH_ON_PICKUP
+  GATEWAY
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  REFUNDED
+}
+
+/// Registro de pago. NO almacena datos de tarjetas: solo método, monto y referencia verificada.
+model Payment {
+  id           String        @id @default(cuid())
+  orderId      String
+  order        Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method       PaymentMethod
+  status       PaymentStatus @default(PENDING)
+  amountCents  Int
+  reference    String?
+  notes        String?
+  verifiedById String?
+  verifiedBy   User?         @relation(fields: [verifiedById], references: [id], onDelete: SetNull)
+  verifiedAt   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([orderId])
+}
+
+enum DeliveryStatus {
+  PENDING_COORDINATION
+  PENDING_PAYMENT
+  CONFIRMED
+  PREPARING
+  READY_FOR_PICKUP
+  DISPATCHED
+  IN_TRANSIT
+  OUT_FOR_DELIVERY
+  DELIVERED
+  INCIDENT
+  CANCELLED
+}
+
+model Courier {
+  id                  String     @id @default(cuid())
+  name                String     @unique
+  website             String?
+  phone               String?
+  /// Plantilla de URL de rastreo, p.ej. "https://courier.pe/track?guia={code}".
+  trackingUrlTemplate String?
+  notes               String?
+  active              Boolean    @default(true)
+  deliveries          Delivery[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+}
+
+model DeliveryZone {
+  id            String     @id @default(cuid())
+  name          String     @unique
+  description   String?
+  /// Costo referencial configurado por ELZIIUS (null = cotizar caso a caso).
+  baseCostCents Int?
+  /// Tiempo estimado configurado por ELZIIUS (texto libre, opcional).
+  estimatedTime String?
+  active        Boolean    @default(true)
+  deliveries    Delivery[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Delivery {
+  id             String         @id @default(cuid())
+  orderId        String         @unique
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method         DeliveryMethod
+  status         DeliveryStatus @default(PENDING_COORDINATION)
+  addressId      String?
+  address        Address?       @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  zoneId         String?
+  zone           DeliveryZone?  @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  courierId      String?
+  courier        Courier?       @relation(fields: [courierId], references: [id], onDelete: SetNull)
+  recipientName  String
+  recipientPhone String
+  pickupLocation String?
+  scheduledAt    DateTime?
+  costCents      Int?
+  weightGrams    Int?
+  lengthCm       Int?
+  widthCm        Int?
+  heightCm       Int?
+  trackingNumber String?
+  dispatchedAt   DateTime?
+  deliveredAt    DateTime?
+  receivedBy     String?
+  notes          String?
+  incidentNotes  String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  tracking    ShipmentTracking[]
+  attachments Attachment[]
+
+  @@index([status])
+  @@index([method])
+}
+
+model ShipmentTracking {
+  id          String         @id @default(cuid())
+  deliveryId  String
+  delivery    Delivery       @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  status      DeliveryStatus
+  description String?
+  location    String?
+  occurredAt  DateTime       @default(now())
+  createdById String?
+  createdBy   User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime       @default(now())
+
+  @@index([deliveryId, occurredAt])
+}
+
+// -----------------------------------------------------------------------------
+// Servicios técnicos
+// -----------------------------------------------------------------------------
+
+model Service {
+  id                  String    @id @default(cuid())
+  slug                String    @unique
+  code                String    @unique // "01", "02"...
+  name                String
+  shortDescription    String
+  description         String
+  icon                String    @default("wrench")
+  imageUrl            String?
+  benefits            String[]
+  activities          String[]
+  procedure           String[]
+  /// Tiempo estimado configurable (texto libre definido por ELZIIUS).
+  estimatedTime       String?
+  /// Precio referencial opcional en céntimos.
+  referencePriceCents Int?
+  priceNote           String?
+  whatsappMessage     String?
+  active              Boolean   @default(true)
+  sortOrder           Int       @default(0)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  deletedAt           DateTime?
+
+  requests ServiceRequest[]
+  orders   ServiceOrder[]
+}
+
+enum RequestKind {
+  SERVICE
+  QUOTE
+  CONTACT
+  PRODUCT_INQUIRY
+  WEB_PROJECT
+  COMPLAINT
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  CLOSED
+}
+
+/// Solicitudes entrantes desde formularios públicos.
+model ServiceRequest {
+  id               String        @id @default(cuid())
+  kind             RequestKind
+  status           RequestStatus @default(NEW)
+  serviceId        String?
+  service          Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  productId        String?
+  product          Product?      @relation(fields: [productId], references: [id], onDelete: SetNull)
+  customerId       String?
+  customer         Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  name             String
+  email            String?
+  phone            String
+  company          String?
+  deviceType       String?
+  subject          String?
+  message          String
+  preferredContact String?
+  consentAt        DateTime
+  handledNotes     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([kind, status])
+  @@index([createdAt])
+}
+
+enum ServiceOrderStatus {
+  REQUESTED
+  RECEIVED
+  IN_DIAGNOSIS
+  QUOTE_SENT
+  PENDING_APPROVAL
+  APPROVED
+  IN_REPAIR
+  IN_TESTING
+  READY_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum DeviceType {
+  DESKTOP
+  LAPTOP
+  ALL_IN_ONE
+  PRINTER
+  MONITOR
+  PERIPHERAL
+  OTHER
+}
+
+enum ServiceDeliveryMode {
+  PICKUP_AT_STORE
+  HOME_DELIVERY
+  COURIER
+}
+
+model ServiceOrder {
+  id                     String              @id @default(cuid())
+  /// Código público de seguimiento: aleatorio, no secuencial.
+  code                   String              @unique
+  status                 ServiceOrderStatus  @default(RECEIVED)
+  customerId             String
+  customer               Customer            @relation(fields: [customerId], references: [id])
+  serviceId              String?
+  service                Service?            @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  technicianId           String?
+  technician             Technician?         @relation(fields: [technicianId], references: [id], onDelete: SetNull)
+  deviceType             DeviceType
+  brand                  String
+  model                  String?
+  serialNumber           String?
+  accessories            String?
+  physicalCondition      String?
+  reportedIssue          String
+  /// Solo se registra si el cliente entregó acceso; la contraseña NUNCA se almacena.
+  accessProvided         Boolean             @default(false)
+  dataBackupAuthorized   Boolean             @default(false)
+  receivedAt             DateTime            @default(now())
+  estimatedReadyAt       DateTime?
+  deliveryMode           ServiceDeliveryMode @default(PICKUP_AT_STORE)
+  /// Observaciones visibles para el cliente en /seguimiento.
+  publicNotes            String?
+  /// Notas internas: nunca se exponen públicamente.
+  internalNotes          String?
+  finalResult            String?
+  completedAt            DateTime?
+  deliveredAt            DateTime?
+  warrantyDays           Int?
+  warrantyTerms          String?
+  closingRecommendations String?
+  customerConformity     Boolean?
+  conformityNotes        String?
+  cancelledAt            DateTime?
+  cancelReason           String?
+  isDemo                 Boolean             @default(false)
+  createdById            String?
+  createdBy              User?               @relation("ServiceOrderCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  history     ServiceOrderHistory[]
+  diagnoses   Diagnosis[]
+  approvals   ServiceApproval[]
+  repairTasks RepairTask[]
+  parts       ReplacementPart[]
+  quality     QualityChecklist[]
+  attachments Attachment[]
+  movements   InventoryMovement[]
+
+  @@index([status, receivedAt])
+  @@index([customerId])
+  @@index([technicianId])
+}
+
+model ServiceOrderHistory {
+  id         String              @id @default(cuid())
+  orderId    String
+  order      ServiceOrder        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  fromStatus ServiceOrderStatus?
+  toStatus   ServiceOrderStatus?
+  /// Texto del evento. Si isPublic = false, solo lo ve el personal.
+  note       String?
+  isPublic   Boolean             @default(true)
+  userId     String?
+  user       User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt  DateTime            @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+model Diagnosis {
+  id                 String            @id @default(cuid())
+  orderId            String
+  order              ServiceOrder      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  findings           String
+  testsPerformed     String?
+  affectedComponents String?
+  technicalDiagnosis String
+  /// Resumen autorizado para mostrarse al cliente.
+  publicSummary      String?
+  budgetCents        Int?
+  estimatedTime      String?
+  recommendations    String?
+  userId             String?
+  user               User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  approvals          ServiceApproval[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  @@index([orderId])
+}
+
+enum ApprovalDecision {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model ServiceApproval {
+  id           String           @id @default(cuid())
+  orderId      String
+  order        ServiceOrder     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  diagnosisId  String?
+  diagnosis    Diagnosis?       @relation(fields: [diagnosisId], references: [id], onDelete: SetNull)
+  budgetCents  Int
+  description  String
+  sentAt       DateTime         @default(now())
+  sentVia      String?
+  decision     ApprovalDecision @default(PENDING)
+  respondedAt  DateTime?
+  /// Evidencia de autorización (p.ej. "Confirmado por WhatsApp 09/11 15:20").
+  evidence     String?
+  evidenceUrl  String?
+  recordedById String?
+  recordedBy   User?            @relation(fields: [recordedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([orderId])
+}
+
+model RepairTask {
+  id          String            @id @default(cuid())
+  orderId     String
+  order       ServiceOrder      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  description String
+  notes       String?
+  performedAt DateTime          @default(now())
+  userId      String?
+  user        User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  parts       ReplacementPart[]
+  createdAt   DateTime          @default(now())
+
+  @@index([orderId])
+}
+
+model ReplacementPart {
+  id             String       @id @default(cuid())
+  orderId        String
+  order          ServiceOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  repairTaskId   String?
+  repairTask     RepairTask?  @relation(fields: [repairTaskId], references: [id], onDelete: SetNull)
+  productId      String?
+  product        Product?     @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name           String
+  quantity       Int          @default(1)
+  unitPriceCents Int?
+  serialNumber   String?
+  /// true si se descontó del inventario de ELZIIUS.
+  fromInventory  Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  @@index([orderId])
+}
+
+enum CheckResult {
+  PASS
+  FAIL
+  NOT_APPLICABLE
+}
+
+model QualityChecklist {
+  id            String             @id @default(cuid())
+  orderId       String
+  order         ServiceOrder       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  passed        Boolean
+  notes         String?
+  performedById String?
+  performedBy   User?              @relation(fields: [performedById], references: [id], onDelete: SetNull)
+  performedAt   DateTime           @default(now())
+  items         QualityCheckItem[]
+
+  @@index([orderId])
+}
+
+model QualityCheckItem {
+  id          String           @id @default(cuid())
+  checklistId String
+  checklist   QualityChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  label       String
+  result      CheckResult
+  notes       String?
+}
+
+enum AttachmentKind {
+  RECEPTION_PHOTO
+  DIAGNOSIS_PHOTO
+  REPAIR_PHOTO
+  APPROVAL_EVIDENCE
+  SHIPPING_PROOF
+  OTHER
+}
+
+model Attachment {
+  id             String         @id @default(cuid())
+  kind           AttachmentKind
+  storageKey     String         @unique
+  fileName       String
+  mimeType       String
+  sizeBytes      Int
+  /// Si es true, la imagen puede verse en el seguimiento público.
+  isPublic       Boolean        @default(false)
+  serviceOrderId String?
+  serviceOrder   ServiceOrder?  @relation(fields: [serviceOrderId], references: [id], onDelete: Cascade)
+  deliveryId     String?
+  delivery       Delivery?      @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  uploadedById   String?
+  uploadedBy     User?          @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt      DateTime       @default(now())
+
+  @@index([serviceOrderId])
+  @@index([deliveryId])
+}
+
+// -----------------------------------------------------------------------------
+// Transversal
+// -----------------------------------------------------------------------------
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+  IN_APP
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model Notification {
+  id          String              @id @default(cuid())
+  channel     NotificationChannel
+  status      NotificationStatus  @default(PENDING)
+  userId      String?
+  user        User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerId  String?
+  customer    Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  subject     String?
+  body        String
+  relatedType String?
+  relatedId   String?
+  error       String?
+  sentAt      DateTime?
+  readAt      DateTime?
+  createdAt   DateTime            @default(now())
+
+  @@index([status])
+  @@index([userId, readAt])
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  authorName String
+  authorRole String?
+  content    String
+  rating     Int      @default(5)
+  approved   Boolean  @default(false)
+  isDemo     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  before    Json?
+  after     Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model BusinessConfiguration {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  updatedById String?
+  updatedBy   User?    @relation(fields: [updatedById], references: [id], onDelete: SetNull)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="325 85 350 350" width="350" height="350">
+  <defs>
+    <linearGradient id="boltGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0099FF"/>
+      <stop offset="50%" stop-color="#00D2FF"/>
+      <stop offset="100%" stop-color="#66F0FF"/>
+    </linearGradient>
+    <linearGradient id="slashGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0088EE"/>
+      <stop offset="100%" stop-color="#00E5FF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(500, 260)">
+    <!-- Hexágono exterior abierto por el rayo -->
+    <!-- Mitad Superior Izquierda -->
+    <polygon points="0,-165 -142,-82 -142,82 -76,121 -66,105 -123,71 -123,-71 0,-142 54,-111 64,-127" fill="#FFFFFF"/>
+    <!-- Mitad Inferior Derecha -->
+    <polygon points="88,-113 142,-82 142,82 0,165 -48,137 -38,121 0,142 123,71 123,-71 78,-97" fill="#FFFFFF"/>
+
+    <!-- Letra E izquierda (recortada en diagonal) -->
+    <polygon points="-102,-65 -15,-65 -33,-38 -75,-38 -75,-13 -45,-13 -61,12 -75,12 -75,38 -52,38 -69,65 -102,65" fill="#FFFFFF"/>
+
+    <!-- Letra Z derecha (recortada en diagonal) -->
+    <polygon points="48,-65 102,-65 102,-38 35,38 102,38 102,65 -18,65 -2,38 64,-38 31,-38" fill="#FFFFFF"/>
+
+    <!-- Rayo Cian Eléctrico Central -->
+    <polygon points="95,-175 -18,-10 12,-10 -95,175 22,5 -10,5" fill="url(#boltGrad)"/>
+  </g>
+</svg>
