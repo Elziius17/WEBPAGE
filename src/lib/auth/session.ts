@@ -15,7 +15,16 @@ export type CurrentUser = {
 
 /** Usuario autenticado y activo, o null. Memorizado por petición. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  let session: Awaited<ReturnType<typeof auth.api.getSession>>;
+  try {
+    session = await auth.api.getSession({ headers: await headers() });
+  } catch (err) {
+    // Un error de configuración de autenticación no debe tumbar el sitio público:
+    // se registra y el visitante se trata como anónimo (las zonas privadas siguen cerradas).
+    if (err && typeof err === "object" && "digest" in err) throw err;
+    console.error("[auth] No se pudo leer la sesión:", err instanceof Error ? err.message : err);
+    return null;
+  }
   if (!session) return null;
   const u = session.user as typeof session.user & { role?: string; active?: boolean };
   if (u.active === false) return null;
