@@ -1,6 +1,10 @@
 "use server";
 
-import { complaintSchema, publicRequestSchema, trackingLookupSchema } from "@/lib/validations/public";
+import {
+  complaintSchema,
+  publicRequestSchema,
+  trackingLookupSchema,
+} from "@/lib/validations/public";
 import { db } from "@/lib/db";
 import { checkoutSchema } from "@/lib/validations/checkout";
 import { handleActionError, validationError, type ActionResult } from "@/lib/actions";
@@ -18,7 +22,11 @@ export async function submitPublicRequest(input: unknown): Promise<ActionResult>
     // Honeypot: los bots completan el campo oculto "website".
     if (parsed.data.website) return { ok: true, message: "Solicitud recibida." };
     const rl = await rateLimitByIp("public-request", { limit: 5, windowSeconds: 600 });
-    if (!rl.ok) return { ok: false, error: `Demasiadas solicitudes. Intenta en ${Math.ceil(rl.retryAfterSeconds / 60)} min.` };
+    if (!rl.ok)
+      return {
+        ok: false,
+        error: `Demasiadas solicitudes. Intenta en ${Math.ceil(rl.retryAfterSeconds / 60)} min.`,
+      };
     await createPublicRequest(parsed.data);
     return { ok: true, message: "¡Gracias! Recibimos tu solicitud y te contactaremos pronto." };
   } catch (e) {
@@ -32,10 +40,19 @@ export async function lookupTracking(input: unknown): Promise<ActionResult<Publi
     if (!parsed.success) return validationError(parsed.error);
     // Límite estricto contra enumeración de códigos.
     const rl = await rateLimitByIp("tracking", { limit: 10, windowSeconds: 600 });
-    if (!rl.ok) return { ok: false, error: `Demasiados intentos. Intenta nuevamente en ${Math.ceil(rl.retryAfterSeconds / 60)} min.` };
+    if (!rl.ok)
+      return {
+        ok: false,
+        error: `Demasiados intentos. Intenta nuevamente en ${Math.ceil(rl.retryAfterSeconds / 60)} min.`,
+      };
     const result = await findPublicTracking(parsed.data.code, parsed.data.verifier);
     // Mensaje genérico: no revela si el código existe.
-    if (!result) return { ok: false, error: "No encontramos una orden con esos datos. Verifica el código y el correo o teléfono registrado." };
+    if (!result)
+      return {
+        ok: false,
+        error:
+          "No encontramos una orden con esos datos. Verifica el código y el correo o teléfono registrado.",
+      };
     return { ok: true, data: result };
   } catch (e) {
     return handleActionError(e);
@@ -70,12 +87,19 @@ export async function getCartSnapshot(ids: unknown): Promise<CartSnapshotItem[]>
   }));
 }
 
-export async function placeOrder(input: unknown): Promise<ActionResult<{ code: string; totalCents: number }>> {
+export async function placeOrder(
+  input: unknown,
+): Promise<ActionResult<{ code: string; totalCents: number }>> {
   try {
     const parsed = checkoutSchema.safeParse(input);
     if (!parsed.success) return validationError(parsed.error);
     const rl = await rateLimitByIp("checkout", { limit: 6, windowSeconds: 900 });
-    if (!rl.ok) return { ok: false, error: "Has registrado varios pedidos seguidos. Intenta en unos minutos o escríbenos por WhatsApp." };
+    if (!rl.ok)
+      return {
+        ok: false,
+        error:
+          "Has registrado varios pedidos seguidos. Intenta en unos minutos o escríbenos por WhatsApp.",
+      };
     const user = await getCurrentUser();
     const order = await createOrder(parsed.data, user?.id ?? null);
     return { ok: true, data: { code: order.code, totalCents: order.totalCents } };
@@ -84,13 +108,16 @@ export async function placeOrder(input: unknown): Promise<ActionResult<{ code: s
   }
 }
 
-export async function submitComplaint(input: unknown): Promise<ActionResult<{ code: string; createdAt: string }>> {
+export async function submitComplaint(
+  input: unknown,
+): Promise<ActionResult<{ code: string; createdAt: string }>> {
   try {
     const parsed = complaintSchema.safeParse(input);
     if (!parsed.success) return validationError(parsed.error);
     if (parsed.data.website) return { ok: false, error: "Solicitud inválida." };
     const rl = await rateLimitByIp("complaint", { limit: 3, windowSeconds: 3600 });
-    if (!rl.ok) return { ok: false, error: "Has enviado varias hojas de reclamación. Intenta más tarde." };
+    if (!rl.ok)
+      return { ok: false, error: "Has enviado varias hojas de reclamación. Intenta más tarde." };
     const d = parsed.data;
     const lines = [
       `Tipo: ${d.type}`,
@@ -116,7 +143,12 @@ export async function submitComplaint(input: unknown): Promise<ActionResult<{ co
       },
     });
     const code = `LR-${new Date().getFullYear()}-${r.id.slice(-8).toUpperCase()}`;
-    await db.serviceRequest.update({ where: { id: r.id }, data: { subject: `${code} · ${d.type === "RECLAMO" ? "Reclamo" : "Queja"} — ${d.goodType.toLowerCase()}` } });
+    await db.serviceRequest.update({
+      where: { id: r.id },
+      data: {
+        subject: `${code} · ${d.type === "RECLAMO" ? "Reclamo" : "Queja"} — ${d.goodType.toLowerCase()}`,
+      },
+    });
     return { ok: true, data: { code, createdAt: r.createdAt.toISOString() } };
   } catch (e) {
     return handleActionError(e);

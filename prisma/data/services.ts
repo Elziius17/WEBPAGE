@@ -101,7 +101,8 @@ export const servicesSeed = [
     slug: "instalacion-de-software",
     name: "Instalación de software",
     icon: "disc-3",
-    shortDescription: "Sistemas operativos, drivers, ofimática, antivirus y software especializado.",
+    shortDescription:
+      "Sistemas operativos, drivers, ofimática, antivirus y software especializado.",
     description:
       "Instalamos y configuramos el software que necesitas, con licencias proporcionadas o adquiridas por el cliente. Dejamos tu equipo listo para trabajar, con drivers actualizados y configuraciones seguras.",
     benefits: [

@@ -22,7 +22,10 @@ export function Alert({
 }) {
   const { cls, Icon } = styles[tone];
   return (
-    <div role={tone === "danger" ? "alert" : "status"} className={cn("flex gap-3 rounded-xl border p-4 text-sm", cls, className)}>
+    <div
+      role={tone === "danger" ? "alert" : "status"}
+      className={cn("flex gap-3 rounded-xl border p-4 text-sm", cls, className)}
+    >
       <Icon className="mt-0.5 size-4 shrink-0" aria-hidden />
       <div className="space-y-1">
         {title && <p className="font-semibold">{title}</p>}

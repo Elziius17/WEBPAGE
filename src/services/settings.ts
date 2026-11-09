@@ -14,7 +14,10 @@ export const businessSettingsSchema = z.object({
     .regex(/^\d{0,15}$/, "Solo dígitos, formato internacional sin + (p.ej. 51987654321)")
     .optional()
     .default(""),
-  email: z.union([z.literal(""), z.email("Correo inválido")]).optional().default(""),
+  email: z
+    .union([z.literal(""), z.email("Correo inválido")])
+    .optional()
+    .default(""),
   phone: z.string().trim().max(30).optional().default(""),
   address: z.string().trim().max(200).optional().default(""),
   city: z.string().trim().max(80).optional().default(""),
@@ -23,9 +26,18 @@ export const businessSettingsSchema = z.object({
   courierNotes: z.string().trim().max(500).optional().default(""),
   serviceWarrantyDays: z.coerce.number().int().min(0).max(365).optional().default(0),
   warrantyText: z.string().trim().max(1500).optional().default(""),
-  facebook: z.union([z.literal(""), z.url()]).optional().default(""),
-  instagram: z.union([z.literal(""), z.url()]).optional().default(""),
-  tiktok: z.union([z.literal(""), z.url()]).optional().default(""),
+  facebook: z
+    .union([z.literal(""), z.url()])
+    .optional()
+    .default(""),
+  instagram: z
+    .union([z.literal(""), z.url()])
+    .optional()
+    .default(""),
+  tiktok: z
+    .union([z.literal(""), z.url()])
+    .optional()
+    .default(""),
 });
 
 export type BusinessSettings = z.infer<typeof businessSettingsSchema>;
@@ -84,7 +96,16 @@ export const getQcTemplate = cache(async (): Promise<string[]> => {
 /** Subconjunto seguro para enviar al cliente (componentes públicos). */
 export type PublicBusinessInfo = Pick<
   BusinessSettings,
-  "commercialName" | "whatsapp" | "email" | "phone" | "address" | "city" | "schedule" | "facebook" | "instagram" | "tiktok"
+  | "commercialName"
+  | "whatsapp"
+  | "email"
+  | "phone"
+  | "address"
+  | "city"
+  | "schedule"
+  | "facebook"
+  | "instagram"
+  | "tiktok"
 >;
 
 export async function getPublicBusinessInfo(): Promise<PublicBusinessInfo> {

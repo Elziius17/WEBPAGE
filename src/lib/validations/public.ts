@@ -1,7 +1,22 @@
 import { z } from "zod";
-import { consentSchema, nameSchema, optionalEmail, optionalEnum, optionalText, phoneSchema, requiredEmail } from "./common";
+import {
+  consentSchema,
+  nameSchema,
+  optionalEmail,
+  optionalEnum,
+  optionalText,
+  phoneSchema,
+  requiredEmail,
+} from "./common";
 
-export const requestKinds = ["SERVICE", "QUOTE", "CONTACT", "PRODUCT_INQUIRY", "WEB_PROJECT", "COMPLAINT"] as const;
+export const requestKinds = [
+  "SERVICE",
+  "QUOTE",
+  "CONTACT",
+  "PRODUCT_INQUIRY",
+  "WEB_PROJECT",
+  "COMPLAINT",
+] as const;
 
 export const publicRequestSchema = z.object({
   kind: z.enum(requestKinds),

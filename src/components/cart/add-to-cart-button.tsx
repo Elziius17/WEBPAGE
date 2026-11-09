@@ -34,7 +34,15 @@ export function AddToCartButton({
       className={compact ? "" : "w-full sm:w-auto"}
     >
       {added ? <Check /> : <ShoppingCart />}
-      {compact ? (added ? "Agregado" : "Agregar") : available <= 0 ? "Sin stock" : added ? "Agregado al carrito" : "Agregar al carrito"}
+      {compact
+        ? added
+          ? "Agregado"
+          : "Agregar"
+        : available <= 0
+          ? "Sin stock"
+          : added
+            ? "Agregado al carrito"
+            : "Agregar al carrito"}
     </Button>
   );
 }

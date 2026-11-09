@@ -4,7 +4,8 @@ export const protocols = [
     slug: "recepcion",
     title: "Recepción",
     icon: "clipboard-list",
-    summary: "Registramos tu equipo con detalle para garantizar trazabilidad desde el primer minuto.",
+    summary:
+      "Registramos tu equipo con detalle para garantizar trazabilidad desde el primer minuto.",
     steps: [
       { t: "Registro del cliente", d: "Datos de contacto y medio de comunicación preferido." },
       { t: "Identificación del equipo", d: "Tipo, marca, modelo y número de serie." },
@@ -65,7 +66,10 @@ export const protocols = [
     summary: "Te entregamos tu equipo con información clara sobre lo realizado.",
     steps: [
       { t: "Comunicación", d: "Aviso de que el equipo está listo y coordinación de entrega." },
-      { t: "Presentación de resultados", d: "Resumen del trabajo realizado y repuestos utilizados." },
+      {
+        t: "Presentación de resultados",
+        d: "Resumen del trabajo realizado y repuestos utilizados.",
+      },
       { t: "Recomendaciones", d: "Buenas prácticas de uso y mantenimiento." },
       { t: "Garantía", d: "Condiciones y plazo de la garantía aplicable." },
       { t: "Conformidad", d: "Registro de la conformidad del cliente." },
@@ -78,11 +82,26 @@ export const protocols = [
     icon: "lock",
     summary: "Tu información es tuya. La tratamos con confidencialidad y solo con autorización.",
     steps: [
-      { t: "Confidencialidad", d: "El personal no revisa ni copia información personal del equipo." },
-      { t: "Autorización de acceso", d: "Solo se accede al sistema cuando el servicio lo requiere y el cliente lo autoriza." },
-      { t: "Respaldos autorizados", d: "Las copias de seguridad se realizan únicamente con autorización expresa." },
-      { t: "Protección de información", d: "No almacenamos contraseñas de equipos en nuestros sistemas." },
-      { t: "Eliminación segura", d: "Borrado seguro de datos solo cuando corresponde y existe autorización." },
+      {
+        t: "Confidencialidad",
+        d: "El personal no revisa ni copia información personal del equipo.",
+      },
+      {
+        t: "Autorización de acceso",
+        d: "Solo se accede al sistema cuando el servicio lo requiere y el cliente lo autoriza.",
+      },
+      {
+        t: "Respaldos autorizados",
+        d: "Las copias de seguridad se realizan únicamente con autorización expresa.",
+      },
+      {
+        t: "Protección de información",
+        d: "No almacenamos contraseñas de equipos en nuestros sistemas.",
+      },
+      {
+        t: "Eliminación segura",
+        d: "Borrado seguro de datos solo cuando corresponde y existe autorización.",
+      },
     ],
   },
 ] as const;

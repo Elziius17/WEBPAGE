@@ -4,7 +4,13 @@ import type { PublicBusinessInfo } from "@/services/settings";
 
 const BusinessContext = createContext<PublicBusinessInfo | null>(null);
 
-export function BusinessProvider({ value, children }: { value: PublicBusinessInfo; children: ReactNode }) {
+export function BusinessProvider({
+  value,
+  children,
+}: {
+  value: PublicBusinessInfo;
+  children: ReactNode;
+}) {
   return <BusinessContext value={value}>{children}</BusinessContext>;
 }
 

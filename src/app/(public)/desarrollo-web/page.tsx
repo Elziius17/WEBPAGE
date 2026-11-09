@@ -9,18 +9,43 @@ import { whatsappMessages } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Diseño y desarrollo de páginas web",
-  description: "Landing pages, páginas corporativas, catálogos digitales y tiendas virtuales con diseño responsive, SEO e integración con WhatsApp.",
+  description:
+    "Landing pages, páginas corporativas, catálogos digitales y tiendas virtuales con diseño responsive, SEO e integración con WhatsApp.",
   alternates: { canonical: "/desarrollo-web" },
 };
 
 const offers = [
-  { icon: "layout-template", t: "Landing pages", d: "Páginas enfocadas en conversión para campañas y lanzamientos." },
-  { icon: "building", t: "Páginas corporativas", d: "Presencia profesional para tu empresa o emprendimiento." },
-  { icon: "book-open", t: "Catálogos digitales", d: "Muestra tus productos o servicios de forma ordenada y atractiva." },
-  { icon: "shopping-bag", t: "Tiendas virtuales", d: "Vende en línea con carrito, gestión de pedidos e inventario." },
+  {
+    icon: "layout-template",
+    t: "Landing pages",
+    d: "Páginas enfocadas en conversión para campañas y lanzamientos.",
+  },
+  {
+    icon: "building",
+    t: "Páginas corporativas",
+    d: "Presencia profesional para tu empresa o emprendimiento.",
+  },
+  {
+    icon: "book-open",
+    t: "Catálogos digitales",
+    d: "Muestra tus productos o servicios de forma ordenada y atractiva.",
+  },
+  {
+    icon: "shopping-bag",
+    t: "Tiendas virtuales",
+    d: "Vende en línea con carrito, gestión de pedidos e inventario.",
+  },
   { icon: "form-input", t: "Formularios", d: "Captación de clientes, cotizaciones y reservas." },
-  { icon: "message-circle", t: "Integración de WhatsApp", d: "Conecta a tus visitantes directamente con tu equipo comercial." },
-  { icon: "smartphone", t: "Diseño responsive", d: "Se ve y funciona perfecto en celulares, tablets y computadoras." },
+  {
+    icon: "message-circle",
+    t: "Integración de WhatsApp",
+    d: "Conecta a tus visitantes directamente con tu equipo comercial.",
+  },
+  {
+    icon: "smartphone",
+    t: "Diseño responsive",
+    d: "Se ve y funciona perfecto en celulares, tablets y computadoras.",
+  },
   { icon: "search-check", t: "SEO", d: "Estructura optimizada para aparecer en buscadores." },
   { icon: "globe", t: "Hosting y dominio", d: "Asesoría y gestión de publicación de tu sitio." },
 ];
@@ -39,24 +64,40 @@ export default function WebDevPage() {
     <>
       <PageHero
         eyebrow="Desarrollo web"
-        title={<>Tu negocio merece una <span className="text-gradient">web profesional</span></>}
+        title={
+          <>
+            Tu negocio merece una <span className="text-gradient">web profesional</span>
+          </>
+        }
         description="Diseñamos y desarrollamos sitios modernos, rápidos y preparados para captar clientes."
         breadcrumbs={[{ label: "Desarrollo web" }]}
       >
         <div className="flex flex-wrap gap-3">
-          <WhatsAppButton message={whatsappMessages.webProject()} label="Cotizar por WhatsApp" size="lg" />
-          <a href="#cotizar" className="inline-flex h-12 items-center rounded-xl border border-white/12 bg-white/5 px-6 font-semibold text-fg hover:border-brand-cyan/40">Solicitar cotización</a>
+          <WhatsAppButton
+            message={whatsappMessages.webProject()}
+            label="Cotizar por WhatsApp"
+            size="lg"
+          />
+          <a
+            href="#cotizar"
+            className="text-fg hover:border-brand-cyan/40 inline-flex h-12 items-center rounded-xl border border-white/12 bg-white/5 px-6 font-semibold"
+          >
+            Solicitar cotización
+          </a>
         </div>
       </PageHero>
       <Section>
         <Container>
-          <SectionHeader eyebrow="Qué hacemos" title="Soluciones web para cada etapa de tu negocio" />
+          <SectionHeader
+            eyebrow="Qué hacemos"
+            title="Soluciones web para cada etapa de tu negocio"
+          />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {offers.map((o) => (
               <div key={o.t} className="surface surface-hover p-6">
-                <DynamicIcon name={o.icon} className="size-6 text-brand-cyan" />
-                <h3 className="mt-4 font-semibold text-fg">{o.t}</h3>
-                <p className="mt-1.5 text-sm text-fg-muted">{o.d}</p>
+                <DynamicIcon name={o.icon} className="text-brand-cyan size-6" />
+                <h3 className="text-fg mt-4 font-semibold">{o.t}</h3>
+                <p className="text-fg-muted mt-1.5 text-sm">{o.d}</p>
               </div>
             ))}
           </div>
@@ -70,9 +111,18 @@ export default function WebDevPage() {
       </Section>
       <Section id="cotizar" className="scroll-mt-20">
         <Container className="max-w-3xl">
-          <SectionHeader title="Solicita tu cotización" description="Cuéntanos sobre tu proyecto y te enviaremos una propuesta." />
+          <SectionHeader
+            title="Solicita tu cotización"
+            description="Cuéntanos sobre tu proyecto y te enviaremos una propuesta."
+          />
           <div className="surface p-6 sm:p-8">
-            <RequestForm kind="WEB_PROJECT" serviceSlug="desarrollo-web" showCompany messageLabel="¿Qué tipo de web necesitas? Objetivos, secciones, referencias…" submitLabel="Solicitar cotización" />
+            <RequestForm
+              kind="WEB_PROJECT"
+              serviceSlug="desarrollo-web"
+              showCompany
+              messageLabel="¿Qué tipo de web necesitas? Objetivos, secciones, referencias…"
+              submitLabel="Solicitar cotización"
+            />
           </div>
         </Container>
       </Section>

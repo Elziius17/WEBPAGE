@@ -7,22 +7,46 @@ const ACTIVE_ORDER = ["PENDING_CONFIRMATION", "CONFIRMED", "PREPARING", "READY"]
 export async function getDashboardKpis() {
   const today = startOfDayLima();
   const month = startOfMonthLima();
-  const [salesToday, salesMonth, pendingOrders, deliveredMonth, newRequests, inRepair, pendingApproval, activeProducts, lowStock, serviceIncome] =
-    await Promise.all([
-      db.order.aggregate({ _sum: { totalCents: true }, _count: true, where: { status: "COMPLETED", completedAt: { gte: today } } }),
-      db.order.aggregate({ _sum: { totalCents: true }, _count: true, where: { status: "COMPLETED", completedAt: { gte: month } } }),
-      db.order.count({ where: { status: { in: [...ACTIVE_ORDER] } } }),
-      db.order.count({ where: { status: "COMPLETED", completedAt: { gte: month } } }),
-      db.serviceRequest.count({ where: { status: "NEW" } }),
-      db.serviceOrder.count({ where: { status: { in: ["IN_DIAGNOSIS", "APPROVED", "IN_REPAIR", "IN_TESTING"] } } }),
-      db.serviceOrder.count({ where: { status: { in: ["QUOTE_SENT", "PENDING_APPROVAL"] } } }),
-      db.$queryRaw<{ n: bigint }[]>`SELECT COUNT(*)::bigint AS n FROM "Product" WHERE "deletedAt" IS NULL AND "status"='ACTIVE' AND "stock" - "reserved" > 0`,
-      db.$queryRaw<{ n: bigint }[]>`SELECT COUNT(*)::bigint AS n FROM "Product" WHERE "deletedAt" IS NULL AND "status"='ACTIVE' AND "stock" - "reserved" <= "minStock"`,
-      db.$queryRaw<{ total: bigint | null }[]>`
+  const [
+    salesToday,
+    salesMonth,
+    pendingOrders,
+    deliveredMonth,
+    newRequests,
+    inRepair,
+    pendingApproval,
+    activeProducts,
+    lowStock,
+    serviceIncome,
+  ] = await Promise.all([
+    db.order.aggregate({
+      _sum: { totalCents: true },
+      _count: true,
+      where: { status: "COMPLETED", completedAt: { gte: today } },
+    }),
+    db.order.aggregate({
+      _sum: { totalCents: true },
+      _count: true,
+      where: { status: "COMPLETED", completedAt: { gte: month } },
+    }),
+    db.order.count({ where: { status: { in: [...ACTIVE_ORDER] } } }),
+    db.order.count({ where: { status: "COMPLETED", completedAt: { gte: month } } }),
+    db.serviceRequest.count({ where: { status: "NEW" } }),
+    db.serviceOrder.count({
+      where: { status: { in: ["IN_DIAGNOSIS", "APPROVED", "IN_REPAIR", "IN_TESTING"] } },
+    }),
+    db.serviceOrder.count({ where: { status: { in: ["QUOTE_SENT", "PENDING_APPROVAL"] } } }),
+    db.$queryRaw<
+      { n: bigint }[]
+    >`SELECT COUNT(*)::bigint AS n FROM "Product" WHERE "deletedAt" IS NULL AND "status"='ACTIVE' AND "stock" - "reserved" > 0`,
+    db.$queryRaw<
+      { n: bigint }[]
+    >`SELECT COUNT(*)::bigint AS n FROM "Product" WHERE "deletedAt" IS NULL AND "status"='ACTIVE' AND "stock" - "reserved" <= "minStock"`,
+    db.$queryRaw<{ total: bigint | null }[]>`
         SELECT SUM(a."budgetCents")::bigint AS total FROM "ServiceApproval" a
         JOIN "ServiceOrder" o ON o."id" = a."orderId"
         WHERE a."decision"='APPROVED' AND o."status"='DELIVERED' AND o."deliveredAt" >= ${month}`,
-    ]);
+  ]);
   return {
     salesTodayCents: salesToday._sum.totalCents ?? 0,
     salesTodayCount: salesToday._count,
@@ -58,7 +82,11 @@ export async function getMonthlySales(months = 6) {
     )
     SELECT m.month, COALESCE(p.total,0)::bigint AS products, COALESCE(s.total,0)::bigint AS services
     FROM m LEFT JOIN p ON p.month = m.month LEFT JOIN s ON s.month = m.month ORDER BY m.month`;
-  return rows.map((r) => ({ month: r.month, products: Number(r.products) / 100, services: Number(r.services) / 100 }));
+  return rows.map((r) => ({
+    month: r.month,
+    products: Number(r.products) / 100,
+    services: Number(r.services) / 100,
+  }));
 }
 
 export async function getTopProducts(limit = 5) {
@@ -75,7 +103,12 @@ export async function getTopServices(limit = 7) {
       (SELECT COUNT(*) FROM "ServiceOrder" o WHERE o."serviceId" = s."id")::bigint AS orders,
       (SELECT COUNT(*) FROM "ServiceRequest" r WHERE r."serviceId" = s."id")::bigint AS requests
     FROM "Service" s WHERE s."deletedAt" IS NULL ORDER BY orders DESC, requests DESC LIMIT ${limit}`;
-  return rows.map((r) => ({ name: r.name, total: Number(r.orders) + Number(r.requests), orders: Number(r.orders), requests: Number(r.requests) }));
+  return rows.map((r) => ({
+    name: r.name,
+    total: Number(r.orders) + Number(r.requests),
+    orders: Number(r.orders),
+    requests: Number(r.requests),
+  }));
 }
 
 export async function getServiceStatusDistribution() {
@@ -104,8 +137,31 @@ export async function getInventoryEvolution(months = 6) {
 
 export async function getRecentActivity() {
   const [orders, services] = await Promise.all([
-    db.order.findMany({ orderBy: { createdAt: "desc" }, take: 5, select: { id: true, code: true, status: true, totalCents: true, contactName: true, createdAt: true } }),
-    db.serviceOrder.findMany({ orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, code: true, status: true, brand: true, deviceType: true, updatedAt: true, customer: { select: { fullName: true } } } }),
+    db.order.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        code: true,
+        status: true,
+        totalCents: true,
+        contactName: true,
+        createdAt: true,
+      },
+    }),
+    db.serviceOrder.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        code: true,
+        status: true,
+        brand: true,
+        deviceType: true,
+        updatedAt: true,
+        customer: { select: { fullName: true } },
+      },
+    }),
   ]);
   return { orders, services };
 }

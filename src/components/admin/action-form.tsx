@@ -1,5 +1,13 @@
 "use client";
-import { createContext, use, useActionState, useEffect, useRef, startTransition, type ReactNode } from "react";
+import {
+  createContext,
+  use,
+  useActionState,
+  useEffect,
+  useRef,
+  startTransition,
+  type ReactNode,
+} from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
@@ -45,8 +53,10 @@ export function ActionForm({
   useEffect(() => {
     if (state?.ok) {
       if (resetOnSuccess) ref.current?.reset();
-      if (redirectTo) router.push(typeof redirectTo === "function" ? redirectTo(state.data) : redirectTo);
-      else if (redirectPrefix && (state.data as { id?: string } | undefined)?.id) router.push(`${redirectPrefix}${(state.data as { id: string }).id}`);
+      if (redirectTo)
+        router.push(typeof redirectTo === "function" ? redirectTo(state.data) : redirectTo);
+      else if (redirectPrefix && (state.data as { id?: string } | undefined)?.id)
+        router.push(`${redirectPrefix}${(state.data as { id: string }).id}`);
     }
   }, [state, resetOnSuccess, redirectTo, redirectPrefix, router]);
 
@@ -64,7 +74,7 @@ export function ActionForm({
       >
         {state && !state.ok && <Alert tone="danger">{state.error}</Alert>}
         {state?.ok && successMessage && state.message && (
-          <p role="status" className="flex items-center gap-2 text-sm text-success">
+          <p role="status" className="text-success flex items-center gap-2 text-sm">
             <CheckCircle2 className="size-4" aria-hidden /> {state.message}
           </p>
         )}
@@ -81,16 +91,49 @@ export function useFieldError(name: string) {
 }
 
 /** Campo con etiqueta y error de servidor. */
-export function FormField({ name, label, hint, required, className, children }: { name: string; label: ReactNode; hint?: ReactNode; required?: boolean; className?: string; children: ReactNode }) {
+export function FormField({
+  name,
+  label,
+  hint,
+  required,
+  className,
+  children,
+}: {
+  name: string;
+  label: ReactNode;
+  hint?: ReactNode;
+  required?: boolean;
+  className?: string;
+  children: ReactNode;
+}) {
   const error = useFieldError(name);
   return (
-    <Field label={label} htmlFor={name} error={error} hint={hint} required={required} className={className}>
+    <Field
+      label={label}
+      htmlFor={name}
+      error={error}
+      hint={hint}
+      required={required}
+      className={className}
+    >
       {children}
     </Field>
   );
 }
 
-export function SubmitButton({ children, variant, size = "md", className, pendingLabel = "Guardando…" }: { children: ReactNode; variant?: "primary" | "secondary" | "danger" | "ghost"; size?: "sm" | "md" | "lg"; className?: string; pendingLabel?: string }) {
+export function SubmitButton({
+  children,
+  variant,
+  size = "md",
+  className,
+  pendingLabel = "Guardando…",
+}: {
+  children: ReactNode;
+  variant?: "primary" | "secondary" | "danger" | "ghost";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  pendingLabel?: string;
+}) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" variant={variant} size={size} disabled={pending} className={className}>

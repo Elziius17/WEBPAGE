@@ -10,7 +10,8 @@ export const runtime = "nodejs";
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/admin/service-orders/[id]/pdf">) {
   const user = await getCurrentUser();
-  if (!user || !hasPermission(user.role, "service-orders:read")) return new Response("No autorizado", { status: 403 });
+  if (!user || !hasPermission(user.role, "service-orders:read"))
+    return new Response("No autorizado", { status: 403 });
   const { id } = await ctx.params;
   const order = await db.serviceOrder.findFirst({
     where: { id, ...(await serviceOrderScope(user)) },
@@ -27,7 +28,12 @@ export async function GET(_req: Request, ctx: RouteContext<"/api/admin/service-o
   });
   if (!order) return new Response("No encontrado", { status: 404 });
   const pdf = await renderServiceOrderPdf(order, await getBusinessSettings());
-  await audit({ userId: user.id, action: "service-order.pdf", entity: "ServiceOrder", entityId: order.id });
+  await audit({
+    userId: user.id,
+    action: "service-order.pdf",
+    entity: "ServiceOrder",
+    entityId: order.id,
+  });
   return new Response(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",

@@ -2,7 +2,12 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 /**
@@ -13,7 +18,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
  */
 
 const driver = (process.env.STORAGE_DRIVER ?? "local") as "local" | "s3";
-const localDir = path.resolve(process.env.STORAGE_LOCAL_DIR ?? "./storage");
+const localDir = path.resolve(
+  /*turbopackIgnore: true*/ process.env.STORAGE_LOCAL_DIR ?? "./storage",
+);
 
 let s3: S3Client | null = null;
 function getS3() {
@@ -44,23 +51,32 @@ export async function putObject(key: string, body: Uint8Array, contentType: stri
   if (!isValidKey(key)) throw new Error("Clave de almacenamiento inválida");
   if (driver === "s3") {
     await getS3().send(
-      new PutObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key, Body: body, ContentType: contentType }),
+      new PutObjectCommand({
+        Bucket: process.env.S3_BUCKET,
+        Key: key,
+        Body: body,
+        ContentType: contentType,
+      }),
     );
     return;
   }
-  const full = path.join(localDir, key);
-  await mkdir(path.dirname(full), { recursive: true });
-  await writeFile(full, body);
+  const full = path.join(/*turbopackIgnore: true*/ localDir, key);
+  await mkdir(/*turbopackIgnore: true*/ path.dirname(full), { recursive: true });
+  await writeFile(/*turbopackIgnore: true*/ full, body);
 }
 
 export async function getObject(key: string): Promise<Uint8Array | null> {
   if (!isValidKey(key)) return null;
   if (driver === "s3") {
-    const res = await getS3().send(new GetObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }));
+    const res = await getS3().send(
+      new GetObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }),
+    );
     return res.Body ? new Uint8Array(await res.Body.transformToByteArray()) : null;
   }
   try {
-    return new Uint8Array(await readFile(path.join(localDir, key)));
+    return new Uint8Array(
+      await readFile(/*turbopackIgnore: true*/ path.join(/*turbopackIgnore: true*/ localDir, key)),
+    );
   } catch {
     return null;
   }
@@ -72,7 +88,9 @@ export async function deleteObject(key: string) {
     await getS3().send(new DeleteObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }));
     return;
   }
-  await unlink(path.join(localDir, key)).catch(() => undefined);
+  await unlink(/*turbopackIgnore: true*/ path.join(/*turbopackIgnore: true*/ localDir, key)).catch(
+    () => undefined,
+  );
 }
 
 /** URL para imágenes públicas de productos. */
@@ -86,9 +104,13 @@ export function publicUrl(key: string) {
 /** URL firmada de corta duración para archivos privados (S3), o ruta protegida (local). */
 export async function privateUrl(key: string, expiresInSeconds = 300) {
   if (driver === "s3") {
-    return getSignedUrl(getS3(), new GetObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }), {
-      expiresIn: expiresInSeconds,
-    });
+    return getSignedUrl(
+      getS3(),
+      new GetObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }),
+      {
+        expiresIn: expiresInSeconds,
+      },
+    );
   }
   return `/api/files/${key}`;
 }

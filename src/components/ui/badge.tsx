@@ -11,7 +11,11 @@ const tones: Record<Tone, string> = {
   accent: "bg-brand-cyan/12 text-brand-cyan border-brand-cyan/25",
 };
 
-export function Badge({ tone = "neutral", className, ...props }: ComponentProps<"span"> & { tone?: Tone }) {
+export function Badge({
+  tone = "neutral",
+  className,
+  ...props
+}: ComponentProps<"span"> & { tone?: Tone }) {
   return (
     <span
       className={cn(

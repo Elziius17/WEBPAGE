@@ -7,8 +7,18 @@ type Data = z.output<typeof publicRequestSchema>;
 
 export async function createPublicRequest(data: Data) {
   const [service, product] = await Promise.all([
-    data.serviceSlug ? db.service.findFirst({ where: { slug: data.serviceSlug, active: true }, select: { id: true } }) : null,
-    data.productSlug ? db.product.findFirst({ where: { slug: data.productSlug, deletedAt: null }, select: { id: true } }) : null,
+    data.serviceSlug
+      ? db.service.findFirst({
+          where: { slug: data.serviceSlug, active: true },
+          select: { id: true },
+        })
+      : null,
+    data.productSlug
+      ? db.product.findFirst({
+          where: { slug: data.productSlug, deletedAt: null },
+          select: { id: true },
+        })
+      : null,
   ]);
   return db.serviceRequest.create({
     data: {

@@ -38,7 +38,8 @@ export function computeMovement(
   quantity: number,
 ): { stockDelta: number; reservedDelta: number } {
   if (!Number.isInteger(quantity) || quantity < 0) throw new BusinessError("Cantidad inválida.");
-  if (type !== "ADJUSTMENT" && quantity === 0) throw new BusinessError("La cantidad debe ser mayor a 0.");
+  if (type !== "ADJUSTMENT" && quantity === 0)
+    throw new BusinessError("La cantidad debe ser mayor a 0.");
   const available = current.stock - current.reserved;
   let stockDelta = 0;
   let reservedDelta = 0;
@@ -66,7 +67,8 @@ export function computeMovement(
       reservedDelta = quantity;
       break;
     case "RELEASE":
-      if (quantity > current.reserved) throw new BusinessError("No hay reservas suficientes para liberar.");
+      if (quantity > current.reserved)
+        throw new BusinessError("No hay reservas suficientes para liberar.");
       reservedDelta = -quantity;
       break;
     case "SALE":

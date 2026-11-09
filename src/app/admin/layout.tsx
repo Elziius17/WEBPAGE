@@ -7,7 +7,10 @@ import { hasPermission, isStaff } from "@/lib/security/permissions";
 import { adminNav } from "@/config/admin-nav";
 import { roleLabel } from "@/config/statuses";
 
-export const metadata: Metadata = { title: { default: "Panel", template: "%s · Panel ELZIIUS" }, robots: { index: false, follow: false } };
+export const metadata: Metadata = {
+  title: { default: "Panel", template: "%s · Panel ELZIIUS" },
+  robots: { index: false, follow: false },
+};
 export const dynamic = "force-dynamic";
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
@@ -18,14 +21,14 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     .map((g) => ({ ...g, items: g.items.filter((i) => hasPermission(user.role, i.permission)) }))
     .filter((g) => g.items.length);
   return (
-    <div className="min-h-dvh bg-ink-950">
+    <div className="bg-ink-950 min-h-dvh">
       <AdminSidebar
         nav={nav}
         footer={
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-fg">{user.name}</p>
-              <p className="text-xs text-fg-subtle">{roleLabel[user.role]}</p>
+              <p className="text-fg truncate text-sm font-medium">{user.name}</p>
+              <p className="text-fg-subtle text-xs">{roleLabel[user.role]}</p>
             </div>
             <SignOutButton />
           </div>

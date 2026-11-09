@@ -9,12 +9,16 @@ import { db } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Servicios de soporte técnico y TI",
-  description: "Mantenimiento preventivo y correctivo, repotenciación, instalación de software, soporte técnico, desarrollo web y soluciones empresariales.",
+  description:
+    "Mantenimiento preventivo y correctivo, repotenciación, instalación de software, soporte técnico, desarrollo web y soluciones empresariales.",
   alternates: { canonical: "/servicios" },
 };
 
 export default async function ServicesPage() {
-  const services = await db.service.findMany({ where: { active: true, deletedAt: null }, orderBy: { sortOrder: "asc" } });
+  const services = await db.service.findMany({
+    where: { active: true, deletedAt: null },
+    orderBy: { sortOrder: "asc" },
+  });
   return (
     <>
       <PageHero
@@ -26,7 +30,9 @@ export default async function ServicesPage() {
       <Section>
         <Container>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((s) => <ServiceCard key={s.id} service={s} />)}
+            {services.map((s) => (
+              <ServiceCard key={s.id} service={s} />
+            ))}
           </div>
         </Container>
       </Section>
@@ -38,9 +44,16 @@ export default async function ServicesPage() {
       </Section>
       <Section>
         <Container className="max-w-3xl">
-          <SectionHeader title="Solicita un servicio" description="Cuéntanos qué necesitas y te contactaremos para coordinar." />
+          <SectionHeader
+            title="Solicita un servicio"
+            description="Cuéntanos qué necesitas y te contactaremos para coordinar."
+          />
           <div className="surface p-6 sm:p-8">
-            <RequestForm kind="SERVICE" showDevice messageLabel="Describe el problema o lo que necesitas" />
+            <RequestForm
+              kind="SERVICE"
+              showDevice
+              messageLabel="Describe el problema o lo que necesitas"
+            />
           </div>
         </Container>
       </Section>

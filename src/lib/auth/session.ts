@@ -37,7 +37,10 @@ export async function requireUser(next?: string): Promise<CurrentUser> {
 }
 
 /** Para páginas del panel: exige rol de personal y el permiso indicado. */
-export async function requireStaffPage(permission: Permission, next = "/admin"): Promise<CurrentUser> {
+export async function requireStaffPage(
+  permission: Permission,
+  next = "/admin",
+): Promise<CurrentUser> {
   const user = await requireUser(next);
   if (!isStaff(user.role)) redirect("/mi-cuenta");
   if (!hasPermission(user.role, permission)) redirect("/admin/acceso-denegado");

@@ -12,11 +12,16 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
   const [business, user] = await Promise.all([getPublicBusinessInfo(), getCurrentUser()]);
   return (
     <BusinessProvider value={business}>
-      <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-brand-cyan focus:px-4 focus:py-2 focus:text-ink-950">
+      <a
+        href="#contenido"
+        className="focus:bg-brand-cyan focus:text-ink-950 sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:px-4 focus:py-2"
+      >
         Saltar al contenido
       </a>
       <SiteHeader account={user ? { name: user.name, isStaff: isStaff(user.role) } : null} />
-      <main id="contenido" className="flex-1">{children}</main>
+      <main id="contenido" className="flex-1">
+        {children}
+      </main>
       <SiteFooter business={business} />
       <WhatsAppFloating />
     </BusinessProvider>

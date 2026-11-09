@@ -12,7 +12,10 @@ export const optionalEmail = z
   .optional()
   .transform((v) => (v ? v.toLowerCase() : undefined));
 
-export const requiredEmail = z.email("Correo inválido").max(120).transform((v) => v.toLowerCase());
+export const requiredEmail = z
+  .email("Correo inválido")
+  .max(120)
+  .transform((v) => v.toLowerCase());
 
 export const nameSchema = z.string().trim().min(2, "Ingresa tu nombre").max(100);
 
@@ -25,10 +28,11 @@ export const optionalText = (max: number) =>
     .transform((v) => (v ? v : undefined));
 
 export const consentSchema = z
-  .union([z.literal("on"), z.literal("true"), z.literal(true)], {
-    error: "Debes aceptar la política de privacidad",
+  .unknown()
+  .refine((v) => v === true || v === "on" || v === "true", {
+    message: "Debes aceptar la política de privacidad",
   })
-  .transform(() => true);
+  .transform(() => true as const);
 
 /** Monto en soles (texto o número) -> céntimos. Vacío => undefined. */
 export const optionalSolesToCents = z

@@ -8,16 +8,24 @@ import { CatalogFilters, SortSelect, buildQuery } from "@/components/products/ca
 import { EmptyState } from "@/components/ui/empty-state";
 import { ButtonLink } from "@/components/ui/button";
 import { DynamicIcon } from "@/components/ui/icon";
-import { getBrands, getCategoriesWithCount, listProducts, SORT_OPTIONS, type SortKey } from "@/services/catalog";
+import {
+  getBrands,
+  getCategoriesWithCount,
+  listProducts,
+  SORT_OPTIONS,
+  type SortKey,
+} from "@/services/catalog";
 import { cn } from "@/lib/utils/cn";
 
 export const metadata: Metadata = {
   title: "Tienda de componentes y periféricos",
-  description: "Procesadores, memorias RAM, SSD NVMe, tarjetas gráficas, monitores, impresoras y accesorios con garantía. Precios en soles.",
+  description:
+    "Procesadores, memorias RAM, SSD NVMe, tarjetas gráficas, monitores, impresoras y accesorios con garantía. Precios en soles.",
   alternates: { canonical: "/tienda" },
 };
 
-const str = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)?.slice(0, 100) || undefined;
+const str = (v: string | string[] | undefined) =>
+  (Array.isArray(v) ? v[0] : v)?.slice(0, 100) || undefined;
 const num = (v: string | undefined) => {
   if (!v) return undefined;
   const n = Number(v);
@@ -37,7 +45,9 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
     orden: str(sp.orden),
     pagina: str(sp.pagina),
   };
-  const sort = (params.orden && params.orden in SORT_OPTIONS ? params.orden : "relevance") as SortKey;
+  const sort = (
+    params.orden && params.orden in SORT_OPTIONS ? params.orden : "relevance"
+  ) as SortKey;
   const page = Math.max(1, Number(params.pagina) || 1);
 
   const [result, categories, brands] = await Promise.all([
@@ -63,17 +73,26 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
         eyebrow="Tienda ELZIIUS"
         title={activeCategory ? activeCategory.name : "Componentes, periféricos e impresoras"}
         description="Precios en soles (PEN). Confirmamos la disponibilidad y coordinamos contigo el pago y la entrega."
-        breadcrumbs={activeCategory ? [{ href: "/tienda", label: "Tienda" }, { label: activeCategory.name }] : [{ label: "Tienda" }]}
+        breadcrumbs={
+          activeCategory
+            ? [{ href: "/tienda", label: "Tienda" }, { label: activeCategory.name }]
+            : [{ label: "Tienda" }]
+        }
       />
       <Container className="py-10">
-        <nav aria-label="Categorías" className="-mx-4 mb-8 flex gap-2 overflow-x-auto px-4 pb-2 [scrollbar-width:none]">
+        <nav
+          aria-label="Categorías"
+          className="-mx-4 mb-8 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4 pb-2"
+        >
           {categories.map((c) => (
             <Link
               key={c.slug}
               href={buildQuery({}, { categoria: c.slug })}
               className={cn(
                 "flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-sm transition-colors",
-                params.categoria === c.slug ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan" : "border-white/8 bg-white/3 text-fg-muted hover:text-fg",
+                params.categoria === c.slug
+                  ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan"
+                  : "text-fg-muted hover:text-fg border-white/8 bg-white/3",
               )}
             >
               <DynamicIcon name={c.icon} className="size-4" /> {c.name}
@@ -86,22 +105,33 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
           </aside>
           <div>
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-fg-muted" aria-live="polite">
+              <p className="text-fg-muted text-sm" aria-live="polite">
                 {result.total} producto{result.total === 1 ? "" : "s"}
-                {params.q && <> para “<span className="text-fg">{params.q}</span>”</>}
+                {params.q && (
+                  <>
+                    {" "}
+                    para “<span className="text-fg">{params.q}</span>”
+                  </>
+                )}
               </p>
               <SortSelect params={params} />
             </div>
             {result.items.length ? (
               <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {result.items.map((p) => <ProductCard key={p.id} product={p} />)}
+                {result.items.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
               </div>
             ) : (
               <EmptyState
                 icon={PackageSearch}
                 title="No encontramos productos con esos filtros"
                 description="Prueba con otros términos o consúltanos: podemos conseguir el componente que necesitas."
-                action={<ButtonLink href="/contacto?tipo=producto" variant="secondary" size="sm">Consultar un producto</ButtonLink>}
+                action={
+                  <ButtonLink href="/contacto?tipo=producto" variant="secondary" size="sm">
+                    Consultar un producto
+                  </ButtonLink>
+                }
               />
             )}
             {result.pages > 1 && (
@@ -113,7 +143,9 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
                     aria-current={n === result.page ? "page" : undefined}
                     className={cn(
                       "grid size-10 place-items-center rounded-lg border text-sm",
-                      n === result.page ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan" : "border-white/8 text-fg-muted hover:text-fg",
+                      n === result.page
+                        ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan"
+                        : "text-fg-muted hover:text-fg border-white/8",
                     )}
                   >
                     {n}

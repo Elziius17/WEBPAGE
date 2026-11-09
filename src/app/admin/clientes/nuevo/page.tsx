@@ -9,8 +9,13 @@ export default async function NewCustomer() {
   await requireStaffPage("customers:write");
   return (
     <>
-      <AdminPageHeader title="Nuevo cliente" back={{ href: "/admin/clientes", label: "Clientes" }} />
-      <Panel><CustomerForm /></Panel>
+      <AdminPageHeader
+        title="Nuevo cliente"
+        back={{ href: "/admin/clientes", label: "Clientes" }}
+      />
+      <Panel>
+        <CustomerForm />
+      </Panel>
     </>
   );
 }

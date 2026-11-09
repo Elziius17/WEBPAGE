@@ -26,7 +26,11 @@ export function WhatsAppButton({
   if (!href) {
     return (
       <span
-        className={cn(buttonVariants({ variant: "secondary", size }), "cursor-not-allowed opacity-60", className)}
+        className={cn(
+          buttonVariants({ variant: "secondary", size }),
+          "cursor-not-allowed opacity-60",
+          className,
+        )}
         title="El número de WhatsApp comercial aún no está configurado"
         aria-disabled="true"
       >
@@ -35,7 +39,12 @@ export function WhatsAppButton({
     );
   }
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={cn(buttonVariants({ variant, size }), className)}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(buttonVariants({ variant, size }), className)}
+    >
       <MessageCircle /> {label}
     </a>
   );

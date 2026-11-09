@@ -18,15 +18,27 @@ export default async function CheckoutPage() {
     getCurrentUser(),
     getBusinessSettings(),
   ]);
-  const customer = user ? await db.customer.findUnique({ where: { userId: user.id }, select: { fullName: true, email: true, phone: true } }) : null;
+  const customer = user
+    ? await db.customer.findUnique({
+        where: { userId: user.id },
+        select: { fullName: true, email: true, phone: true },
+      })
+    : null;
   return (
     <>
-      <PageHero title="Finalizar pedido" breadcrumbs={[{ href: "/carrito", label: "Carrito" }, { label: "Checkout" }]} />
+      <PageHero
+        title="Finalizar pedido"
+        breadcrumbs={[{ href: "/carrito", label: "Carrito" }, { label: "Checkout" }]}
+      />
       <Container className="py-10">
         <CheckoutForm
           zones={zones}
           pickupInstructions={settings.pickupInstructions || undefined}
-          defaults={{ name: customer?.fullName ?? user?.name, email: customer?.email ?? user?.email, phone: customer?.phone || undefined }}
+          defaults={{
+            name: customer?.fullName ?? user?.name,
+            email: customer?.email ?? user?.email,
+            phone: customer?.phone || undefined,
+          }}
         />
       </Container>
     </>

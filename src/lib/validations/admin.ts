@@ -1,10 +1,26 @@
 import { z } from "zod";
 import {
-  checkbox, idSchema, nameSchema, optionalEmail, optionalEnum, optionalInt, optionalSolesToCents, optionalText,
-  phoneSchema, requiredSolesToCents,
+  checkbox,
+  idSchema,
+  nameSchema,
+  optionalEmail,
+  optionalEnum,
+  optionalInt,
+  optionalSolesToCents,
+  optionalText,
+  phoneSchema,
+  requiredSolesToCents,
 } from "./common";
 
-const deviceTypes = ["DESKTOP", "LAPTOP", "ALL_IN_ONE", "PRINTER", "MONITOR", "PERIPHERAL", "OTHER"] as const;
+const deviceTypes = [
+  "DESKTOP",
+  "LAPTOP",
+  "ALL_IN_ONE",
+  "PRINTER",
+  "MONITOR",
+  "PERIPHERAL",
+  "OTHER",
+] as const;
 const deliveryModes = ["PICKUP_AT_STORE", "HOME_DELIVERY", "COURIER"] as const;
 const datetimeLocal = z
   .string()
@@ -46,8 +62,18 @@ export const receptionSchema = z
   })
   .superRefine((d, ctx) => {
     if (!d.customerId) {
-      if (!d.customerName || d.customerName.length < 2) ctx.addIssue({ code: "custom", path: ["customerName"], message: "Nombre del cliente requerido" });
-      if (!d.customerPhone || !phoneSchema.safeParse(d.customerPhone).success) ctx.addIssue({ code: "custom", path: ["customerPhone"], message: "Teléfono válido requerido" });
+      if (!d.customerName || d.customerName.length < 2)
+        ctx.addIssue({
+          code: "custom",
+          path: ["customerName"],
+          message: "Nombre del cliente requerido",
+        });
+      if (!d.customerPhone || !phoneSchema.safeParse(d.customerPhone).success)
+        ctx.addIssue({
+          code: "custom",
+          path: ["customerPhone"],
+          message: "Teléfono válido requerido",
+        });
     }
   });
 
@@ -72,12 +98,28 @@ export const serviceOrderEditSchema = z.object({
 
 export const transitionSchema = z.object({
   orderId: idSchema,
-  to: z.enum(["REQUESTED", "RECEIVED", "IN_DIAGNOSIS", "QUOTE_SENT", "PENDING_APPROVAL", "APPROVED", "IN_REPAIR", "IN_TESTING", "READY_FOR_DELIVERY", "DELIVERED", "CANCELLED"]),
+  to: z.enum([
+    "REQUESTED",
+    "RECEIVED",
+    "IN_DIAGNOSIS",
+    "QUOTE_SENT",
+    "PENDING_APPROVAL",
+    "APPROVED",
+    "IN_REPAIR",
+    "IN_TESTING",
+    "READY_FOR_DELIVERY",
+    "DELIVERED",
+    "CANCELLED",
+  ]),
   note: optionalText(1000),
   isPublic: checkbox,
 });
 
-export const noteSchema = z.object({ orderId: idSchema, note: z.string().trim().min(2).max(1000), isPublic: checkbox });
+export const noteSchema = z.object({
+  orderId: idSchema,
+  note: z.string().trim().min(2).max(1000),
+  isPublic: checkbox,
+});
 
 export const diagnosisSchema = z.object({
   orderId: idSchema,
@@ -105,7 +147,11 @@ export const approvalDecisionSchema = z.object({
   respondedAt: datetimeLocal,
 });
 
-export const repairTaskSchema = z.object({ orderId: idSchema, description: z.string().trim().min(3).max(1500), notes: optionalText(1500) });
+export const repairTaskSchema = z.object({
+  orderId: idSchema,
+  description: z.string().trim().min(3).max(1500),
+  notes: optionalText(1500),
+});
 
 export const partSchema = z
   .object({
@@ -118,8 +164,10 @@ export const partSchema = z
     fromInventory: checkbox,
   })
   .superRefine((d, ctx) => {
-    if (d.fromInventory && !d.productId) ctx.addIssue({ code: "custom", path: ["productId"], message: "Selecciona el producto" });
-    if (!d.fromInventory && !d.name) ctx.addIssue({ code: "custom", path: ["name"], message: "Indica el repuesto" });
+    if (d.fromInventory && !d.productId)
+      ctx.addIssue({ code: "custom", path: ["productId"], message: "Selecciona el producto" });
+    if (!d.fromInventory && !d.name)
+      ctx.addIssue({ code: "custom", path: ["name"], message: "Indica el repuesto" });
   });
 
 export const closeSchema = z.object({
@@ -137,7 +185,13 @@ export const closeSchema = z.object({
 export const productSchema = z.object({
   id: optionalText(40),
   name: z.string().trim().min(3, "Nombre requerido").max(150),
-  sku: z.string().trim().min(2, "SKU requerido").max(40).regex(/^[A-Za-z0-9._-]+$/, "Solo letras, números, guiones y puntos").transform((v) => v.toUpperCase()),
+  sku: z
+    .string()
+    .trim()
+    .min(2, "SKU requerido")
+    .max(40)
+    .regex(/^[A-Za-z0-9._-]+$/, "Solo letras, números, guiones y puntos")
+    .transform((v) => v.toUpperCase()),
   slug: optionalText(120),
   brand: z.string().trim().min(1, "Marca requerida").max(60),
   model: optionalText(80),
@@ -171,7 +225,10 @@ export const movementSchema = z.object({
 export const supplierSchema = z.object({
   id: optionalText(40),
   name: z.string().trim().min(2).max(120),
-  ruc: z.union([z.literal(""), z.string().regex(/^\d{11}$/, "RUC de 11 dígitos")]).optional().transform((v) => v || undefined),
+  ruc: z
+    .union([z.literal(""), z.string().regex(/^\d{11}$/, "RUC de 11 dígitos")])
+    .optional()
+    .transform((v) => v || undefined),
   contactName: optionalText(100),
   phone: optionalText(20),
   email: optionalEmail,
@@ -220,7 +277,13 @@ export const orderStatusSchema = z.object({
 
 export const paymentSchema = z.object({
   orderId: idSchema,
-  method: z.enum(["WHATSAPP_COORDINATION", "BANK_TRANSFER", "DIGITAL_WALLET", "CASH_ON_PICKUP", "GATEWAY"]),
+  method: z.enum([
+    "WHATSAPP_COORDINATION",
+    "BANK_TRANSFER",
+    "DIGITAL_WALLET",
+    "CASH_ON_PICKUP",
+    "GATEWAY",
+  ]),
   amountCents: requiredSolesToCents,
   reference: z.string().trim().min(3, "Indica la referencia de la operación verificada").max(120),
   notes: optionalText(500),
@@ -244,7 +307,19 @@ export const deliveryUpdateSchema = z.object({
 
 export const deliveryStatusSchema = z.object({
   deliveryId: idSchema,
-  to: z.enum(["PENDING_COORDINATION", "PENDING_PAYMENT", "CONFIRMED", "PREPARING", "READY_FOR_PICKUP", "DISPATCHED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED", "INCIDENT", "CANCELLED"]),
+  to: z.enum([
+    "PENDING_COORDINATION",
+    "PENDING_PAYMENT",
+    "CONFIRMED",
+    "PREPARING",
+    "READY_FOR_PICKUP",
+    "DISPATCHED",
+    "IN_TRANSIT",
+    "OUT_FOR_DELIVERY",
+    "DELIVERED",
+    "INCIDENT",
+    "CANCELLED",
+  ]),
   description: optionalText(500),
   location: optionalText(120),
 });
@@ -252,7 +327,10 @@ export const deliveryStatusSchema = z.object({
 export const courierSchema = z.object({
   id: optionalText(40),
   name: z.string().trim().min(2).max(80),
-  website: z.union([z.literal(""), z.url()]).optional().transform((v) => v || undefined),
+  website: z
+    .union([z.literal(""), z.url()])
+    .optional()
+    .transform((v) => v || undefined),
   phone: optionalText(30),
   trackingUrlTemplate: optionalText(300),
   notes: optionalText(500),
@@ -283,7 +361,10 @@ export const customerSchema = z.object({
 
 export const staffUserSchema = z.object({
   name: nameSchema,
-  email: z.email().max(120).transform((v) => v.toLowerCase()),
+  email: z
+    .email()
+    .max(120)
+    .transform((v) => v.toLowerCase()),
   role: z.enum(["ADMIN", "TECHNICIAN", "SALES"]),
   password: z.string().min(10, "Mínimo 10 caracteres").max(128),
 });

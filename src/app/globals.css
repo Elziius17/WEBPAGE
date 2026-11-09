@@ -102,7 +102,12 @@
 
 @layer components {
   .text-gradient {
-    background: linear-gradient(100deg, var(--color-brand-blue), var(--color-brand-cyan) 55%, var(--color-brand-ice));
+    background: linear-gradient(
+      100deg,
+      var(--color-brand-blue),
+      var(--color-brand-cyan) 55%,
+      var(--color-brand-ice)
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -130,14 +135,14 @@
     box-shadow: 0 12px 40px -18px rgb(0 153 255 / 0.55);
   }
   .prose-legal h2 {
-    @apply mt-10 mb-3 text-xl font-semibold text-fg;
+    @apply text-fg mt-10 mb-3 text-xl font-semibold;
   }
   .prose-legal h3 {
-    @apply mt-6 mb-2 font-semibold text-fg;
+    @apply text-fg mt-6 mb-2 font-semibold;
   }
   .prose-legal p,
   .prose-legal li {
-    @apply leading-relaxed text-fg-muted;
+    @apply text-fg-muted leading-relaxed;
   }
   .prose-legal ul {
     @apply my-3 list-disc space-y-1.5 pl-6;

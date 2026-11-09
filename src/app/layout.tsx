@@ -35,7 +35,11 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [{ url: "/logo/elziius-logo-original.jpg", width: 1408, height: 768, alt: "ELZIIUS" }],
   },
-  twitter: { card: "summary_large_image", title: siteConfig.name, description: siteConfig.description },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+  },
   alternates: { canonical: "/" },
   formatDetection: { telephone: false },
 };

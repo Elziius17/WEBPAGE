@@ -6,7 +6,8 @@ import { TrackingLookup } from "@/components/tracking/tracking-lookup";
 
 export const metadata: Metadata = {
   title: "Seguimiento de servicio técnico",
-  description: "Consulta en línea el estado de tu computadora o laptop con tu código de orden ELZIIUS.",
+  description:
+    "Consulta en línea el estado de tu computadora o laptop con tu código de orden ELZIIUS.",
   alternates: { canonical: "/seguimiento" },
 };
 
@@ -23,9 +24,10 @@ export default async function TrackingPage({ searchParams }: PageProps<"/seguimi
       />
       <Container className="max-w-5xl py-10">
         <TrackingLookup initialCode={code} />
-        <p className="mt-8 flex items-start gap-2 text-xs text-fg-subtle">
-          <ShieldCheck className="size-4 shrink-0 text-brand-cyan" aria-hidden />
-          Por tu seguridad, solo mostramos información del servicio. Los datos personales, contraseñas y notas internas nunca se publican.
+        <p className="text-fg-subtle mt-8 flex items-start gap-2 text-xs">
+          <ShieldCheck className="text-brand-cyan size-4 shrink-0" aria-hidden />
+          Por tu seguridad, solo mostramos información del servicio. Los datos personales,
+          contraseñas y notas internas nunca se publican.
         </p>
       </Container>
     </>

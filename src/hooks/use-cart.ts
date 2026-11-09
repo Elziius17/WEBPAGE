@@ -20,8 +20,13 @@ function read(): CartLine[] {
     const parsed = raw ? (JSON.parse(raw) as unknown) : [];
     cache = Array.isArray(parsed)
       ? parsed
-          .filter((l): l is CartLine => typeof l?.productId === "string" && Number.isInteger(l?.quantity))
-          .map((l) => ({ productId: l.productId, quantity: Math.min(Math.max(1, l.quantity), MAX_QTY) }))
+          .filter(
+            (l): l is CartLine => typeof l?.productId === "string" && Number.isInteger(l?.quantity),
+          )
+          .map((l) => ({
+            productId: l.productId,
+            quantity: Math.min(Math.max(1, l.quantity), MAX_QTY),
+          }))
           .slice(0, 30)
       : [];
   } catch {
@@ -66,8 +71,11 @@ export const cart = {
   },
   setQuantity(productId: string, quantity: number) {
     write(
-      read()
-        .map((l) => (l.productId === productId ? { ...l, quantity: Math.min(Math.max(1, quantity), MAX_QTY) } : l)),
+      read().map((l) =>
+        l.productId === productId
+          ? { ...l, quantity: Math.min(Math.max(1, quantity), MAX_QTY) }
+          : l,
+      ),
     );
   },
   remove(productId: string) {

@@ -76,10 +76,18 @@ export type CreatedOrder = { id: string; code: string; totalCents: number; dupli
  *  - La clave de idempotencia evita pedidos duplicados por doble envío.
  *  - El stock se verifica aquí y nuevamente al confirmar (cuando se reserva).
  */
-export async function createOrder(data: CheckoutData, userId: string | null): Promise<CreatedOrder> {
+export async function createOrder(
+  data: CheckoutData,
+  userId: string | null,
+): Promise<CreatedOrder> {
   const existing = await db.order.findUnique({ where: { idempotencyKey: data.idempotencyKey } });
   if (existing)
-    return { id: existing.id, code: existing.code, totalCents: existing.totalCents, duplicated: true };
+    return {
+      id: existing.id,
+      code: existing.code,
+      totalCents: existing.totalCents,
+      duplicated: true,
+    };
 
   const items = mergeCartItems(data.items);
 
@@ -96,7 +104,16 @@ export async function createOrder(data: CheckoutData, userId: string | null): Pr
 
       for (const item of items) {
         const rows = await tx.$queryRaw<
-          { id: string; name: string; sku: string; priceCents: number; stock: number; reserved: number; status: string; deletedAt: Date | null }[]
+          {
+            id: string;
+            name: string;
+            sku: string;
+            priceCents: number;
+            stock: number;
+            reserved: number;
+            status: string;
+            deletedAt: Date | null;
+          }[]
         >`SELECT "id","name","sku","priceCents","stock","reserved","status","deletedAt" FROM "Product" WHERE "id" = ${item.productId} FOR UPDATE`;
         const p = rows[0];
         if (!p || p.deletedAt || p.status !== "ACTIVE")
@@ -161,9 +178,15 @@ export async function createOrder(data: CheckoutData, userId: string | null): Pr
           customerNotes: data.customerNotes ?? null,
           idempotencyKey: data.idempotencyKey,
           items: { create: lines },
-          history: { create: { toStatus: "PENDING_CONFIRMATION", note: "Pedido registrado desde la tienda" } },
+          history: {
+            create: { toStatus: "PENDING_CONFIRMATION", note: "Pedido registrado desde la tienda" },
+          },
           payments: {
-            create: { method: "WHATSAPP_COORDINATION", status: "PENDING", amountCents: subtotalCents + (shippingCents ?? 0) },
+            create: {
+              method: "WHATSAPP_COORDINATION",
+              status: "PENDING",
+              amountCents: subtotalCents + (shippingCents ?? 0),
+            },
           },
           delivery: {
             create: {
@@ -174,12 +197,23 @@ export async function createOrder(data: CheckoutData, userId: string | null): Pr
               addressId,
               zoneId,
               costCents: shippingCents,
-              tracking: { create: { status: "PENDING_COORDINATION", description: "Pedido registrado" } },
+              tracking: {
+                create: { status: "PENDING_COORDINATION", description: "Pedido registrado" },
+              },
             },
           },
         },
       });
-      await audit({ userId, action: "order.create", entity: "Order", entityId: order.id, after: { code, subtotalCents, items: lines.length } }, tx);
+      await audit(
+        {
+          userId,
+          action: "order.create",
+          entity: "Order",
+          entityId: order.id,
+          after: { code, subtotalCents, items: lines.length },
+        },
+        tx,
+      );
       return { id: order.id, code: order.code, totalCents: order.totalCents, duplicated: false };
     });
   } catch (err) {
@@ -250,7 +284,8 @@ export async function changeOrderStatusTx(tx: Tx, params: ChangeOrderParams) {
     if (params.to === "COMPLETED") {
       const wasReserved = RESERVED_STATES.includes(current.status);
       for (const it of order.items) {
-        if (!wasReserved) throw new BusinessError("El pedido debe confirmarse antes de completarse.");
+        if (!wasReserved)
+          throw new BusinessError("El pedido debe confirmarse antes de completarse.");
         await applyMovement(tx, {
           productId: it.productId,
           type: "SALE",
@@ -267,7 +302,12 @@ export async function changeOrderStatusTx(tx: Tx, params: ChangeOrderParams) {
           data: { status: "DELIVERED", deliveredAt: new Date() },
         });
         await tx.shipmentTracking.create({
-          data: { deliveryId: order.delivery.id, status: "DELIVERED", description: "Entrega confirmada", createdById: params.userId },
+          data: {
+            deliveryId: order.delivery.id,
+            status: "DELIVERED",
+            description: "Entrega confirmada",
+            createdById: params.userId,
+          },
         });
       }
     }
@@ -305,7 +345,12 @@ export async function changeOrderStatusTx(tx: Tx, params: ChangeOrderParams) {
           },
         });
         await tx.shipmentTracking.create({
-          data: { deliveryId: order.delivery.id, status: "CONFIRMED", description: "Pedido confirmado", createdById: params.userId },
+          data: {
+            deliveryId: order.delivery.id,
+            status: "CONFIRMED",
+            description: "Pedido confirmado",
+            createdById: params.userId,
+          },
         });
       }
     }
@@ -317,10 +362,23 @@ export async function changeOrderStatusTx(tx: Tx, params: ChangeOrderParams) {
 
     await tx.order.update({ where: { id: order.id }, data });
     await tx.orderHistory.create({
-      data: { orderId: order.id, fromStatus: current.status, toStatus: params.to, note: params.note ?? null, userId: params.userId },
+      data: {
+        orderId: order.id,
+        fromStatus: current.status,
+        toStatus: params.to,
+        note: params.note ?? null,
+        userId: params.userId,
+      },
     });
     await audit(
-      { userId: params.userId, action: "order.status", entity: "Order", entityId: order.id, before: { status: current.status }, after: { status: params.to } },
+      {
+        userId: params.userId,
+        action: "order.status",
+        entity: "Order",
+        entityId: order.id,
+        before: { status: current.status },
+        after: { status: params.to },
+      },
       tx,
     );
   }
@@ -337,7 +395,15 @@ export const DELIVERY_TRANSITIONS: Record<DeliveryStatus, DeliveryStatus[]> = {
   IN_TRANSIT: ["OUT_FOR_DELIVERY", "DELIVERED", "INCIDENT"],
   OUT_FOR_DELIVERY: ["DELIVERED", "INCIDENT"],
   DELIVERED: [],
-  INCIDENT: ["PREPARING", "READY_FOR_PICKUP", "DISPATCHED", "IN_TRANSIT", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"],
+  INCIDENT: [
+    "PREPARING",
+    "READY_FOR_PICKUP",
+    "DISPATCHED",
+    "IN_TRANSIT",
+    "OUT_FOR_DELIVERY",
+    "DELIVERED",
+    "CANCELLED",
+  ],
   CANCELLED: [],
 };
 
@@ -357,7 +423,10 @@ export async function updateDeliveryStatus(params: {
   description?: string | null;
   location?: string | null;
 }) {
-  const delivery = await db.delivery.findUnique({ where: { id: params.deliveryId }, include: { order: true } });
+  const delivery = await db.delivery.findUnique({
+    where: { id: params.deliveryId },
+    include: { order: true },
+  });
   if (!delivery) throw new BusinessError("Entrega no encontrada.");
   if (!allowedDeliveryTransitions(delivery.method, delivery.status).includes(params.to))
     throw new BusinessError("Transición de entrega no permitida.");
@@ -390,11 +459,23 @@ export async function updateDeliveryStatus(params: {
       },
     });
     await audit(
-      { userId: params.userId, action: "delivery.status", entity: "Delivery", entityId: delivery.id, before: { status: delivery.status }, after: { status: params.to } },
+      {
+        userId: params.userId,
+        action: "delivery.status",
+        entity: "Delivery",
+        entityId: delivery.id,
+        before: { status: delivery.status },
+        after: { status: params.to },
+      },
       tx,
     );
     if (params.to === "DELIVERED") {
-      await changeOrderStatusTx(tx, { orderId: delivery.orderId, to: "COMPLETED", userId: params.userId, note: "Entrega registrada" });
+      await changeOrderStatusTx(tx, {
+        orderId: delivery.orderId,
+        to: "COMPLETED",
+        userId: params.userId,
+        note: "Entrega registrada",
+      });
     }
   });
 }

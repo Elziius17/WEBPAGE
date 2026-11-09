@@ -9,6 +9,7 @@ export default defineConfig({
   },
   datasource: {
     // Placeholder solo para comandos que no conectan (p.ej. `prisma generate` en CI).
-    url: process.env.DATABASE_URL ?? "postgresql://placeholder:placeholder@localhost:5432/placeholder",
+    url:
+      process.env.DATABASE_URL ?? "postgresql://placeholder:placeholder@localhost:5432/placeholder",
   },
 });

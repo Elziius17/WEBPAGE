@@ -33,12 +33,7 @@ export function generateOrderCode(): string {
 
 /** Normaliza un código ingresado por el usuario (mayúsculas, sin espacios, O→0, I/L→1). */
 export function normalizeCode(input: string): string {
-  return input
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g, "")
-    .replace(/O/g, "0")
-    .replace(/[IL]/g, "1");
+  return input.trim().toUpperCase().replace(/\s+/g, "").replace(/O/g, "0").replace(/[IL]/g, "1");
 }
 
 export const TRACKING_CODE_REGEX = /^EZ-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/;

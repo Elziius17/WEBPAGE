@@ -32,11 +32,18 @@ export function SiteHeader({ account }: { account: { name: string; isStaff: bool
     <header
       className={cn(
         "sticky top-0 z-50 border-b transition-colors duration-300",
-        scrolled || open ? "border-white/8 bg-ink-950/85 backdrop-blur-xl" : "border-transparent bg-transparent",
+        scrolled || open
+          ? "bg-ink-950/85 border-white/8 backdrop-blur-xl"
+          : "border-transparent bg-transparent",
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="shrink-0" aria-label="ELZIIUS, ir al inicio" onClick={() => setOpen(false)}>
+        <Link
+          href="/"
+          className="shrink-0"
+          aria-label="ELZIIUS, ir al inicio"
+          onClick={() => setOpen(false)}
+        >
           <LogoHorizontal />
         </Link>
 
@@ -54,38 +61,45 @@ export function SiteHeader({ account }: { account: { name: string; isStaff: bool
                 )}
               >
                 {item.label}
-                {active && <span className="mt-0.5 block h-px bg-gradient-to-r from-brand-blue to-brand-cyan" />}
+                {active && (
+                  <span className="from-brand-blue to-brand-cyan mt-0.5 block h-px bg-gradient-to-r" />
+                )}
               </Link>
             );
           })}
         </nav>
 
         <div className="ml-auto flex items-center gap-1.5">
-          <ButtonLink href="/seguimiento" variant="secondary" size="sm" className="hidden sm:inline-flex">
+          <ButtonLink
+            href="/seguimiento"
+            variant="secondary"
+            size="sm"
+            className="hidden sm:inline-flex"
+          >
             <Search /> Seguimiento
           </ButtonLink>
           <Link
             href={accountHref}
-            className="grid size-10 place-items-center rounded-xl text-fg-muted transition-colors hover:bg-white/6 hover:text-fg"
+            className="text-fg-muted hover:text-fg grid size-10 place-items-center rounded-xl transition-colors hover:bg-white/6"
             aria-label={account ? `Mi cuenta (${account.name})` : "Iniciar sesión"}
           >
             <User className="size-5" />
           </Link>
           <Link
             href="/carrito"
-            className="relative grid size-10 place-items-center rounded-xl text-fg-muted transition-colors hover:bg-white/6 hover:text-fg"
+            className="text-fg-muted hover:text-fg relative grid size-10 place-items-center rounded-xl transition-colors hover:bg-white/6"
             aria-label={`Carrito, ${count} producto(s)`}
           >
             <ShoppingCart className="size-5" />
             {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 grid min-w-5 place-items-center rounded-full bg-brand-cyan px-1 text-[11px] font-bold text-ink-950">
+              <span className="bg-brand-cyan text-ink-950 absolute -top-0.5 -right-0.5 grid min-w-5 place-items-center rounded-full px-1 text-[11px] font-bold">
                 {count}
               </span>
             )}
           </Link>
           <button
             type="button"
-            className="grid size-10 place-items-center rounded-xl text-fg lg:hidden"
+            className="text-fg grid size-10 place-items-center rounded-xl lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
@@ -97,21 +111,32 @@ export function SiteHeader({ account }: { account: { name: string; isStaff: bool
       </div>
 
       {open && (
-        <nav id="mobile-nav" aria-label="Móvil" className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/8 bg-ink-950 px-4 pb-10 lg:hidden">
+        <nav
+          id="mobile-nav"
+          aria-label="Móvil"
+          className="bg-ink-950 h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/8 px-4 pb-10 lg:hidden"
+        >
           <ul className="flex flex-col py-4">
-            {[...publicNav, { href: "/seguimiento", label: "Seguimiento de equipo" }].map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block border-b border-white/6 py-4 text-lg font-medium text-fg"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {[...publicNav, { href: "/seguimiento", label: "Seguimiento de equipo" }].map(
+              (item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="text-fg block border-b border-white/6 py-4 text-lg font-medium"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ),
+            )}
           </ul>
-          <ButtonLink href={accountHref} onClick={() => setOpen(false)} className="w-full" variant="secondary">
+          <ButtonLink
+            href={accountHref}
+            onClick={() => setOpen(false)}
+            className="w-full"
+            variant="secondary"
+          >
             {account ? "Mi cuenta" : "Iniciar sesión"}
           </ButtonLink>
         </nav>

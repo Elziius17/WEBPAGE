@@ -2,7 +2,12 @@ import "server-only";
 import type { z } from "zod";
 import { authorize, type CurrentUser } from "@/lib/auth/session";
 import type { Permission } from "@/lib/security/permissions";
-import { formDataToObject, handleActionError, validationError, type ActionResult } from "@/lib/actions";
+import {
+  formDataToObject,
+  handleActionError,
+  validationError,
+  type ActionResult,
+} from "@/lib/actions";
 
 /**
  * Ejecuta una acción administrativa: autoriza (servidor), valida con Zod y

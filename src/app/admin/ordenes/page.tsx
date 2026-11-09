@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { AdminPageHeader, DataTable, FilterBar, Pagination, TableEmpty, sp } from "@/components/admin/ui";
+import {
+  AdminPageHeader,
+  DataTable,
+  FilterBar,
+  Pagination,
+  TableEmpty,
+  sp,
+} from "@/components/admin/ui";
 import { ButtonLink, Button } from "@/components/ui/button";
 import { Input, Select } from "@/components/ui/form";
 import { ServiceStatusBadge } from "@/components/ui/status-badge";
@@ -51,20 +58,41 @@ export default async function ServiceOrdersPage({ searchParams }: PageProps<"/ad
       orderBy: { receivedAt: "desc" },
       skip: (page - 1) * pageSize,
       take: pageSize,
-      include: { customer: { select: { fullName: true, phone: true } }, technician: { select: { user: { select: { name: true } } } }, service: { select: { name: true } } },
+      include: {
+        customer: { select: { fullName: true, phone: true } },
+        technician: { select: { user: { select: { name: true } } } },
+        service: { select: { name: true } },
+      },
     }),
   ]);
-  const qs = (p: number) => `/admin/ordenes?${new URLSearchParams({ ...(search ? { q: search } : {}), ...(estado ? { estado } : {}), pagina: String(p) })}`;
+  const qs = (p: number) =>
+    `/admin/ordenes?${new URLSearchParams({ ...(search ? { q: search } : {}), ...(estado ? { estado } : {}), pagina: String(p) })}`;
 
   return (
     <>
       <AdminPageHeader
         title="Órdenes de servicio"
-        description={hasPermission(user.role, "service-orders:read-all") ? "Todas las órdenes técnicas." : "Órdenes asignadas a ti."}
-        actions={hasPermission(user.role, "service-orders:write") && <ButtonLink href="/admin/ordenes/nueva"><Plus /> Registrar recepción</ButtonLink>}
+        description={
+          hasPermission(user.role, "service-orders:read-all")
+            ? "Todas las órdenes técnicas."
+            : "Órdenes asignadas a ti."
+        }
+        actions={
+          hasPermission(user.role, "service-orders:write") && (
+            <ButtonLink href="/admin/ordenes/nueva">
+              <Plus /> Registrar recepción
+            </ButtonLink>
+          )
+        }
       />
       <FilterBar action="/admin/ordenes">
-        <Input name="q" defaultValue={search} placeholder="Código, cliente, teléfono, marca, serie…" className="w-72" aria-label="Buscar" />
+        <Input
+          name="q"
+          defaultValue={search}
+          placeholder="Código, cliente, teléfono, marca, serie…"
+          className="w-72"
+          aria-label="Buscar"
+        />
         <Select name="estado" defaultValue={estado ?? ""} className="w-56" aria-label="Estado">
           <option value="">Todos los estados</option>
           <optgroup label="Grupos">
@@ -74,10 +102,16 @@ export default async function ServiceOrdersPage({ searchParams }: PageProps<"/ad
             <option value="cerrados">Cerrados</option>
           </optgroup>
           <optgroup label="Estado">
-            {Object.entries(serviceOrderStatusLabel).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            {Object.entries(serviceOrderStatusLabel).map(([k, v]) => (
+              <option key={k} value={k}>
+                {v}
+              </option>
+            ))}
           </optgroup>
         </Select>
-        <Button type="submit" variant="secondary">Filtrar</Button>
+        <Button type="submit" variant="secondary">
+          Filtrar
+        </Button>
       </FilterBar>
       <DataTable
         head={["Código", "Recepción", "Cliente", "Equipo", "Servicio", "Técnico", "Estado"]}
@@ -85,13 +119,30 @@ export default async function ServiceOrdersPage({ searchParams }: PageProps<"/ad
       >
         {orders.map((o) => (
           <tr key={o.id}>
-            <td><Link href={`/admin/ordenes/${o.id}`} className="font-mono font-semibold text-fg hover:text-brand-cyan">{o.code}</Link>{o.isDemo && <span className="ml-1 text-[10px] text-warning">DEMO</span>}</td>
-            <td className="whitespace-nowrap text-fg-muted">{formatDate(o.receivedAt)}</td>
-            <td><p className="text-fg">{o.customer.fullName}</p><p className="text-xs text-fg-subtle">{o.customer.phone}</p></td>
-            <td className="text-fg-muted">{deviceTypeLabel[o.deviceType]} · {o.brand} {o.model}</td>
+            <td>
+              <Link
+                href={`/admin/ordenes/${o.id}`}
+                className="text-fg hover:text-brand-cyan font-mono font-semibold"
+              >
+                {o.code}
+              </Link>
+              {o.isDemo && <span className="text-warning ml-1 text-[10px]">DEMO</span>}
+            </td>
+            <td className="text-fg-muted whitespace-nowrap">{formatDate(o.receivedAt)}</td>
+            <td>
+              <p className="text-fg">{o.customer.fullName}</p>
+              <p className="text-fg-subtle text-xs">{o.customer.phone}</p>
+            </td>
+            <td className="text-fg-muted">
+              {deviceTypeLabel[o.deviceType]} · {o.brand} {o.model}
+            </td>
             <td className="text-fg-muted">{o.service?.name ?? "—"}</td>
-            <td className="text-fg-muted">{o.technician?.user.name ?? <span className="text-warning">Sin asignar</span>}</td>
-            <td><ServiceStatusBadge status={o.status} /></td>
+            <td className="text-fg-muted">
+              {o.technician?.user.name ?? <span className="text-warning">Sin asignar</span>}
+            </td>
+            <td>
+              <ServiceStatusBadge status={o.status} />
+            </td>
           </tr>
         ))}
       </DataTable>

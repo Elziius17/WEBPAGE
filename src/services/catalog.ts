@@ -86,7 +86,13 @@ export async function listProducts(f: CatalogFilters) {
 
   const [total, items] = await Promise.all([
     db.product.count({ where }),
-    db.product.findMany({ where, orderBy, select: productCardSelect, skip: (page - 1) * pageSize, take: pageSize }),
+    db.product.findMany({
+      where,
+      orderBy,
+      select: productCardSelect,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
   ]);
   return { items, total, page, pageSize, pages: Math.max(1, Math.ceil(total / pageSize)) };
 }
@@ -123,13 +129,30 @@ export async function getCategoriesWithCount() {
   const cats = await db.category.findMany({
     where: { active: true, deletedAt: null },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    select: { id: true, slug: true, name: true, icon: true, _count: { select: { products: { where: publicWhere } } } },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      icon: true,
+      _count: { select: { products: { where: publicWhere } } },
+    },
   });
-  return cats.map((c) => ({ id: c.id, slug: c.slug, name: c.name, icon: c.icon, count: c._count.products }));
+  return cats.map((c) => ({
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    icon: c.icon,
+    count: c._count.products,
+  }));
 }
 
 export async function getBrands() {
-  const rows = await db.product.findMany({ where: publicWhere, distinct: ["brand"], select: { brand: true }, orderBy: { brand: "asc" } });
+  const rows = await db.product.findMany({
+    where: publicWhere,
+    distinct: ["brand"],
+    select: { brand: true },
+    orderBy: { brand: "asc" },
+  });
   return rows.map((r) => r.brand);
 }
 

@@ -3,7 +3,13 @@ import { siteConfig } from "@/config/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/api", "/mi-cuenta", "/carrito", "/checkout", "/login", "/registro"] }],
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/api", "/mi-cuenta", "/carrito", "/checkout", "/login", "/registro"],
+      },
+    ],
     sitemap: `${siteConfig.url}/sitemap.xml`,
   };
 }

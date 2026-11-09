@@ -24,7 +24,11 @@ export async function generateMetadata({ params }: PageProps<"/tienda/[slug]">):
     title: `${p.name} — ${p.brand}`,
     description,
     alternates: { canonical: `/tienda/${p.slug}` },
-    openGraph: { title: p.name, description, images: p.images[0] ? [{ url: p.images[0].url }] : undefined },
+    openGraph: {
+      title: p.name,
+      description,
+      images: p.images[0] ? [{ url: p.images[0].url }] : undefined,
+    },
     robots: p.isDemo ? { index: false } : undefined,
   };
 }
@@ -35,7 +39,10 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
   if (!product) notFound();
   const related = await getRelatedProducts(product.id, product.categoryId);
   const stock = stockInfo(product);
-  const specs = (Array.isArray(product.specs) ? product.specs : []) as { label: string; value: string }[];
+  const specs = (Array.isArray(product.specs) ? product.specs : []) as {
+    label: string;
+    value: string;
+  }[];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -45,20 +52,31 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
     brand: { "@type": "Brand", name: product.brand },
     model: product.model ?? undefined,
     description: product.description,
-    image: product.images.map((i) => (i.url.startsWith("http") ? i.url : `${siteConfig.url}${i.url}`)),
+    image: product.images.map((i) =>
+      i.url.startsWith("http") ? i.url : `${siteConfig.url}${i.url}`,
+    ),
     offers: {
       "@type": "Offer",
       priceCurrency: "PEN",
       price: (product.priceCents / 100).toFixed(2),
-      availability: stock.available > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      itemCondition: product.condition === "NEW" ? "https://schema.org/NewCondition" : "https://schema.org/RefurbishedCondition",
+      availability:
+        stock.available > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      itemCondition:
+        product.condition === "NEW"
+          ? "https://schema.org/NewCondition"
+          : "https://schema.org/RefurbishedCondition",
       url: `${siteConfig.url}/tienda/${product.slug}`,
     },
   };
 
   return (
     <>
-      {!product.isDemo && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
+      {!product.isDemo && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        />
+      )}
       <PageHero
         title={product.name}
         breadcrumbs={[
@@ -76,8 +94,9 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
                 Este producto se cargó para probar la tienda; no es una oferta comercial real.
               </Alert>
             )}
-            <p className="text-sm font-medium tracking-wide text-fg-subtle uppercase">
-              {product.brand}{product.model ? ` · ${product.model}` : ""}
+            <p className="text-fg-subtle text-sm font-medium tracking-wide uppercase">
+              {product.brand}
+              {product.model ? ` · ${product.model}` : ""}
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <Badge tone={stock.tone}>{stock.label}</Badge>
@@ -85,33 +104,48 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
               <Badge>SKU {product.sku}</Badge>
             </div>
             <div className="mt-6 flex items-baseline gap-3">
-              <span className="font-display text-4xl font-extrabold text-fg">{formatPEN(product.priceCents)}</span>
+              <span className="font-display text-fg text-4xl font-extrabold">
+                {formatPEN(product.priceCents)}
+              </span>
               {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
-                <span className="text-lg text-fg-subtle line-through">{formatPEN(product.compareAtPriceCents)}</span>
+                <span className="text-fg-subtle text-lg line-through">
+                  {formatPEN(product.compareAtPriceCents)}
+                </span>
               )}
             </div>
-            <p className="mt-1 text-xs text-fg-subtle">Precio en soles, incluye IGV salvo indicación contraria.</p>
-            {product.shortDescription && <p className="mt-6 leading-relaxed text-fg-muted">{product.shortDescription}</p>}
+            <p className="text-fg-subtle mt-1 text-xs">
+              Precio en soles, incluye IGV salvo indicación contraria.
+            </p>
+            {product.shortDescription && (
+              <p className="text-fg-muted mt-6 leading-relaxed">{product.shortDescription}</p>
+            )}
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <AddToCartButton productId={product.id} available={stock.available} />
-              <WhatsAppButton message={whatsappMessages.product(product.name)} label="Consultar por WhatsApp" size="lg" variant="secondary" />
+              <WhatsAppButton
+                message={whatsappMessages.product(product.name)}
+                label="Consultar por WhatsApp"
+                size="lg"
+                variant="secondary"
+              />
             </div>
 
             <ul className="mt-8 grid gap-3 sm:grid-cols-3">
               <li className="surface flex flex-col gap-1.5 p-4 text-sm">
-                <ShieldCheck className="size-5 text-brand-cyan" aria-hidden />
-                <span className="font-semibold text-fg">Garantía</span>
-                <span className="text-fg-muted">{product.warrantyMonths > 0 ? `${product.warrantyMonths} meses` : "Consultar"}</span>
+                <ShieldCheck className="text-brand-cyan size-5" aria-hidden />
+                <span className="text-fg font-semibold">Garantía</span>
+                <span className="text-fg-muted">
+                  {product.warrantyMonths > 0 ? `${product.warrantyMonths} meses` : "Consultar"}
+                </span>
               </li>
               <li className="surface flex flex-col gap-1.5 p-4 text-sm">
-                <Store className="size-5 text-brand-cyan" aria-hidden />
-                <span className="font-semibold text-fg">Recojo</span>
+                <Store className="text-brand-cyan size-5" aria-hidden />
+                <span className="text-fg font-semibold">Recojo</span>
                 <span className="text-fg-muted">Coordinado</span>
               </li>
               <li className="surface flex flex-col gap-1.5 p-4 text-sm">
-                <Truck className="size-5 text-brand-cyan" aria-hidden />
-                <span className="font-semibold text-fg">Envío</span>
+                <Truck className="text-brand-cyan size-5" aria-hidden />
+                <span className="text-fg font-semibold">Envío</span>
                 <span className="text-fg-muted">Por courier, cotizado</span>
               </li>
             </ul>
@@ -119,14 +153,20 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
         </Container>
         <Container className="mt-14 grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="mb-4 text-xl font-bold text-fg">Descripción</h2>
-            <p className="leading-relaxed whitespace-pre-line text-fg-muted">{product.description}</p>
-            {product.warrantyNotes && <p className="mt-4 text-sm text-fg-subtle">Garantía: {product.warrantyNotes}</p>}
-            <p className="mt-6 text-xs text-fg-subtle">Publicado el {formatDate(product.createdAt)}</p>
+            <h2 className="text-fg mb-4 text-xl font-bold">Descripción</h2>
+            <p className="text-fg-muted leading-relaxed whitespace-pre-line">
+              {product.description}
+            </p>
+            {product.warrantyNotes && (
+              <p className="text-fg-subtle mt-4 text-sm">Garantía: {product.warrantyNotes}</p>
+            )}
+            <p className="text-fg-subtle mt-6 text-xs">
+              Publicado el {formatDate(product.createdAt)}
+            </p>
           </div>
           {specs.length > 0 && (
             <div>
-              <h2 className="mb-4 text-xl font-bold text-fg">Especificaciones técnicas</h2>
+              <h2 className="text-fg mb-4 text-xl font-bold">Especificaciones técnicas</h2>
               <dl className="surface divide-y divide-white/6">
                 {specs.map((s) => (
                   <div key={s.label} className="grid grid-cols-2 gap-4 px-5 py-3 text-sm">
@@ -142,9 +182,11 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
       {related.length > 0 && (
         <Section className="bg-ink-900/40">
           <Container>
-            <h2 className="mb-6 text-2xl font-bold text-fg">Productos relacionados</h2>
+            <h2 className="text-fg mb-6 text-2xl font-bold">Productos relacionados</h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {related.map((p) => <ProductCard key={p.id} product={p} />)}
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           </Container>
         </Section>

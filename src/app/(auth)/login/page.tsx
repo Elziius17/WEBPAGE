@@ -14,8 +14,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   if (user) redirect(isStaff(user.role) ? "/admin" : "/mi-cuenta");
   return (
     <>
-      <h1 className="text-2xl font-bold text-fg">Iniciar sesión</h1>
-      <p className="mt-1 mb-6 text-sm text-fg-muted">Accede a tus pedidos y servicios.</p>
+      <h1 className="text-fg text-2xl font-bold">Iniciar sesión</h1>
+      <p className="text-fg-muted mt-1 mb-6 text-sm">Accede a tus pedidos y servicios.</p>
       <LoginForm next={next} />
     </>
   );
