@@ -24,6 +24,7 @@ export function ActionForm({
   className,
   resetOnSuccess,
   redirectTo,
+  redirectPrefix,
   confirm,
   successMessage = true,
 }: {
@@ -32,6 +33,8 @@ export function ActionForm({
   className?: string;
   resetOnSuccess?: boolean;
   redirectTo?: string | ((data: unknown) => string);
+  /** Redirige a `${redirectPrefix}${data.id}` tras éxito (usable desde Server Components). */
+  redirectPrefix?: string;
   confirm?: string;
   successMessage?: boolean;
 }) {
@@ -43,8 +46,9 @@ export function ActionForm({
     if (state?.ok) {
       if (resetOnSuccess) ref.current?.reset();
       if (redirectTo) router.push(typeof redirectTo === "function" ? redirectTo(state.data) : redirectTo);
+      else if (redirectPrefix && (state.data as { id?: string } | undefined)?.id) router.push(`${redirectPrefix}${(state.data as { id: string }).id}`);
     }
-  }, [state, resetOnSuccess, redirectTo, router]);
+  }, [state, resetOnSuccess, redirectTo, redirectPrefix, router]);
 
   return (
     <FormState value={state}>

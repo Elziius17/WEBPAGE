@@ -90,7 +90,7 @@ export function InventoryLine({ data }: { data: { month: string; units: number }
             <XAxis dataKey="label" {...axisProps} />
             <YAxis {...axisProps} allowDecimals={false} width={44} />
             <Tooltip {...tooltipStyle} cursor={{ stroke: "rgba(255,255,255,0.2)" }} formatter={(v) => [`${v} unid.`, "Inventario"]} />
-            <Line type="monotone" dataKey="units" stroke={CHART.products} strokeWidth={2} dot={{ r: 4, fill: CHART.products, stroke: CHART.surface, strokeWidth: 2 }} activeDot={{ r: 5 }} />
+            <Line type="linear" dataKey="units" stroke={CHART.products} strokeWidth={2} dot={{ r: 4, fill: CHART.products, stroke: CHART.surface, strokeWidth: 2 }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>

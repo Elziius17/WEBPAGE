@@ -74,6 +74,7 @@ function ServiceOrderDoc({ o, logo, biz }: { o: OrderForPdf; logo: Buffer; biz: 
       <Page size="A4" style={s.page}>
         <View style={s.header}>
           {/* Logotipo oficial sin modificaciones */}
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image no admite alt */}
           <Image src={logo} style={s.logo} />
           <View>
             <Text style={s.hTitle}>ORDEN DE SERVICIO TÉCNICO</Text>

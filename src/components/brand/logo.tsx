@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -51,21 +52,23 @@ function Wordmark({ id }: { id: string }) {
 
 /** Isotipo (hexágono EZ + rayo). */
 export function LogoMark({ className, title = "ELZIIUS" }: { className?: string; title?: string }) {
+  const id = `lm${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg viewBox="325 85 350 350" className={cn("shrink-0", className)} role="img" aria-label={title}>
-      <Defs id="lm" />
-      <IsoGroup id="lm" />
+      <Defs id={id} />
+      <IsoGroup id={id} />
     </svg>
   );
 }
 
 /** Logotipo completo vertical (isotipo + ELZ//US + descriptor). */
 export function LogoFull({ className, withTagline = true }: { className?: string; withTagline?: boolean }) {
+  const id = `lf${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <svg viewBox={withTagline ? "260 80 480 500" : "260 80 480 460"} className={className} role="img" aria-label="ELZIIUS — Soporte, Hardware, Web">
-      <Defs id="lf" />
-      <IsoGroup id="lf" />
-      <Wordmark id="lf" />
+      <Defs id={id} />
+      <IsoGroup id={id} />
+      <Wordmark id={id} />
       {withTagline && (
         <text x="500" y="562" fontFamily={textFont} fontWeight="600" fontSize="21" fill="#FFFFFF" textAnchor="middle" letterSpacing="5">
           SOPORTE • HARDWARE • WEB
@@ -77,12 +80,13 @@ export function LogoFull({ className, withTagline = true }: { className?: string
 
 /** Versión horizontal para cabecera: isotipo + palabra ELZ//US del logotipo (mismas formas). */
 export function LogoHorizontal({ className }: { className?: string }) {
+  const id = `lh${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoMark className="h-9 w-9" title="" />
       <svg viewBox="270 440 460 90" className="h-[22px] w-auto" role="img" aria-label="ELZIIUS">
-        <Defs id="lh" />
-        <Wordmark id="lh" />
+        <Defs id={id} />
+        <Wordmark id={id} />
       </svg>
     </span>
   );
