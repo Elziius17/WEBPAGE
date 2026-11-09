@@ -34,6 +34,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["@react-pdf/renderer", "pg"],
+  // El PDF de órdenes lee el logotipo oficial desde el disco del servidor.
+  outputFileTracingIncludes: {
+    "/api/admin/service-orders/**": ["./public/logo/elziius-logo-original.jpg"],
+  },
   images: {
     remotePatterns: process.env.STORAGE_PUBLIC_URL
       ? [{ protocol: "https", hostname: new URL(process.env.STORAGE_PUBLIC_URL).hostname }]
