@@ -210,6 +210,15 @@ export const productSchema = z.object({
   warrantyMonths: z.coerce.number().int().min(0).max(120).default(0),
   warrantyNotes: optionalText(500),
   weightGrams: optionalInt,
+  /** Solo al crear: stock inicial, registrado como movimiento de entrada. */
+  initialStock: optionalInt,
+  /** Solo al crear: fotos ya subidas por el registro con IA. */
+  pendingImageKeys: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .transform((v) =>
+      v === undefined || v === "" ? [] : (Array.isArray(v) ? v : [v]).filter(Boolean).slice(0, 4),
+    ),
 });
 
 export const movementSchema = z.object({

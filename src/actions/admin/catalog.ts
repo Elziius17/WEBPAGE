@@ -8,7 +8,7 @@ import { authorize } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/security/audit";
 import { validateUpload } from "@/lib/security/file-validation";
-import { buildKey, deleteObject, publicUrl, putObject } from "@/lib/storage";
+import { buildKey, deleteObject, isValidKey, publicUrl, putObject } from "@/lib/storage";
 import { slugify } from "@/lib/utils/slug";
 import {
   categorySchema,
@@ -100,14 +100,48 @@ export async function saveProductAction(_: S, fd: FormData) {
         revalidatePath(`/tienda/${after.slug}`);
         return { ok: true, data: { id: d.id }, message: "Producto actualizado." };
       }
-      // El stock inicial NO se define aquí: se registra como movimiento de entrada (trazabilidad).
-      const p = await db.product.create({ data: { ...data, stock: 0, reserved: 0 } });
+      // Fotos del registro con IA: deben ser claves de productos aún no asociadas.
+      const keys = d.pendingImageKeys.filter((k) => isValidKey(k) && k.startsWith("products/"));
+      if (keys.length) {
+        const used = await db.productImage.count({ where: { storageKey: { in: keys } } });
+        if (used)
+          throw new BusinessError(
+            "Las fotos ya fueron asociadas a otro producto. Vuelve a subirlas.",
+          );
+      }
+      // El stock nunca se escribe directo: el inicial entra como movimiento ENTRY (trazabilidad).
+      const p = await db.product.create({
+        data: {
+          ...data,
+          stock: 0,
+          reserved: 0,
+          images: {
+            create: keys.map((k, i) => ({
+              storageKey: k,
+              url: publicUrl(k),
+              alt: data.name,
+              sortOrder: i,
+            })),
+          },
+        },
+      });
+      if (d.initialStock && d.initialStock > 0) {
+        await registerManualMovement({
+          productId: p.id,
+          type: "ENTRY",
+          quantity: d.initialStock,
+          userId: user.id,
+          reason: "Stock inicial al registrar el producto",
+          unitCostCents: data.costCents,
+          supplierId: data.supplierId,
+        });
+      }
       await audit({
         userId: user.id,
         action: "product.create",
         entity: "Product",
         entityId: p.id,
-        after: p,
+        after: { ...p, initialStock: d.initialStock ?? 0, photos: keys.length },
       });
       revalidatePath("/admin/productos");
       return { ok: true, data: { id: p.id }, message: "Producto creado." };

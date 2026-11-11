@@ -9,15 +9,17 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { put as blobPut, get as blobGet, del as blobDel } from "@vercel/blob";
 
 /**
  * Almacenamiento de objetos.
  *  - "local": disco del servidor (solo desarrollo / un único servidor).
  *  - "s3": cualquier servicio compatible con S3 (AWS S3, Cloudflare R2, MinIO).
+ *  - "blob": Vercel Blob en modo privado (los archivos se entregan siempre por /api/files).
  * Las claves se generan en el servidor (UUID) para impedir rutas arbitrarias.
  */
 
-const driver = (process.env.STORAGE_DRIVER ?? "local") as "local" | "s3";
+const driver = (process.env.STORAGE_DRIVER ?? "local") as "local" | "s3" | "blob";
 const localDir = path.resolve(
   /*turbopackIgnore: true*/ process.env.STORAGE_LOCAL_DIR ?? "./storage",
 );
@@ -49,6 +51,15 @@ export function isValidKey(key: string) {
 
 export async function putObject(key: string, body: Uint8Array, contentType: string) {
   if (!isValidKey(key)) throw new Error("Clave de almacenamiento inválida");
+  if (driver === "blob") {
+    await blobPut(key, Buffer.from(body), {
+      access: "private",
+      contentType,
+      addRandomSuffix: false,
+      allowOverwrite: false,
+    });
+    return;
+  }
   if (driver === "s3") {
     await getS3().send(
       new PutObjectCommand({
@@ -67,6 +78,11 @@ export async function putObject(key: string, body: Uint8Array, contentType: stri
 
 export async function getObject(key: string): Promise<Uint8Array | null> {
   if (!isValidKey(key)) return null;
+  if (driver === "blob") {
+    const res = await blobGet(key, { access: "private" }).catch(() => null);
+    if (!res || res.statusCode !== 200 || !res.stream) return null;
+    return new Uint8Array(await new Response(res.stream).arrayBuffer());
+  }
   if (driver === "s3") {
     const res = await getS3().send(
       new GetObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }),
@@ -84,6 +100,10 @@ export async function getObject(key: string): Promise<Uint8Array | null> {
 
 export async function deleteObject(key: string) {
   if (!isValidKey(key)) return;
+  if (driver === "blob") {
+    await blobDel(key).catch(() => undefined);
+    return;
+  }
   if (driver === "s3") {
     await getS3().send(new DeleteObjectCommand({ Bucket: process.env.S3_BUCKET, Key: key }));
     return;

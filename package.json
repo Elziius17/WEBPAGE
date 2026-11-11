@@ -23,6 +23,7 @@
     "vercel-build": "prisma migrate deploy && next build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
     "@aws-sdk/client-s3": "^3.1164.0",
     "@aws-sdk/s3-request-presigner": "^3.1164.0",
     "@date-fns/tz": "^1.5.0",
@@ -30,6 +31,8 @@
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
     "@react-pdf/renderer": "^4.9.0",
+    "@vercel/blob": "^2.9.0",
+    "@vercel/oidc": "^4.0.8",
     "better-auth": "^1.7.18",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

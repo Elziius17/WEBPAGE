@@ -122,3 +122,31 @@ describe("formularios del panel", () => {
     );
   });
 });
+
+describe("registro de producto con foto", () => {
+  const base = {
+    name: "SSD 1TB",
+    sku: "ssd-1tb",
+    brand: "X",
+    categoryId: "c1",
+    description: "Descripción suficiente",
+    priceCents: "320",
+    status: "DRAFT",
+    condition: "NEW",
+  };
+  it("acepta stock inicial y normaliza las claves de fotos a una lista (máx. 4)", () => {
+    const one = productSchema.parse({
+      ...base,
+      initialStock: "5",
+      pendingImageKeys: "products/2026/a.jpg",
+    });
+    expect(one.initialStock).toBe(5);
+    expect(one.pendingImageKeys).toEqual(["products/2026/a.jpg"]);
+    const many = productSchema.parse({ ...base, pendingImageKeys: ["a", "b", "c", "d", "e"] });
+    expect(many.pendingImageKeys).toHaveLength(4);
+    expect(productSchema.parse(base).pendingImageKeys).toEqual([]);
+  });
+  it("rechaza stock inicial negativo", () => {
+    expect(productSchema.safeParse({ ...base, initialStock: "-2" }).success).toBe(false);
+  });
+});
