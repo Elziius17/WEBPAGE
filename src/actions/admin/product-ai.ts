@@ -7,7 +7,7 @@ import { audit } from "@/lib/security/audit";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { validateUpload } from "@/lib/security/file-validation";
 import { buildKey, putObject } from "@/lib/storage";
-import { AiUnavailableError } from "@/lib/ai/client";
+import { AiUnavailableError, isProductAiEnabled } from "@/lib/ai/client";
 import {
   extractProductDraft,
   type ProductDraft,
@@ -28,6 +28,8 @@ export async function analyzeProductPhotosAction(
 ): Promise<ActionResult<AnalyzeResult>> {
   try {
     const user = await authorize("products:write");
+    if (!isProductAiEnabled())
+      throw new BusinessError("El registro con foto está desactivado. Usa el registro manual.");
     const rl = await rateLimit("product-ai", user.id, { limit: 20, windowSeconds: 3600 });
     if (!rl.ok)
       throw new BusinessError(

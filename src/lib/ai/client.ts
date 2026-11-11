@@ -11,6 +11,15 @@ import { getVercelOidcToken } from "@vercel/oidc";
 export const AI_GATEWAY_URL = "https://ai-gateway.vercel.sh";
 export const VISION_MODEL = "anthropic/claude-opus-5.5";
 
+/**
+ * Interruptor del registro de productos con foto (IA). Desactivado por defecto:
+ * para reactivarlo, define ENABLE_PRODUCT_AI=true en Vercel (requiere tarjeta
+ * verificada en AI Gateway; ver docs/AI.md).
+ */
+export function isProductAiEnabled() {
+  return process.env.ENABLE_PRODUCT_AI === "true";
+}
+
 export class AiUnavailableError extends Error {
   constructor(message: string) {
     super(message);
