@@ -133,6 +133,12 @@ export async function extractProductDraft(
           "Se agotó el crédito gratuito de IA de este periodo o hay demasiadas solicitudes. Usa el registro manual; el crédito se renueva cada 30 días.",
         );
       }
+      const type = (err.error as { error?: { type?: string } } | undefined)?.error?.type;
+      if (type === "customer_verification_required") {
+        throw new AiUnavailableError(
+          "Vercel exige registrar una tarjeta en la cuenta para liberar los créditos gratuitos de IA (AI Gateway). Mientras tanto, usa el registro manual.",
+        );
+      }
       if (err.status === 401 || err.status === 403) {
         throw new AiUnavailableError(
           "La IA no está habilitada para este proyecto en Vercel. Usa el registro manual.",
