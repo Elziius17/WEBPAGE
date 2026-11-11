@@ -13,7 +13,14 @@ export default async function CheckoutPage() {
     db.deliveryZone.findMany({
       where: { active: true },
       orderBy: { name: "asc" },
-      select: { id: true, name: true, description: true, baseCostCents: true, estimatedTime: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        baseCostCents: true,
+        costIsMinimum: true,
+        estimatedTime: true,
+      },
     }),
     getCurrentUser(),
     getBusinessSettings(),

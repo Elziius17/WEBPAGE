@@ -21,7 +21,7 @@ export default async function SettingsPage() {
   const [s, qc, testimonials] = await Promise.all([
     getBusinessSettings(),
     getQcTemplate(),
-    db.testimonial.findMany({ orderBy: { createdAt: "desc" } }),
+    db.testimonial.findMany({ orderBy: [{ approved: "asc" }, { updatedAt: "desc" }] }),
   ]);
   return (
     <>
@@ -143,7 +143,7 @@ export default async function SettingsPage() {
           </Panel>
           <Panel
             title="Testimonios"
-            description="Publica solo testimonios reales con autorización del cliente."
+            description="Los clientes registrados envían su opinión desde «Mi cuenta» y queda pendiente hasta que la publiques aquí. Publica solo testimonios reales con autorización del cliente."
           >
             <ActionForm
               action={saveTestimonialAction}
@@ -180,6 +180,13 @@ export default async function SettingsPage() {
                     <p className="text-fg font-medium">
                       {t.authorName} {t.isDemo && <Badge tone="warning">DEMO</Badge>}
                     </p>
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <Badge tone={t.approved ? "success" : "warning"}>
+                        {t.approved ? "Publicado" : "Pendiente"}
+                      </Badge>
+                      {t.userId && <Badge tone="info">Cliente registrado</Badge>}
+                      {t.verified && <Badge tone="success">Verificado</Badge>}
+                    </div>
                     <ActionForm
                       action={deleteTestimonialAction}
                       confirm="¿Eliminar testimonio?"
@@ -196,6 +203,11 @@ export default async function SettingsPage() {
                       </button>
                     </ActionForm>
                   </div>
+                  <p className="text-warning mt-1 text-xs" aria-label={`${t.rating} de 5`}>
+                    {"★".repeat(t.rating)}
+                    <span className="text-fg-subtle">{"★".repeat(5 - t.rating)}</span>
+                    {t.authorRole && <span className="text-fg-subtle ml-2">· {t.authorRole}</span>}
+                  </p>
                   <p className="text-fg-muted mt-1">{t.content}</p>
                   <ActionForm action={saveTestimonialAction} className="mt-2 space-y-0">
                     <input type="hidden" name="id" value={t.id} />

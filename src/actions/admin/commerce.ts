@@ -223,6 +223,7 @@ export async function saveZoneAction(_: S, fd: FormData) {
       name: d.name,
       description: d.description ?? null,
       baseCostCents: d.baseCostCents ?? null,
+      costIsMinimum: d.costIsMinimum,
       estimatedTime: d.estimatedTime ?? null,
       active: d.active,
     };

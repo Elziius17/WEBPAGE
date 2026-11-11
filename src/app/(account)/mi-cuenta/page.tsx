@@ -18,6 +18,8 @@ import { db } from "@/lib/db";
 import { formatPEN } from "@/lib/utils/money";
 import { formatDate } from "@/lib/utils/dates";
 import { deviceTypeLabel } from "@/config/statuses";
+import { getOwnTestimonial } from "@/services/testimonials";
+import { TestimonialForm } from "@/components/forms/testimonial-form";
 
 export const metadata: Metadata = { title: "Mi cuenta", robots: { index: false } };
 
@@ -25,6 +27,7 @@ export default async function AccountPage() {
   const user = await requireUser("/mi-cuenta");
   if (isStaff(user.role)) redirect("/admin");
   // Un cliente SOLO ve registros vinculados a su propia ficha.
+  const testimonialPromise = getOwnTestimonial(user.id);
   const customer = await db.customer.findUnique({
     where: { userId: user.id },
     include: {
@@ -62,6 +65,13 @@ export default async function AccountPage() {
       },
     },
   });
+
+  const testimonial = await testimonialPromise;
+  const parts = user.name.trim().split(/\s+/);
+  const suggestedName =
+    parts.length > 1
+      ? `${parts[0]} ${parts[parts.length - 1]!.charAt(0).toUpperCase()}.`
+      : parts[0]!;
 
   return (
     <>
@@ -160,6 +170,28 @@ export default async function AccountPage() {
               }
             />
           )}
+        </section>
+        <section id="testimonio" className="scroll-mt-24">
+          <h2 className="text-fg mb-1 text-xl font-bold">Tu opinión sobre ELZIIUS</h2>
+          <p className="text-fg-muted mb-4 text-sm">
+            Ayuda a otros clientes contando tu experiencia. Se mostrará en la página de inicio una
+            vez revisada.
+          </p>
+          <div className="max-w-2xl">
+            <TestimonialForm
+              existing={
+                testimonial && {
+                  authorName: testimonial.authorName,
+                  authorRole: testimonial.authorRole,
+                  content: testimonial.content,
+                  rating: testimonial.rating,
+                  approved: testimonial.approved,
+                  verified: testimonial.verified,
+                }
+              }
+              suggestedName={suggestedName}
+            />
+          </div>
         </section>
       </Container>
     </>

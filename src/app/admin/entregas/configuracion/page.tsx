@@ -48,7 +48,7 @@ function CourierFields({ c }: { c?: Courier }) {
 function ZoneFields({ z }: { z?: DeliveryZone }) {
   const k = z?.id ?? "new";
   return (
-    <div className="grid items-end gap-3 lg:grid-cols-[1fr_1.5fr_140px_1fr_auto_auto]">
+    <div className="grid items-end gap-3 lg:grid-cols-[1fr_1.5fr_140px_1fr_auto_auto_auto]">
       {z && <input type="hidden" name="id" value={z.id} />}
       <FormField name="name" label="Zona" required>
         <Input id={`zn-${k}`} name="name" defaultValue={z?.name} />
@@ -67,6 +67,12 @@ function ZoneFields({ z }: { z?: DeliveryZone }) {
       <FormField name="estimatedTime" label="Tiempo estimado">
         <Input id={`zt-${k}`} name="estimatedTime" defaultValue={z?.estimatedTime ?? ""} />
       </FormField>
+      <label
+        className="text-fg-muted flex h-11 items-center gap-2 text-sm"
+        title="El monto se muestra como referencia y el flete se cotiza en cada pedido"
+      >
+        <Checkbox name="costIsMinimum" defaultChecked={z?.costIsMinimum ?? false} /> Es “desde”
+      </label>
       <label className="text-fg-muted flex h-11 items-center gap-2 text-sm">
         <Checkbox name="active" defaultChecked={z?.active ?? true} /> Activa
       </label>
@@ -89,7 +95,8 @@ export default async function DeliveryConfigPage() {
       />
       <Alert tone="info" className="mb-6">
         Registra solo tarifas y tiempos confirmados con tus couriers. Si una zona no tiene costo, el
-        envío se cotizará caso a caso.
+        envío se cotizará caso a caso. Marca “Es desde” cuando el monto sea solo referencial: el
+        cliente verá “desde S/ …” y confirmarás el flete real en el pedido.
       </Alert>
       <Panel title="Couriers" className="mb-6">
         <ActionForm

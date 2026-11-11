@@ -88,6 +88,7 @@ model User {
   shipmentEvents      ShipmentTracking[]
   notifications       Notification[]
   configUpdates       BusinessConfiguration[]
+  testimonial         Testimonial?
 
   @@index([role])
 }
@@ -526,6 +527,8 @@ model DeliveryZone {
   description   String?
   /// Costo referencial configurado por ELZIIUS (null = cotizar caso a caso).
   baseCostCents Int?
+  /// true = baseCostCents es un monto referencial "desde"; el flete real se cotiza por pedido.
+  costIsMinimum Boolean    @default(false)
   /// Tiempo estimado configurado por ELZIIUS (texto libre, opcional).
   estimatedTime String?
   active        Boolean    @default(true)
@@ -948,15 +951,22 @@ model Notification {
 }
 
 model Testimonial {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
+  /// Cliente registrado que lo envió (null = cargado por el personal).
+  userId     String?   @unique
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   authorName String
   authorRole String?
   content    String
-  rating     Int      @default(5)
-  approved   Boolean  @default(false)
-  isDemo     Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  rating     Int       @default(5)
+  approved   Boolean   @default(false)
+  /// El autor tiene al menos un pedido o servicio completado.
+  verified   Boolean   @default(false)
+  /// Fecha en que el cliente autorizó publicar su nombre y opinión (Ley 29733).
+  consentAt  DateTime?
+  isDemo     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model AuditLog {

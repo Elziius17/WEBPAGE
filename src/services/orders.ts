@@ -141,7 +141,8 @@ export async function createOrder(
         const zone = await tx.deliveryZone.findFirst({ where: { id: data.zoneId, active: true } });
         if (zone) {
           zoneId = zone.id;
-          shippingCents = zone.baseCostCents ?? null; // null => ELZIIUS cotiza
+          // null => ELZIIUS cotiza (también cuando el costo es referencial "desde").
+          shippingCents = zone.costIsMinimum ? null : (zone.baseCostCents ?? null);
         }
       }
 

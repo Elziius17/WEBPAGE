@@ -1,4 +1,4 @@
-import { ArrowRight, MessageSquareQuote, Star } from "lucide-react";
+import { ArrowRight, BadgeCheck, MessageSquareQuote, Star } from "lucide-react";
 import { Hero } from "@/components/home/hero";
 import { Steps } from "@/components/home/steps";
 import { Faq } from "@/components/home/faq";
@@ -13,6 +13,7 @@ import { benefits, faqs, purchaseProcess, techProcess } from "@/config/content";
 import { siteConfig } from "@/config/site";
 import { db } from "@/lib/db";
 import { getFeaturedProducts } from "@/services/catalog";
+import { getPublishedTestimonials } from "@/services/testimonials";
 import { whatsappMessages } from "@/lib/whatsapp";
 
 export default async function HomePage() {
@@ -23,7 +24,7 @@ export default async function HomePage() {
       take: 6,
     }),
     getFeaturedProducts(4),
-    db.testimonial.findMany({ where: { approved: true }, orderBy: { createdAt: "desc" }, take: 3 }),
+    getPublishedTestimonials(6),
   ]);
 
   const jsonLd = {
@@ -188,7 +189,7 @@ export default async function HomePage() {
         <Container>
           <SectionHeader eyebrow="Testimonios" title="Lo que dicen nuestros clientes" />
           {testimonials.length ? (
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {testimonials.map((t) => (
                 <figure key={t.id} className="surface p-6">
                   <div
@@ -204,6 +205,11 @@ export default async function HomePage() {
                   </blockquote>
                   <figcaption className="text-fg mt-4 text-sm font-semibold">
                     {t.authorName}
+                    {t.verified && (
+                      <span className="text-success ml-2 inline-flex items-center gap-1 align-middle text-xs font-medium">
+                        <BadgeCheck className="size-3.5" aria-hidden /> Cliente verificado
+                      </span>
+                    )}
                     {t.authorRole && (
                       <span className="text-fg-subtle block text-xs font-normal">
                         {t.authorRole}
@@ -213,13 +219,20 @@ export default async function HomePage() {
                 </figure>
               ))}
             </div>
+          ) : null}
+          {testimonials.length ? (
+            <div className="mt-8 text-center">
+              <ButtonLink href="/mi-cuenta#testimonio" variant="secondary" size="sm">
+                <MessageSquareQuote className="size-4" aria-hidden /> Dejar mi opinión
+              </ButtonLink>
+            </div>
           ) : (
             <EmptyState
               icon={MessageSquareQuote}
               title="Muy pronto, opiniones reales de nuestros clientes"
-              description="Publicamos únicamente testimonios verificados. ¿Ya trabajaste con nosotros? Cuéntanos tu experiencia."
+              description="Publicamos únicamente opiniones de clientes registrados, revisadas por nuestro equipo. ¿Ya trabajaste con nosotros? Cuéntanos tu experiencia."
               action={
-                <ButtonLink href="/contacto?tipo=testimonio" variant="secondary" size="sm">
+                <ButtonLink href="/mi-cuenta#testimonio" variant="secondary" size="sm">
                   Dejar mi opinión
                 </ButtonLink>
               }

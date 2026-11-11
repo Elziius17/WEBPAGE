@@ -24,6 +24,7 @@ type Zone = {
   name: string;
   description: string | null;
   baseCostCents: number | null;
+  costIsMinimum: boolean;
   estimatedTime: string | null;
 };
 
@@ -60,7 +61,11 @@ export function CheckoutForm({
   const method = useWatch({ control, name: "deliveryMethod" });
   const zoneId = useWatch({ control, name: "zoneId" });
   const zone = zones.find((z) => z.id === zoneId);
-  const shipping = method === "PICKUP" ? 0 : (zone?.baseCostCents ?? null);
+  // Un costo "desde" es solo referencial: el flete real se cotiza y no se suma al total.
+  const shipping =
+    method === "PICKUP" ? 0 : zone && !zone.costIsMinimum ? (zone.baseCostCents ?? null) : null;
+  const shippingFrom =
+    method === "COURIER" && zone?.costIsMinimum ? (zone.baseCostCents ?? null) : null;
 
   if (done)
     return (
@@ -258,7 +263,7 @@ export function CheckoutForm({
                       <option key={z.id} value={z.id}>
                         {z.name}
                         {z.baseCostCents != null
-                          ? ` — ${formatPEN(z.baseCostCents)}`
+                          ? ` — ${z.costIsMinimum ? "desde " : ""}${formatPEN(z.baseCostCents)}`
                           : " — por cotizar"}
                       </option>
                     ))}
@@ -364,7 +369,11 @@ export function CheckoutForm({
             <dt className="text-fg-muted">Envío</dt>
             <dd>
               {shipping === null ? (
-                <span className="text-fg-subtle">Por cotizar</span>
+                <span className="text-fg-subtle">
+                  {shippingFrom != null
+                    ? `Desde ${formatPEN(shippingFrom)} · por cotizar`
+                    : "Por cotizar"}
+                </span>
               ) : shipping === 0 ? (
                 "Sin costo"
               ) : (

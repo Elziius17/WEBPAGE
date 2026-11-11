@@ -86,3 +86,26 @@ export const complaintSchema = z.object({
   website: z.string().max(0).optional(),
 });
 export type ComplaintInput = z.input<typeof complaintSchema>;
+
+/** Testimonio enviado por un cliente registrado (queda pendiente de moderación). */
+export const customerTestimonialSchema = z.object({
+  authorName: z
+    .string()
+    .trim()
+    .min(2, "Indica cómo quieres que aparezca tu nombre")
+    .max(60, "Máximo 60 caracteres"),
+  authorRole: optionalText(80),
+  rating: z.coerce.number().int().min(1, "Elige una valoración").max(5, "Elige una valoración"),
+  content: z
+    .string()
+    .trim()
+    .min(20, "Cuéntanos un poco más (mínimo 20 caracteres)")
+    .max(600, "Máximo 600 caracteres"),
+  consent: z
+    .unknown()
+    .refine((v) => v === true || v === "on" || v === "true", {
+      message: "Debes autorizar la publicación de tu opinión",
+    })
+    .transform(() => true as const),
+});
+export type CustomerTestimonialInput = z.input<typeof customerTestimonialSchema>;

@@ -351,6 +351,7 @@ export const zoneSchema = z.object({
   name: z.string().trim().min(2).max(80),
   description: optionalText(300),
   baseCostCents: optionalSolesToCents,
+  costIsMinimum: checkbox,
   estimatedTime: optionalText(80),
   active: checkbox,
 });
