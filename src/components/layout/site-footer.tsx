@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import { LogoFull } from "@/components/brand/logo";
 import { legalNav, publicNav, siteConfig } from "@/config/site";
 import type { PublicBusinessInfo } from "@/services/settings";
+import { CookiePreferencesLink } from "@/components/layout/cookie-consent";
 
 export function SiteFooter({ business }: { business: PublicBusinessInfo }) {
   const year = new Date().getFullYear();
@@ -29,6 +30,9 @@ export function SiteFooter({ business }: { business: PublicBusinessInfo }) {
                 </Link>
               </li>
             ))}
+            <li>
+              <CookiePreferencesLink className="text-fg-muted hover:text-brand-cyan cursor-pointer text-left transition-colors" />
+            </li>
             <li>
               <Link
                 className="text-fg-muted hover:text-brand-cyan transition-colors"

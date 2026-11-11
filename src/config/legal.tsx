@@ -80,7 +80,19 @@ export const legalDocs: LegalDoc[] = [
           Podremos compartir los datos estrictamente necesarios con empresas de courier para la
           entrega de pedidos y con proveedores de servicios tecnológicos (alojamiento,
           almacenamiento) que actúan como encargados del tratamiento bajo obligaciones de
-          confidencialidad. [Detallar proveedores y, de existir, flujos transfronterizos.]
+          confidencialidad: Vercel (alojamiento web), Neon (base de datos) y Vercel Blob (archivos),
+          con servidores en Estados Unidos, lo que constituye un flujo transfronterizo de datos.
+          Para la estabilidad y mejora del sitio usamos Sentry (registro de errores técnicos, sin
+          datos de contacto) y, solo si lo aceptas, PostHog (analítica de uso).
+        </p>
+        <h2 id="cookies">5-A. Cookies y analítica</h2>
+        <p>
+          Usamos cookies técnicas necesarias para mantener tu sesión y tu carrito. Las cookies de
+          analítica (PostHog) solo se activan si las aceptas en el aviso del sitio: registran las
+          páginas visitadas y grabaciones anónimas de la navegación con los campos de formulario
+          ocultos, y nunca se usan en tu cuenta, el inicio de sesión ni el panel interno. Puedes
+          cambiar tu elección en cualquier momento desde «Preferencias de cookies», al pie de la
+          página.
         </p>
         <h2>6. Plazo de conservación</h2>
         <p>
