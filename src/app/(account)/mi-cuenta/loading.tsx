@@ -1,5 +1,5 @@
-import { PublicPageSkeleton } from "@/components/ui/skeletons";
+import { BrandLoader } from "@/components/ui/brand-loader";
 
 export default function Loading() {
-  return <PublicPageSkeleton />;
+  return <BrandLoader label="Cargando tu cuenta…" />;
 }

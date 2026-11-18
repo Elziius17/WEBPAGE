@@ -1,5 +1,5 @@
-import { StorePageSkeleton } from "@/components/ui/skeletons";
+import { BrandLoader } from "@/components/ui/brand-loader";
 
 export default function Loading() {
-  return <StorePageSkeleton />;
+  return <BrandLoader label="Cargando la tienda…" />;
 }
