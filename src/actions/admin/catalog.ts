@@ -79,7 +79,7 @@ export async function saveProductAction(_: S, fd: FormData) {
       status: d.status,
       condition: d.condition,
       featured: d.featured,
-      warrantyMonths: d.warrantyMonths,
+      warrantyDays: d.warrantyDays,
       warrantyNotes: d.warrantyNotes ?? null,
       weightGrams: d.weightGrams ?? null,
     };

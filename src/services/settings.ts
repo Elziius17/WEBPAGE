@@ -25,6 +25,12 @@ export const businessSettingsSchema = z.object({
   pickupInstructions: z.string().trim().max(500).optional().default(""),
   courierNotes: z.string().trim().max(500).optional().default(""),
   serviceWarrantyDays: z.coerce.number().int().min(0).max(365).optional().default(0),
+  /** Garantía por defecto de productos nuevos, en días (45 = 1 mes y medio). */
+  productWarrantyDays: z.coerce.number().int().min(0).max(1095).optional().default(45),
+  /** % sobre el precio típico de mercado en Lima para el precio de venta sugerido. */
+  marketMarkupPercent: z.coerce.number().min(0).max(100).optional().default(5),
+  /** Margen mínimo deseado sobre el precio de venta (para el costo máximo de proveedor). */
+  targetMarginPercent: z.coerce.number().min(0).max(90).optional().default(20),
   warrantyText: z.string().trim().max(1500).optional().default(""),
   facebook: z
     .union([z.literal(""), z.url()])
@@ -65,6 +71,9 @@ const defaults: BusinessSettings = {
   pickupInstructions: "",
   courierNotes: "",
   serviceWarrantyDays: 0,
+  productWarrantyDays: 45,
+  marketMarkupPercent: 5,
+  targetMarginPercent: 20,
   warrantyText: "",
   facebook: "",
   instagram: "",

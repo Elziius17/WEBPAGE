@@ -9,6 +9,8 @@ import { db } from "@/lib/db";
 import { cn } from "@/lib/utils/cn";
 import { isProductAiEnabled } from "@/lib/ai/client";
 import { findSuggestion } from "@/lib/market-suggestions";
+import { getBusinessSettings } from "@/services/settings";
+import { maxCostForMargin, suggestedSalePrice, typicalMarketPrice } from "@/lib/utils/pricing";
 import { Alert } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: "Nuevo producto" };
@@ -21,7 +23,7 @@ export default async function NewProduct({ searchParams }: PageProps<"/admin/pro
   const suggestion = findSuggestion(
     typeof params.sugerencia === "string" ? params.sugerencia : undefined,
   );
-  const [categories, suppliers] = await Promise.all([
+  const [categories, suppliers, settings] = await Promise.all([
     db.category.findMany({
       where: { deletedAt: null, active: true },
       orderBy: { sortOrder: "asc" },
@@ -32,7 +34,21 @@ export default async function NewProduct({ searchParams }: PageProps<"/admin/pro
       orderBy: { name: "asc" },
       select: { id: true, name: true },
     }),
+    getBusinessSettings(),
   ]);
+  const pricingFor = (range: { min: number; max: number } | null, officialUrl: string | null) => {
+    if (!range) return { priceRangePEN: null, officialUrl };
+    const suggestedPrice = suggestedSalePrice(range, settings.marketMarkupPercent);
+    return {
+      priceRangePEN: range,
+      officialUrl,
+      suggestedPrice,
+      typicalPrice: typicalMarketPrice(range),
+      maxCost: maxCostForMargin(suggestedPrice, settings.targetMarginPercent),
+      markupPercent: settings.marketMarkupPercent,
+      marginPercent: settings.targetMarginPercent,
+    };
+  };
   const tabs = [
     { key: "manual", href: "/admin/productos/nuevo", label: "Registro manual", icon: PencilLine },
     {
@@ -92,12 +108,8 @@ export default async function NewProduct({ searchParams }: PageProps<"/admin/pro
               specs: suggestion.specs,
             }
           }
-          reference={
-            suggestion && {
-              priceRangePEN: suggestion.priceRangePEN,
-              officialUrl: suggestion.officialUrl,
-            }
-          }
+          defaultWarrantyDays={settings.productWarrantyDays}
+          reference={suggestion && pricingFor(suggestion.priceRangePEN, suggestion.officialUrl)}
         />
       )}
     </>

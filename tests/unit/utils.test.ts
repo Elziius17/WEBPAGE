@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { formatWarranty, maxCostForMargin, suggestedSalePrice } from "@/lib/utils/pricing";
 import {
   generateTrackingCode,
   generateOrderCode,
@@ -94,5 +95,23 @@ describe("RBAC", () => {
 describe("slug", () => {
   it("genera URLs amigables", () => {
     expect(slugify("Memoria RAM 16 GB — DDR4 ñandú")).toBe("memoria-ram-16-gb-ddr4-nandu");
+  });
+});
+
+describe("precios de dropshipping", () => {
+  it("sugiere un precio ligeramente mayor al típico de mercado, terminado en ,90", () => {
+    expect(suggestedSalePrice({ min: 225, max: 299 }, 5)).toBe(275.9);
+    expect(suggestedSalePrice({ min: 40, max: 50 }, 5)).toBe(47.9);
+    const p = suggestedSalePrice({ min: 85, max: 170 }, 5);
+    expect(p).toBeGreaterThan(127.5);
+  });
+  it("calcula el costo máximo para conservar el margen", () => {
+    expect(maxCostForMargin(275.9, 20)).toBe(220.72);
+  });
+  it("muestra la garantía en días o meses", () => {
+    expect(formatWarranty(45)).toBe("45 días (1 mes y medio)");
+    expect(formatWarranty(30)).toBe("1 mes");
+    expect(formatWarranty(360)).toBe("12 meses");
+    expect(formatWarranty(0)).toBe("Consultar");
   });
 });

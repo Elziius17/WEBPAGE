@@ -176,7 +176,7 @@ async function seedDemo() {
         minStock: 2,
         status: "ACTIVE",
         featured: "featured" in p ? p.featured : false,
-        warrantyMonths: p.warranty,
+        warrantyDays: p.warranty * 30,
         isDemo: true,
       },
     });

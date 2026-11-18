@@ -300,7 +300,8 @@ model Product {
   status              ProductStatus    @default(DRAFT)
   condition           ProductCondition @default(NEW)
   featured            Boolean          @default(false)
-  warrantyMonths      Int              @default(0)
+  /// Garantía del producto en días (p. ej. 45 = 1 mes y medio).
+  warrantyDays        Int              @default(0)
   warrantyNotes       String?
   weightGrams         Int?
   isDemo              Boolean          @default(false)

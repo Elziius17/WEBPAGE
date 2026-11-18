@@ -15,7 +15,7 @@ export type ProductFormDraft = {
   shortDescription?: string;
   description?: string;
   specs?: { label: string; value: string }[];
-  warrantyMonths?: number;
+  warrantyDays?: number;
 };
 
 const VERIFY = "⚠ Sugerido por IA: verifica este dato.";
@@ -28,6 +28,7 @@ export function ProductForm({
   uncertain = [],
   pendingImageKeys = [],
   reference,
+  defaultWarrantyDays = 45,
 }: {
   product?: Product;
   categories: { id: string; name: string }[];
@@ -39,7 +40,18 @@ export function ProductForm({
   /** Fotos ya subidas por el registro con IA. */
   pendingImageKeys?: string[];
   /** Referencia de la investigación de mercado (solo orientativa, no se guarda). */
-  reference?: { priceRangePEN: { min: number; max: number } | null; officialUrl: string | null };
+  reference?: {
+    priceRangePEN: { min: number; max: number } | null;
+    officialUrl: string | null;
+    /** Precio de venta sugerido en soles (típico de Lima + sobreprecio). */
+    suggestedPrice?: number;
+    typicalPrice?: number;
+    maxCost?: number;
+    markupPercent?: number;
+    marginPercent?: number;
+  };
+  /** Garantía por defecto de productos nuevos (Admin › Configuración). */
+  defaultWarrantyDays?: number;
 }) {
   const specList = Array.isArray(product?.specs)
     ? (product.specs as { label: string; value: string }[])
@@ -157,8 +169,8 @@ export function ProductForm({
             required
             hint={
               reference
-                ? reference.priceRangePEN
-                  ? `Otras tiendas en Perú: S/ ${reference.priceRangePEN.min}–${reference.priceRangePEN.max} (referencial)`
+                ? reference.priceRangePEN && reference.suggestedPrice
+                  ? `Sugerido: típico en Lima S/ ${reference.typicalPrice?.toFixed(2)} + ${reference.markupPercent} % (rango S/ ${reference.priceRangePEN.min}–${reference.priceRangePEN.max}). Ajústalo si quieres.`
                   : "Sin precio de mercado verificado: consulta a tu proveedor."
                 : undefined
             }
@@ -167,7 +179,9 @@ export function ProductForm({
               id="priceCents"
               name="priceCents"
               inputMode="decimal"
-              defaultValue={centsToSoles(product?.priceCents)}
+              defaultValue={
+                product ? centsToSoles(product.priceCents) : reference?.suggestedPrice?.toFixed(2)
+              }
             />
           </FormField>
           <FormField name="compareAtPriceCents" label="Precio anterior (promoción)">
@@ -181,7 +195,13 @@ export function ProductForm({
           <FormField
             name="costCents"
             label="Costo de adquisición (S/)"
-            hint={margin != null ? `Margen referencial: ${margin}%` : undefined}
+            hint={
+              margin != null
+                ? `Margen referencial: ${margin}%`
+                : reference?.maxCost
+                  ? `Para ganar ${reference.marginPercent} %, paga al proveedor como máximo S/ ${reference.maxCost.toFixed(2)}.`
+                  : "Lo que te cobra tu proveedor (no se muestra al cliente)."
+            }
           >
             <Input
               id="costCents"
@@ -208,13 +228,17 @@ export function ProductForm({
               defaultValue={product?.minStock ?? 1}
             />
           </FormField>
-          <FormField name="warrantyMonths" label="Garantía (meses)" hint={hint("warranty")}>
+          <FormField
+            name="warrantyDays"
+            label="Garantía (días)"
+            hint={hint("warranty", "45 días = 1 mes y medio")}
+          >
             <Input
-              id="warrantyMonths"
-              name="warrantyMonths"
+              id="warrantyDays"
+              name="warrantyDays"
               type="number"
               min={0}
-              defaultValue={product?.warrantyMonths ?? draft?.warrantyMonths ?? 0}
+              defaultValue={product?.warrantyDays ?? draft?.warrantyDays ?? defaultWarrantyDays}
             />
           </FormField>
           <FormField name="weightGrams" label="Peso (g)">

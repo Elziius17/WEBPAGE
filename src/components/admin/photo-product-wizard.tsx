@@ -77,7 +77,7 @@ export function PhotoProductWizard({
       shortDescription: d.shortDescription,
       description: d.description,
       specs: d.specs.map((s) => ({ label: s.label, value: s.value })),
-      warrantyMonths: d.warrantyMonths ?? undefined,
+      warrantyDays: d.warrantyMonths != null ? d.warrantyMonths * 30 : undefined,
     };
     const uncertain = [...d.uncertainFields];
     if (d.condition === "UNKNOWN") uncertain.push("condition");

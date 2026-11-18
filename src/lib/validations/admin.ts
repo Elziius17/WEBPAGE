@@ -207,7 +207,7 @@ export const productSchema = z.object({
   status: z.enum(["DRAFT", "ACTIVE", "INACTIVE", "DISCONTINUED"]),
   condition: z.enum(["NEW", "REFURBISHED", "USED"]),
   featured: checkbox,
-  warrantyMonths: z.coerce.number().int().min(0).max(120).default(0),
+  warrantyDays: z.coerce.number().int().min(0).max(1095).default(0),
   warrantyNotes: optionalText(500),
   weightGrams: optionalInt,
   /** Solo al crear: stock inicial, registrado como movimiento de entrada. */

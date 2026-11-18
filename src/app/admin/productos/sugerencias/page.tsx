@@ -7,13 +7,16 @@ import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
 import { requireStaffPage } from "@/lib/auth/session";
 import { db } from "@/lib/db";
+import { getBusinessSettings } from "@/services/settings";
+import { suggestedSalePrice } from "@/lib/utils/pricing";
+import { formatPEN } from "@/lib/utils/money";
 import { marketResearchDate, marketSuggestions, productKey } from "@/lib/market-suggestions";
 
 export const metadata: Metadata = { title: "Productos sugeridos" };
 
 export default async function SuggestionsPage() {
   await requireStaffPage("products:write");
-  const [categories, products] = await Promise.all([
+  const [categories, products, settings] = await Promise.all([
     db.category.findMany({
       where: { active: true, deletedAt: null },
       orderBy: { sortOrder: "asc" },
@@ -23,6 +26,7 @@ export default async function SuggestionsPage() {
       where: { deletedAt: null, isDemo: false },
       select: { id: true, brand: true, model: true },
     }),
+    getBusinessSettings(),
   ]);
   const existing = new Map(products.map((p) => [productKey(p.brand, p.model), p.id]));
   return (
@@ -61,6 +65,19 @@ export default async function SuggestionsPage() {
                               ? `Ref. mercado: S/ ${s.priceRangePEN.min}–${s.priceRangePEN.max}`
                               : "Precio de mercado no verificado"}
                           </Badge>
+                          {s.priceRangePEN && (
+                            <Badge tone="success">
+                              Tu precio sugerido:{" "}
+                              {formatPEN(
+                                Math.round(
+                                  suggestedSalePrice(
+                                    s.priceRangePEN,
+                                    settings.marketMarkupPercent,
+                                  ) * 100,
+                                ),
+                              )}
+                            </Badge>
+                          )}
                           {s.searchTerms.slice(0, 3).map((t) => (
                             <span
                               key={t}

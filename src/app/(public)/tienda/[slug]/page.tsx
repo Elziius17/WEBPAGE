@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { formatWarranty } from "@/lib/utils/pricing";
 import { notFound } from "next/navigation";
 import { ShieldCheck, Truck, Store } from "lucide-react";
 import { PageHero } from "@/components/layout/page-hero";
@@ -134,9 +135,7 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
               <li className="surface flex flex-col gap-1.5 p-4 text-sm">
                 <ShieldCheck className="text-brand-cyan size-5" aria-hidden />
                 <span className="text-fg font-semibold">Garantía</span>
-                <span className="text-fg-muted">
-                  {product.warrantyMonths > 0 ? `${product.warrantyMonths} meses` : "Consultar"}
-                </span>
+                <span className="text-fg-muted">{formatWarranty(product.warrantyDays)}</span>
               </li>
               <li className="surface flex flex-col gap-1.5 p-4 text-sm">
                 <Store className="text-brand-cyan size-5" aria-hidden />

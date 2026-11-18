@@ -91,6 +91,45 @@ export default async function SettingsPage() {
                 />
               </FormField>
             </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <FormField
+                name="productWarrantyDays"
+                label="Garantía de productos (días)"
+                hint="Valor por defecto al crear un producto. 45 = 1 mes y medio."
+              >
+                <Input
+                  id="productWarrantyDays"
+                  name="productWarrantyDays"
+                  type="number"
+                  min={0}
+                  defaultValue={s.productWarrantyDays}
+                />
+              </FormField>
+              <FormField
+                name="marketMarkupPercent"
+                label="Sobreprecio vs. mercado (%)"
+                hint="Precio sugerido = precio típico en Lima + este %."
+              >
+                <Input
+                  id="marketMarkupPercent"
+                  name="marketMarkupPercent"
+                  inputMode="decimal"
+                  defaultValue={s.marketMarkupPercent}
+                />
+              </FormField>
+              <FormField
+                name="targetMarginPercent"
+                label="Margen objetivo (%)"
+                hint="Para calcular el costo máximo que puedes pagar al proveedor."
+              >
+                <Input
+                  id="targetMarginPercent"
+                  name="targetMarginPercent"
+                  inputMode="decimal"
+                  defaultValue={s.targetMarginPercent}
+                />
+              </FormField>
+            </div>
             <div className="grid gap-4 sm:grid-cols-[160px_1fr]">
               <FormField name="serviceWarrantyDays" label="Garantía de servicio (días)">
                 <Input
