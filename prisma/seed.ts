@@ -113,10 +113,21 @@ async function seedCatalog() {
   for (const [i, c] of categoriesSeed.entries()) {
     await db.category.upsert({
       where: { slug: c.slug },
-      update: {},
+      update: {
+        name: c.name,
+        icon: c.icon,
+        description: c.description,
+        sortOrder: i,
+        active: true,
+      },
       create: { ...c, sortOrder: i },
     });
   }
+  // Solo se venden las categorías del seed: el resto queda inactivo (no se borra).
+  await db.category.updateMany({
+    where: { slug: { notIn: categoriesSeed.map((c) => c.slug) } },
+    data: { active: false },
+  });
   await db.businessConfiguration.upsert({
     where: { key: "qc.template" },
     update: {},

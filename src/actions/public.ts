@@ -2,6 +2,7 @@
 
 import {
   complaintSchema,
+  pcBuildSchema,
   publicRequestSchema,
   trackingLookupSchema,
 } from "@/lib/validations/public";
@@ -9,7 +10,7 @@ import { db } from "@/lib/db";
 import { checkoutSchema } from "@/lib/validations/checkout";
 import { handleActionError, validationError, type ActionResult } from "@/lib/actions";
 import { rateLimitByIp } from "@/lib/security/rate-limit";
-import { createPublicRequest } from "@/services/requests";
+import { createPcBuildRequest, createPublicRequest } from "@/services/requests";
 import { findPublicTracking, type PublicTracking } from "@/services/service-orders";
 import { createOrder } from "@/services/orders";
 import { getCartProducts, availableUnits } from "@/services/catalog";
@@ -150,6 +151,33 @@ export async function submitComplaint(
       },
     });
     return { ok: true, data: { code, createdAt: r.createdAt.toISOString() } };
+  } catch (e) {
+    return handleActionError(e);
+  }
+}
+
+/** "Cotizar PC completa": guarda las especificaciones; el precio lo define ELZIIUS internamente. */
+export async function submitPcBuildQuote(input: unknown): Promise<ActionResult> {
+  try {
+    const parsed = pcBuildSchema.safeParse(input);
+    if (!parsed.success) return validationError(parsed.error);
+    if (parsed.data.website) return { ok: true, message: "Solicitud recibida." };
+    const rl = await rateLimitByIp("pc-build", { limit: 4, windowSeconds: 900 });
+    if (!rl.ok)
+      return {
+        ok: false,
+        error: `Ya recibimos varias cotizaciones tuyas. Intenta en ${Math.ceil(rl.retryAfterSeconds / 60)} min o escríbenos por WhatsApp.`,
+      };
+    const user = await getCurrentUser();
+    const customer = user
+      ? await db.customer.findUnique({ where: { userId: user.id }, select: { id: true } })
+      : null;
+    await createPcBuildRequest(parsed.data, customer?.id ?? null);
+    return {
+      ok: true,
+      message:
+        "¡Listo! Recibimos tus especificaciones. Te enviaremos la cotización con precio y disponibilidad por tu medio de contacto preferido.",
+    };
   } catch (e) {
     return handleActionError(e);
   }

@@ -11,6 +11,7 @@ import { db } from "@/lib/db";
 import { audit } from "@/lib/security/audit";
 import {
   customerSchema,
+  pcQuoteSchema,
   requestUpdateSchema,
   staffUserSchema,
   testimonialSchema,
@@ -65,6 +66,36 @@ export async function updateRequestAction(_: S, fd: FormData) {
       after: { status: d.status },
     });
     revalidatePath("/admin/solicitudes");
+  });
+}
+
+/** Registra el precio interno de una "Cotización de PC completa". */
+export async function savePcQuoteAction(_: S, fd: FormData) {
+  return runAdminAction("requests:write", pcQuoteSchema, fd, async (d, user) => {
+    const before = await db.serviceRequest.findUnique({
+      where: { id: d.requestId },
+      select: { kind: true, status: true, quotedPriceCents: true },
+    });
+    if (!before || before.kind !== "PC_BUILD")
+      throw new BusinessError("La solicitud no es una cotización de PC.");
+    await db.serviceRequest.update({
+      where: { id: d.requestId },
+      data: {
+        quotedPriceCents: d.quotedPriceCents,
+        quotedAt: new Date(),
+        status: before.status === "NEW" ? "CONTACTED" : before.status,
+      },
+    });
+    await audit({
+      userId: user.id,
+      action: "request.pc_quote",
+      entity: "ServiceRequest",
+      entityId: d.requestId,
+      before: { quotedPriceCents: before.quotedPriceCents },
+      after: { quotedPriceCents: d.quotedPriceCents },
+    });
+    revalidatePath("/admin/solicitudes");
+    return { ok: true, message: "Precio cotizado guardado." };
   });
 }
 

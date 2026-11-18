@@ -16,11 +16,12 @@ import {
   type SortKey,
 } from "@/services/catalog";
 import { cn } from "@/lib/utils/cn";
+import { PcQuoteBanner } from "@/components/products/pc-quote-banner";
 
 export const metadata: Metadata = {
   title: "Tienda de componentes y periféricos",
   description:
-    "Procesadores, memorias RAM, SSD NVMe, tarjetas gráficas, monitores, impresoras y accesorios con garantía. Precios en soles.",
+    "Audífonos, mouse, teclados, combos 3 en 1, adaptadores, tarjetas de video, discos sólidos (SSD) y memoria RAM con garantía. Precios en soles.",
   alternates: { canonical: "/tienda" },
 };
 
@@ -71,7 +72,7 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
     <>
       <PageHero
         eyebrow="Tienda ELZIIUS"
-        title={activeCategory ? activeCategory.name : "Componentes, periféricos e impresoras"}
+        title={activeCategory ? activeCategory.name : "Periféricos y componentes"}
         description="Precios en soles (PEN). Confirmamos la disponibilidad y coordinamos contigo el pago y la entrega."
         breadcrumbs={
           activeCategory
@@ -99,6 +100,7 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
             </Link>
           ))}
         </nav>
+        <PcQuoteBanner className="mb-8" />
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           <aside className="surface h-fit p-5 lg:sticky lg:top-24">
             <CatalogFilters params={params} categories={categories} brands={brands} />

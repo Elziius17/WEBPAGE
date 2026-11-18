@@ -27,6 +27,7 @@ export function ProductForm({
   draft,
   uncertain = [],
   pendingImageKeys = [],
+  reference,
 }: {
   product?: Product;
   categories: { id: string; name: string }[];
@@ -37,6 +38,8 @@ export function ProductForm({
   uncertain?: string[];
   /** Fotos ya subidas por el registro con IA. */
   pendingImageKeys?: string[];
+  /** Referencia de la investigación de mercado (solo orientativa, no se guarda). */
+  reference?: { priceRangePEN: { min: number; max: number } | null; officialUrl: string | null };
 }) {
   const specList = Array.isArray(product?.specs)
     ? (product.specs as { label: string; value: string }[])
@@ -148,7 +151,18 @@ export function ProductForm({
       <section className="surface space-y-4 p-6">
         <h2 className="text-fg font-semibold">Precio, stock y garantía</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <FormField name="priceCents" label="Precio de venta (S/)" required>
+          <FormField
+            name="priceCents"
+            label="Precio de venta (S/)"
+            required
+            hint={
+              reference
+                ? reference.priceRangePEN
+                  ? `Otras tiendas en Perú: S/ ${reference.priceRangePEN.min}–${reference.priceRangePEN.max} (referencial)`
+                  : "Sin precio de mercado verificado: consulta a tu proveedor."
+                : undefined
+            }
+          >
             <Input
               id="priceCents"
               name="priceCents"

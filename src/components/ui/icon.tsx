@@ -36,6 +36,7 @@ import {
   Smartphone,
   SearchCheck,
   Globe,
+  Headphones,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -78,6 +79,8 @@ const ICONS: Record<string, LucideIcon> = {
   smartphone: Smartphone,
   "search-check": SearchCheck,
   globe: Globe,
+  headphones: Headphones,
+  package: Package,
 };
 
 export const ICON_NAMES = Object.keys(ICONS);

@@ -25,7 +25,12 @@ export type CatalogFilters = {
   pageSize?: number;
 };
 
-const publicWhere: Prisma.ProductWhereInput = { status: "ACTIVE", deletedAt: null };
+/** Visible en la tienda: activo, no eliminado y de una categoría que se vende. */
+const publicWhere: Prisma.ProductWhereInput = {
+  status: "ACTIVE",
+  deletedAt: null,
+  category: { active: true, deletedAt: null },
+};
 
 export const productCardSelect = {
   id: true,

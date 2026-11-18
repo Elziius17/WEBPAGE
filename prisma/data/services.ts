@@ -222,19 +222,57 @@ export const servicesSeed = [
   },
 ] as const;
 
+/**
+ * Categorías que vende ELZIIUS (modelo dropshipping). Las que no están aquí
+ * se desactivan en el seed: no se borran, para no perder historial.
+ */
 export const categoriesSeed = [
-  { slug: "procesadores", name: "Procesadores", icon: "cpu" },
-  { slug: "placas-madre", name: "Placas madre", icon: "circuit-board" },
-  { slug: "memoria-ram", name: "Memoria RAM", icon: "memory-stick" },
-  { slug: "ssd-nvme", name: "SSD y NVMe", icon: "hard-drive" },
-  { slug: "discos-duros", name: "Discos duros", icon: "hard-drive" },
-  { slug: "tarjetas-graficas", name: "Tarjetas gráficas", icon: "gpu" },
-  { slug: "fuentes", name: "Fuentes de poder", icon: "plug-zap" },
-  { slug: "gabinetes", name: "Gabinetes", icon: "box" },
-  { slug: "refrigeracion", name: "Refrigeración", icon: "fan" },
-  { slug: "monitores", name: "Monitores", icon: "monitor" },
-  { slug: "teclados", name: "Teclados", icon: "keyboard" },
-  { slug: "mouse", name: "Mouse", icon: "mouse" },
-  { slug: "impresoras", name: "Impresoras", icon: "printer" },
-  { slug: "accesorios", name: "Accesorios", icon: "cable" },
+  {
+    slug: "audifonos",
+    name: "Audífonos",
+    icon: "headphones",
+    description: "Audífonos y headsets gamer, inalámbricos y para oficina.",
+  },
+  {
+    slug: "mouse",
+    name: "Mouse",
+    icon: "mouse",
+    description: "Mouse gamer, inalámbricos y ergonómicos.",
+  },
+  {
+    slug: "teclados",
+    name: "Teclados",
+    icon: "keyboard",
+    description: "Teclados mecánicos, gamer, inalámbricos y de oficina.",
+  },
+  {
+    slug: "combos-3-en-1",
+    name: "Combos 3 en 1",
+    icon: "package",
+    description: "Kits de periféricos en un solo paquete.",
+  },
+  {
+    slug: "adaptadores",
+    name: "Adaptadores",
+    icon: "cable",
+    description: "Hubs USB-C, adaptadores HDMI, Wi-Fi y Bluetooth USB.",
+  },
+  {
+    slug: "tarjetas-graficas",
+    name: "Tarjetas de video",
+    icon: "gpu",
+    description: "Tarjetas gráficas NVIDIA GeForce y AMD Radeon.",
+  },
+  {
+    slug: "ssd-nvme",
+    name: "Discos sólidos (SSD)",
+    icon: "hard-drive",
+    description: "SSD SATA y NVMe M.2 para acelerar tu PC o laptop.",
+  },
+  {
+    slug: "memoria-ram",
+    name: "Memoria RAM",
+    icon: "memory-stick",
+    description: "Memorias DDR4 y DDR5 para PC y laptop.",
+  },
 ] as const;

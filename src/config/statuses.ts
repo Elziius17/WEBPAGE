@@ -131,6 +131,7 @@ export const requestKindLabel: Record<RequestKind, string> = {
   PRODUCT_INQUIRY: "Consulta de producto",
   WEB_PROJECT: "Proyecto web",
   COMPLAINT: "Libro de reclamaciones",
+  PC_BUILD: "Cotización de PC completa",
 };
 
 export const deviceTypeLabel: Record<DeviceType, string> = {

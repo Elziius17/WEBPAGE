@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, BadgeCheck, MessageSquareQuote, Star } from "lucide-react";
 import { Hero } from "@/components/home/hero";
 import { Steps } from "@/components/home/steps";
@@ -13,11 +14,12 @@ import { benefits, faqs, purchaseProcess, techProcess } from "@/config/content";
 import { siteConfig } from "@/config/site";
 import { db } from "@/lib/db";
 import { getFeaturedProducts } from "@/services/catalog";
+import { PcQuoteBanner } from "@/components/products/pc-quote-banner";
 import { getPublishedTestimonials } from "@/services/testimonials";
 import { whatsappMessages } from "@/lib/whatsapp";
 
 export default async function HomePage() {
-  const [services, products, testimonials] = await Promise.all([
+  const [services, products, testimonials, categories] = await Promise.all([
     db.service.findMany({
       where: { active: true, deletedAt: null },
       orderBy: { sortOrder: "asc" },
@@ -25,6 +27,11 @@ export default async function HomePage() {
     }),
     getFeaturedProducts(4),
     getPublishedTestimonials(6),
+    db.category.findMany({
+      where: { active: true, deletedAt: null },
+      orderBy: { sortOrder: "asc" },
+      select: { slug: true, name: true, icon: true },
+    }),
   ]);
 
   const jsonLd = {
@@ -73,7 +80,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 gap-4">
             {[
               ["Soporte", "Mantenimiento, reparación e instalación de software"],
-              ["Hardware", "Componentes, periféricos, monitores e impresoras"],
+              ["Hardware", "Periféricos, componentes y PC completas a cotizar"],
               ["Web", "Landing pages, webs corporativas y tiendas virtuales"],
               ["Empresas", "Planes de mantenimiento y soporte a usuarios"],
             ].map(([t, d]) => (
@@ -113,8 +120,25 @@ export default async function HomePage() {
           <SectionHeader
             eyebrow="Tienda"
             title="Productos destacados"
-            description="Componentes y periféricos seleccionados, con garantía y asesoría de compatibilidad."
+            description="Periféricos y componentes seleccionados, con garantía y asesoría de compatibilidad."
           />
+          <nav
+            aria-label="Categorías de la tienda"
+            className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4"
+          >
+            {categories.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/tienda?categoria=${c.slug}`}
+                className="surface hover:border-brand-cyan/40 flex items-center gap-3 p-4 transition-colors"
+              >
+                <span className="bg-brand-cyan/10 text-brand-cyan grid size-10 shrink-0 place-items-center rounded-lg">
+                  <DynamicIcon name={c.icon} className="size-5" />
+                </span>
+                <span className="text-fg text-sm font-medium">{c.name}</span>
+              </Link>
+            ))}
+          </nav>
           {products.length ? (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {products.map((p) => (
@@ -128,7 +152,8 @@ export default async function HomePage() {
               description="Mientras tanto, consúltanos por disponibilidad."
             />
           )}
-          <div className="mt-10 text-center">
+          <PcQuoteBanner className="mt-10" />
+          <div className="mt-8 text-center">
             <ButtonLink href="/tienda" variant="secondary">
               Ir a la tienda <ArrowRight />
             </ButtonLink>

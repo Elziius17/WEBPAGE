@@ -39,6 +39,7 @@ export const siteConfig = {
 export const publicNav = [
   { href: "/servicios", label: "Servicios" },
   { href: "/tienda", label: "Tienda" },
+  { href: "/cotizar-pc", label: "Cotizar PC" },
   { href: "/desarrollo-web", label: "Desarrollo web" },
   { href: "/protocolos", label: "Protocolos" },
   { href: "/nosotros", label: "Nosotros" },

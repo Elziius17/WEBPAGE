@@ -11,6 +11,7 @@ export const whatsappMessages = {
   order: (code: string, total: string) =>
     `Hola, acabo de registrar el pedido ${code} por ${total} en ELZIIUS. Deseo coordinar la confirmación y la entrega.`,
   webProject: () => "Hola, deseo cotizar el desarrollo de una página web con ELZIIUS.",
+  pcBuild: () => "Hola, quiero cotizar una PC completa con ELZIIUS.",
 };
 
 /** Normaliza el número comercial configurado (solo dígitos). */

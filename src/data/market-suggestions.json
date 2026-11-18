@@ -1,0 +1,1486 @@
+{
+  "researchedAt": "2026-11-18",
+  "note": "Sugerencias de investigación de mercado (búsquedas web). Precios solo referenciales de terceros; no son precios de ELZIIUS.",
+  "products": [
+    {
+      "id": "redragon-h510-zeus-x-rgb",
+      "category": "audifonos",
+      "brand": "Redragon",
+      "model": "H510 Zeus X RGB",
+      "name": "Audífonos Gamer Redragon Zeus X H510 RGB 7.1",
+      "shortDescription": "Headset gamer con sonido envolvente 7.1 virtual, drivers de 53 mm, micrófono y luces RGB.",
+      "description": "Audífonos gamer over-ear de Redragon con drivers de 53 mm y sonido 7.1 virtual por USB. Incluyen micrófono e iluminación RGB. Existe una versión inalámbrica (H510-Pro / Zeus X Pro) con receptor 2.4 GHz.",
+      "specs": [
+        {
+          "label": "Drivers",
+          "value": "53 mm"
+        },
+        {
+          "label": "Sonido",
+          "value": "7.1 virtual"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB (versión con cable)"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 225,
+        "max": 299
+      },
+      "officialUrl": "https://redragonshop.com/es/products/h510-zeus-wireless-gaming-headset",
+      "searchTerms": [
+        "audífonos gamer",
+        "audífonos redragon",
+        "redragon zeus h510",
+        "audífonos gamer 7.1"
+      ]
+    },
+    {
+      "id": "hyperx-cloud-stinger-2-519t1aa",
+      "category": "audifonos",
+      "brand": "HyperX",
+      "model": "Cloud Stinger 2 (519T1AA)",
+      "name": "Audífonos Gamer HyperX Cloud Stinger 2 con Micrófono 3.5 mm",
+      "shortDescription": "Headset gamer liviano con drivers de 50 mm, micrófono abatible para silenciar y conector 3.5 mm.",
+      "description": "Audífonos gamer de HyperX con drivers dinámicos de 50 mm y conector 3.5 mm. El micrófono se silencia al girarlo hacia arriba y tiene control de volumen en el auricular. Compatible con PC y consolas vía 3.5 mm.",
+      "specs": [
+        {
+          "label": "Drivers",
+          "value": "50 mm"
+        },
+        {
+          "label": "Conexión",
+          "value": "3.5 mm"
+        },
+        {
+          "label": "Micrófono",
+          "value": "Abatible, swivel-to-mute"
+        },
+        {
+          "label": "Respuesta de frecuencia",
+          "value": "10 Hz–28 kHz"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 169,
+        "max": 226
+      },
+      "officialUrl": "https://hyperx.com/products/hyperx-cloud-stinger-2",
+      "searchTerms": [
+        "audífonos hyperx",
+        "hyperx cloud stinger 2",
+        "audífonos gamer con micrófono"
+      ]
+    },
+    {
+      "id": "hyperx-cloud-stinger-2-core-683l9aa",
+      "category": "audifonos",
+      "brand": "HyperX",
+      "model": "Cloud Stinger 2 Core (683L9AA)",
+      "name": "Audífonos Gamer HyperX Cloud Stinger 2 Core 3.5 mm",
+      "shortDescription": "Versión económica del Stinger 2: liviana, con micrófono y conector 3.5 mm para PC y consolas.",
+      "description": "Variante de entrada de la línea Cloud Stinger 2 de HyperX. Se conecta por 3.5 mm y trae micrófono integrado. Es el HyperX más económico listado en tiendas peruanas.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "3.5 mm"
+        },
+        {
+          "label": "Respuesta de frecuencia",
+          "value": "10 Hz–25 kHz"
+        },
+        {
+          "label": "Micrófono",
+          "value": "Sí"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 166,
+        "max": 219
+      },
+      "officialUrl": "https://hyperx.com/products/hyperx-cloud-stinger-2-core",
+      "searchTerms": [
+        "audífonos hyperx baratos",
+        "hyperx stinger 2 core",
+        "audífonos para pc"
+      ]
+    },
+    {
+      "id": "logitech-g-g435-lightspeed",
+      "category": "audifonos",
+      "brand": "Logitech G",
+      "model": "G435 Lightspeed",
+      "name": "Audífonos Inalámbricos Logitech G435 Lightspeed Bluetooth",
+      "shortDescription": "Headset gamer inalámbrico ultraliviano con conexión Lightspeed 2.4 GHz y Bluetooth.",
+      "description": "Audífonos gamer inalámbricos de Logitech G con doble conexión: receptor Lightspeed 2.4 GHz y Bluetooth. Diseño liviano con micrófonos integrados y varias opciones de color.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "Lightspeed 2.4 GHz + Bluetooth"
+        },
+        {
+          "label": "Tipo",
+          "value": "Over-ear inalámbrico"
+        },
+        {
+          "label": "Micrófono",
+          "value": "Integrado (beamforming)"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 205,
+        "max": 399
+      },
+      "officialUrl": "https://www.logitechg.com/es-roam/products/gaming-audio/g435-wireless-gaming-headset.html",
+      "searchTerms": [
+        "audífonos gamer inalámbricos",
+        "logitech g435",
+        "audífonos bluetooth gamer"
+      ]
+    },
+    {
+      "id": "logitech-g-g335",
+      "category": "audifonos",
+      "brand": "Logitech G",
+      "model": "G335",
+      "name": "Audífonos Gamer Logitech G335 con Cable y Micrófono",
+      "shortDescription": "Headset gamer liviano con cable 3.5 mm, micrófono abatible y diadema elástica, en varios colores.",
+      "description": "Audífonos gamer con cable de Logitech G, conector 3.5 mm compatible con PC, consolas y celular. El micrófono se silencia al girarlo y la diadema es ajustable. Se vende en negro, blanco y menta.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "3.5 mm"
+        },
+        {
+          "label": "Micrófono",
+          "value": "Abatible, flip-to-mute"
+        },
+        {
+          "label": "Colores",
+          "value": "Negro, blanco, menta"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.logitechg.com/es-roam/products/gaming-audio/g335-wired-gaming-headset.html",
+      "searchTerms": [
+        "logitech g335",
+        "audífonos gamer blancos",
+        "audífonos con micrófono"
+      ]
+    },
+    {
+      "id": "logitech-g-g203-lightsync",
+      "category": "mouse",
+      "brand": "Logitech G",
+      "model": "G203 Lightsync",
+      "name": "Mouse Gamer Logitech G203 Lightsync RGB 8000 DPI",
+      "shortDescription": "Mouse gamer con cable de 6 botones, sensor de hasta 8,000 DPI e iluminación RGB Lightsync.",
+      "description": "Mouse gamer con cable de Logitech G con sensor de hasta 8,000 DPI y 6 botones programables. Tiene iluminación RGB Lightsync configurable por software y se vende en varios colores.",
+      "specs": [
+        {
+          "label": "DPI",
+          "value": "Hasta 8,000"
+        },
+        {
+          "label": "Botones",
+          "value": "6 programables"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB Lightsync"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 85,
+        "max": 170
+      },
+      "officialUrl": "https://www.logitechg.com/es-roam/products/gaming-mice/g203-lightsync-rgb-6-button-gaming-mouse.html",
+      "searchTerms": [
+        "mouse gamer",
+        "logitech g203",
+        "mouse gamer rgb",
+        "mouse gamer barato"
+      ]
+    },
+    {
+      "id": "logitech-g-g305-lightspeed",
+      "category": "mouse",
+      "brand": "Logitech G",
+      "model": "G305 Lightspeed",
+      "name": "Mouse Gamer Inalámbrico Logitech G305 Lightspeed",
+      "shortDescription": "Mouse gamer inalámbrico Lightspeed con sensor HERO de 12,000 DPI y 6 botones programables.",
+      "description": "Mouse gamer inalámbrico de Logitech G con conexión Lightspeed 2.4 GHz y sensor HERO de hasta 12,000 DPI. Funciona con una pila AA y tiene 6 botones programables.",
+      "specs": [
+        {
+          "label": "Sensor",
+          "value": "HERO, hasta 12,000 DPI"
+        },
+        {
+          "label": "Conexión",
+          "value": "Lightspeed 2.4 GHz"
+        },
+        {
+          "label": "Alimentación",
+          "value": "1 pila AA"
+        },
+        {
+          "label": "Botones",
+          "value": "6 programables"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 139,
+        "max": 190
+      },
+      "officialUrl": "https://www.logitechg.com/es-roam/products/gaming-mice/g305-lightspeed-wireless-gaming-mouse.html",
+      "searchTerms": [
+        "mouse inalámbrico gamer",
+        "logitech g305",
+        "mouse gamer inalámbrico"
+      ]
+    },
+    {
+      "id": "logitech-m170",
+      "category": "mouse",
+      "brand": "Logitech",
+      "model": "M170",
+      "name": "Mouse Inalámbrico Logitech M170",
+      "shortDescription": "Mouse inalámbrico compacto con receptor USB nano, ideal para laptop, oficina y estudio.",
+      "description": "Mouse inalámbrico básico de Logitech con receptor USB de 2.4 GHz y sensor óptico. Diseño ambidiestro y compacto para uso diario en laptop o PC.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "Inalámbrico 2.4 GHz (USB)"
+        },
+        {
+          "label": "Sensor",
+          "value": "Óptico, 1,000 DPI"
+        },
+        {
+          "label": "Diseño",
+          "value": "Ambidiestro"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 40,
+        "max": 50
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/mice/m170-wireless-mouse.html",
+      "searchTerms": [
+        "mouse inalámbrico",
+        "mouse logitech",
+        "mouse inalámbrico barato"
+      ]
+    },
+    {
+      "id": "logitech-m280",
+      "category": "mouse",
+      "brand": "Logitech",
+      "model": "M280",
+      "name": "Mouse Inalámbrico Ergonómico Logitech M280",
+      "shortDescription": "Mouse inalámbrico de forma ergonómica para mano derecha, con receptor USB nano.",
+      "description": "Mouse inalámbrico de Logitech con diseño contorneado para la mano derecha y receptor USB de 2.4 GHz. Sensor óptico de 1,000 DPI para trabajo y estudio.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "Inalámbrico 2.4 GHz (USB)"
+        },
+        {
+          "label": "Sensor",
+          "value": "Óptico, 1,000 DPI"
+        },
+        {
+          "label": "Diseño",
+          "value": "Ergonómico, mano derecha"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 64,
+        "max": 85
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/mice/m280-wireless-mouse.html",
+      "searchTerms": [
+        "mouse inalámbrico logitech",
+        "mouse ergonómico",
+        "logitech m280"
+      ]
+    },
+    {
+      "id": "redragon-cobra-m711",
+      "category": "mouse",
+      "brand": "Redragon",
+      "model": "Cobra M711",
+      "name": "Mouse Gamer Redragon Cobra M711 RGB 10000 DPI",
+      "shortDescription": "Mouse gamer con cable, RGB, sensor de hasta 10,000 DPI y botones programables por software.",
+      "description": "Mouse gamer con cable de Redragon con iluminación RGB y DPI ajustable hasta 10,000. Tiene botones programables mediante el software de Redragon.",
+      "specs": [
+        {
+          "label": "DPI",
+          "value": "Hasta 10,000"
+        },
+        {
+          "label": "Botones",
+          "value": "7 programables"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 88,
+        "max": 100
+      },
+      "officialUrl": "https://redragonshop.com/products/cobra-m711",
+      "searchTerms": [
+        "mouse gamer redragon",
+        "redragon cobra m711",
+        "mouse gamer rgb"
+      ]
+    },
+    {
+      "id": "redragon-griffin-m607",
+      "category": "mouse",
+      "brand": "Redragon",
+      "model": "Griffin M607",
+      "name": "Mouse Gamer Redragon Griffin M607 RGB 7200 DPI",
+      "shortDescription": "Mouse gamer con cable, RGB, hasta 7,200 DPI y pesas ajustables. Disponible en negro y blanco.",
+      "description": "Mouse gamer económico de Redragon con sensor de hasta 7,200 DPI e iluminación RGB. Incluye pesas ajustables y se vende en negro y blanco.",
+      "specs": [
+        {
+          "label": "DPI",
+          "value": "Hasta 7,200"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        },
+        {
+          "label": "Extras",
+          "value": "Pesas ajustables"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 82,
+        "max": 89
+      },
+      "officialUrl": "https://redragonshop.com/",
+      "searchTerms": [
+        "mouse gamer barato",
+        "redragon griffin m607",
+        "mouse gamer blanco"
+      ]
+    },
+    {
+      "id": "redragon-kumara-k552",
+      "category": "teclados",
+      "brand": "Redragon",
+      "model": "Kumara K552",
+      "name": "Teclado Mecánico Gamer Redragon Kumara K552 RGB Español",
+      "shortDescription": "Teclado mecánico TKL de 87 teclas con switches Outemu, iluminación RGB y estructura metálica.",
+      "description": "Teclado mecánico tenkeyless de Redragon con switches Outemu (rojo o azul según versión) e iluminación RGB o arcoíris. Base de aleación metálica y ABS. En Perú se vende en versión con layout en español.",
+      "specs": [
+        {
+          "label": "Formato",
+          "value": "TKL, 87 teclas"
+        },
+        {
+          "label": "Switches",
+          "value": "Outemu (red/blue según versión)"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB / Rainbow"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 158,
+        "max": 240
+      },
+      "officialUrl": "https://redragonshop.com/products/redragon-kumara-k552",
+      "searchTerms": [
+        "teclado mecánico",
+        "teclado gamer",
+        "redragon kumara k552",
+        "teclado mecánico en español"
+      ]
+    },
+    {
+      "id": "logitech-k120",
+      "category": "teclados",
+      "brand": "Logitech",
+      "model": "K120",
+      "name": "Teclado Logitech K120 USB Español",
+      "shortDescription": "Teclado de membrana con cable USB, tamaño completo y layout en español, resistente a salpicaduras.",
+      "description": "Teclado estándar de Logitech con conexión USB y teclas de perfil bajo silenciosas. Tamaño completo con teclado numérico y layout en español.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "Membrana"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        },
+        {
+          "label": "Layout",
+          "value": "Español, tamaño completo"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 40,
+        "max": 55
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/keyboards/k120-usb-standard-computer.html",
+      "searchTerms": [
+        "teclado logitech",
+        "teclado usb",
+        "teclado para oficina",
+        "teclado con ñ"
+      ]
+    },
+    {
+      "id": "logitech-k380-pebble-keys-2-k380s",
+      "category": "teclados",
+      "brand": "Logitech",
+      "model": "K380 / Pebble Keys 2 K380s",
+      "name": "Teclado Bluetooth Multidispositivo Logitech K380",
+      "shortDescription": "Teclado Bluetooth compacto para conectar hasta 3 dispositivos: PC, laptop, tablet o celular.",
+      "description": "Teclado inalámbrico Bluetooth de Logitech, compacto y multidispositivo, que alterna entre hasta tres equipos. La versión actual es la Pebble Keys 2 K380s.",
+      "specs": [
+        {
+          "label": "Conexión",
+          "value": "Bluetooth"
+        },
+        {
+          "label": "Multidispositivo",
+          "value": "Hasta 3 equipos"
+        },
+        {
+          "label": "Formato",
+          "value": "Compacto, sin teclado numérico"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 149,
+        "max": 185
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/keyboards/pebble-keys-2-k380s.html",
+      "searchTerms": [
+        "teclado inalámbrico logitech",
+        "teclado bluetooth",
+        "logitech k380"
+      ]
+    },
+    {
+      "id": "aula-f75",
+      "category": "teclados",
+      "brand": "AULA",
+      "model": "F75",
+      "name": "Teclado Mecánico Gamer AULA F75 RGB Inalámbrico",
+      "shortDescription": "Teclado mecánico 75% tri-modo (cable, 2.4 GHz y Bluetooth) con RGB y switches intercambiables.",
+      "description": "Teclado mecánico en formato 75% de AULA con conexión por cable, receptor 2.4 GHz y Bluetooth. Tiene iluminación RGB y switches hot-swap. El precio en Perú se verificó en un solo listado.",
+      "specs": [
+        {
+          "label": "Formato",
+          "value": "75%"
+        },
+        {
+          "label": "Conexión",
+          "value": "Cable / 2.4 GHz / Bluetooth"
+        },
+        {
+          "label": "Switches",
+          "value": "Hot-swap"
+        },
+        {
+          "label": "Iluminación",
+          "value": "RGB"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 189,
+        "max": 270
+      },
+      "officialUrl": "https://www.aulastar.com/",
+      "searchTerms": [
+        "teclado mecánico inalámbrico",
+        "aula f75",
+        "teclado 75%"
+      ]
+    },
+    {
+      "id": "redragon-fizz-k617",
+      "category": "teclados",
+      "brand": "Redragon",
+      "model": "Fizz K617",
+      "name": "Teclado Mecánico Gamer Redragon Fizz K617 60% RGB",
+      "shortDescription": "Teclado mecánico compacto 60% de 61 teclas, hot-swap y RGB. Existe una versión magnética HE.",
+      "description": "Teclado gamer compacto de Redragon en formato 60% con 61 teclas, switches intercambiables e iluminación RGB. Hay una variante con switches magnéticos Hall Effect y rapid trigger.",
+      "specs": [
+        {
+          "label": "Formato",
+          "value": "60%, 61 teclas"
+        },
+        {
+          "label": "Switches",
+          "value": "Hot-swap (variante HE magnética)"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB-C con cable"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://redragonshop.com/products/fizz-k617-black",
+      "searchTerms": [
+        "teclado 60%",
+        "redragon fizz k617",
+        "teclado magnético",
+        "teclado mecánico pequeño"
+      ]
+    },
+    {
+      "id": "antryx-gc-3100-x3",
+      "category": "combos-3-en-1",
+      "brand": "Antryx",
+      "model": "GC-3100 X3",
+      "name": "Kit Gamer 3 en 1 Antryx GC-3100 Teclado Mecánico + Mouse + Audífonos",
+      "shortDescription": "Combo gamer 3 en 1: teclado mecánico RGB, mouse de 7,200 DPI y audífonos con micrófono.",
+      "description": "Kit gamer de Antryx que incluye teclado mecánico (switch azul o rojo según versión), mouse con cable y audífonos. El teclado y el mouse tienen iluminación RGB. También hay una versión que trae solo teclado y mouse.",
+      "specs": [
+        {
+          "label": "Incluye",
+          "value": "Teclado mecánico + mouse + audífonos"
+        },
+        {
+          "label": "Mouse",
+          "value": "Hasta 7,200 DPI, 1000 Hz"
+        },
+        {
+          "label": "Switches",
+          "value": "Blue o Red según versión"
+        },
+        {
+          "label": "Conexión",
+          "value": "USB con cable"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 199,
+        "max": 339
+      },
+      "officialUrl": "https://www.antryx.com/",
+      "searchTerms": [
+        "combo gamer 3 en 1",
+        "kit gamer",
+        "antryx gc-3100",
+        "teclado mouse y audífonos gamer"
+      ]
+    },
+    {
+      "id": "xtrike-me-mk-900",
+      "category": "combos-3-en-1",
+      "brand": "Xtrike Me",
+      "model": "MK-900",
+      "name": "Combo Gamer 3 en 1 Xtrike Me MK-900 Teclado + Mouse + Mouse Pad",
+      "shortDescription": "Combo 3 en 1 económico: teclado de membrana con luces, mouse de 2,400 DPI y mousepad.",
+      "description": "Combo gamer de Xtrike Me con teclado de membrana de 104 teclas y retroiluminación, mouse óptico de 7 botones con DPI de 800 a 2,400 y mousepad de 280×250 mm. Conexión USB.",
+      "specs": [
+        {
+          "label": "Incluye",
+          "value": "Teclado + mouse + mousepad"
+        },
+        {
+          "label": "Teclado",
+          "value": "Membrana, 104 teclas + 8 multimedia"
+        },
+        {
+          "label": "Mouse",
+          "value": "800–2,400 DPI, 7 botones"
+        },
+        {
+          "label": "Mousepad",
+          "value": "280 × 250 × 2 mm"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 90,
+        "max": 90
+      },
+      "officialUrl": "https://www.xtrikeme.com/",
+      "searchTerms": [
+        "combo 3 en 1",
+        "combo gamer barato",
+        "kit teclado mouse y pad",
+        "xtrike me mk-900"
+      ]
+    },
+    {
+      "id": "logitech-mk270",
+      "category": "combos-3-en-1",
+      "brand": "Logitech",
+      "model": "MK270",
+      "name": "Combo Teclado y Mouse Inalámbrico Logitech MK270 Español",
+      "shortDescription": "Combo inalámbrico de teclado y mouse con un solo receptor USB, para oficina y casa.",
+      "description": "Combo 2 en 1 de Logitech con teclado de tamaño completo y mouse compacto conectados por un único receptor USB de 2.4 GHz. Incluye teclas multimedia y layout en español.",
+      "specs": [
+        {
+          "label": "Incluye",
+          "value": "Teclado + mouse"
+        },
+        {
+          "label": "Conexión",
+          "value": "Inalámbrico 2.4 GHz, un receptor"
+        },
+        {
+          "label": "Layout",
+          "value": "Español"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 98,
+        "max": 123
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/combos/mk270-wireless-keyboard-mouse-combo.html",
+      "searchTerms": [
+        "combo teclado y mouse inalámbrico",
+        "logitech mk270",
+        "combo logitech"
+      ]
+    },
+    {
+      "id": "logitech-mk235",
+      "category": "combos-3-en-1",
+      "brand": "Logitech",
+      "model": "MK235",
+      "name": "Combo Teclado y Mouse Inalámbrico Logitech MK235",
+      "shortDescription": "Combo inalámbrico económico de teclado resistente a salpicaduras y mouse, con receptor USB.",
+      "description": "Combo 2 en 1 de Logitech con teclado de tamaño completo y mouse inalámbricos, ambos con un receptor USB de 2.4 GHz. Pensado para uso diario en casa u oficina.",
+      "specs": [
+        {
+          "label": "Incluye",
+          "value": "Teclado + mouse"
+        },
+        {
+          "label": "Conexión",
+          "value": "Inalámbrico 2.4 GHz"
+        },
+        {
+          "label": "Layout",
+          "value": "Español"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 69,
+        "max": 100
+      },
+      "officialUrl": "https://www.logitech.com/es-roam/products/combos/mk235-wireless-keyboard-mouse-combo.html",
+      "searchTerms": [
+        "combo teclado mouse logitech",
+        "logitech mk235",
+        "combo inalámbrico barato"
+      ]
+    },
+    {
+      "id": "teros-te-4063n",
+      "category": "combos-3-en-1",
+      "brand": "Teros",
+      "model": "TE-4063N",
+      "name": "Kit Gamer 4 en 1 Teros TE-4063N Teclado + Mouse + Audífonos + Pad",
+      "shortDescription": "Kit gamer 4 en 1 con teclado, mouse, audífonos y mousepad.",
+      "description": "Kit gamer de Teros que reúne teclado, mouse, audífonos y mousepad en un solo paquete. No se pudo verificar el precio ni las especificaciones detalladas en tiendas peruanas.",
+      "specs": [
+        {
+          "label": "Incluye",
+          "value": "Teclado + mouse + audífonos + mousepad"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.teros.com.pe/",
+      "searchTerms": [
+        "kit gamer 4 en 1",
+        "combo gamer completo",
+        "teros kit gamer"
+      ]
+    },
+    {
+      "id": "tp-link-tl-wn725n",
+      "category": "adaptadores",
+      "brand": "TP-Link",
+      "model": "TL-WN725N",
+      "name": "Adaptador WiFi USB TP-Link TL-WN725N Nano 150 Mbps",
+      "shortDescription": "Adaptador Wi-Fi USB nano de 150 Mbps a 2.4 GHz para dar internet inalámbrico a tu PC.",
+      "description": "Adaptador inalámbrico USB de TP-Link en formato nano, compatible con Wi-Fi N de hasta 150 Mbps en 2.4 GHz. Es la forma más simple de agregar Wi-Fi a una PC de escritorio.",
+      "specs": [
+        {
+          "label": "Estándar",
+          "value": "Wi-Fi 4 (802.11n)"
+        },
+        {
+          "label": "Velocidad",
+          "value": "Hasta 150 Mbps"
+        },
+        {
+          "label": "Banda",
+          "value": "2.4 GHz"
+        },
+        {
+          "label": "Interfaz",
+          "value": "USB 2.0"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 31,
+        "max": 39
+      },
+      "officialUrl": "https://www.tp-link.com/pe/home-networking/adapter/tl-wn725n/",
+      "searchTerms": [
+        "adaptador wifi usb",
+        "adaptador wifi para pc",
+        "tp-link nano"
+      ]
+    },
+    {
+      "id": "tp-link-archer-t2u-nano",
+      "category": "adaptadores",
+      "brand": "TP-Link",
+      "model": "Archer T2U Nano",
+      "name": "Adaptador WiFi USB Doble Banda TP-Link Archer T2U AC600",
+      "shortDescription": "Adaptador Wi-Fi USB doble banda AC600 (2.4 y 5 GHz) en formato compacto.",
+      "description": "Adaptador inalámbrico USB de TP-Link con Wi-Fi AC600 doble banda: hasta 433 Mbps en 5 GHz y 150 Mbps en 2.4 GHz. Permite conectar la PC a redes de 5 GHz.",
+      "specs": [
+        {
+          "label": "Estándar",
+          "value": "Wi-Fi 5 (AC600)"
+        },
+        {
+          "label": "Banda",
+          "value": "Doble: 2.4 / 5 GHz"
+        },
+        {
+          "label": "Interfaz",
+          "value": "USB 2.0"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 47,
+        "max": 54
+      },
+      "officialUrl": "https://www.tp-link.com/pe/home-networking/adapter/archer-t2u-nano/",
+      "searchTerms": [
+        "adaptador wifi 5ghz",
+        "adaptador wifi doble banda",
+        "archer t2u"
+      ]
+    },
+    {
+      "id": "tp-link-archer-t2u-plus",
+      "category": "adaptadores",
+      "brand": "TP-Link",
+      "model": "Archer T2U Plus",
+      "name": "Adaptador WiFi USB TP-Link Archer T2U Plus AC600 Alta Ganancia",
+      "shortDescription": "Adaptador Wi-Fi USB AC600 doble banda con antena de alta ganancia para más alcance.",
+      "description": "Adaptador inalámbrico USB de TP-Link con Wi-Fi AC600 doble banda y antena externa de alta ganancia. Es útil cuando la PC está lejos del router.",
+      "specs": [
+        {
+          "label": "Estándar",
+          "value": "Wi-Fi 5 (AC600)"
+        },
+        {
+          "label": "Banda",
+          "value": "Doble: 2.4 / 5 GHz"
+        },
+        {
+          "label": "Antena",
+          "value": "Externa de alta ganancia"
+        },
+        {
+          "label": "Interfaz",
+          "value": "USB 2.0"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 66,
+        "max": 90
+      },
+      "officialUrl": "https://www.tp-link.com/pe/home-networking/adapter/archer-t2u-plus/",
+      "searchTerms": [
+        "adaptador wifi con antena",
+        "adaptador wifi largo alcance",
+        "archer t2u plus"
+      ]
+    },
+    {
+      "id": "tp-link-ub500",
+      "category": "adaptadores",
+      "brand": "TP-Link",
+      "model": "UB500",
+      "name": "Adaptador Bluetooth USB TP-Link UB500 Nano 5.0",
+      "shortDescription": "Adaptador Bluetooth 5.0 USB nano para conectar audífonos, mandos y parlantes a tu PC.",
+      "description": "Adaptador USB nano de TP-Link que agrega Bluetooth 5.0 a una PC con Windows. No confundir con el UB500 Plus, un modelo distinto con Bluetooth 5.4.",
+      "specs": [
+        {
+          "label": "Bluetooth",
+          "value": "5.0"
+        },
+        {
+          "label": "Formato",
+          "value": "Nano USB-A"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 30,
+        "max": 60
+      },
+      "officialUrl": "https://www.tp-link.com/pe/home-networking/adapter/ub500/",
+      "searchTerms": [
+        "adaptador bluetooth",
+        "adaptador bluetooth usb pc",
+        "tp-link ub500"
+      ]
+    },
+    {
+      "id": "ugreen-cm417-20197",
+      "category": "adaptadores",
+      "brand": "UGREEN",
+      "model": "CM417 (20197)",
+      "name": "Hub USB-C 5 en 1 UGREEN CM417 HDMI 4K + 4 USB 3.0",
+      "shortDescription": "Hub USB-C 5 en 1 con salida HDMI 4K y 4 puertos USB-A 3.0 para laptops y MacBook.",
+      "description": "Adaptador multipuerto de UGREEN que convierte un puerto USB-C en una salida HDMI 4K y cuatro puertos USB-A 3.0. Verifica la tasa de refresco del HDMI en la ficha del fabricante antes de anunciar 4K a 60 Hz.",
+      "specs": [
+        {
+          "label": "Entrada",
+          "value": "USB-C"
+        },
+        {
+          "label": "Salidas",
+          "value": "1× HDMI 4K, 4× USB-A 3.0"
+        },
+        {
+          "label": "Código",
+          "value": "20197"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 89,
+        "max": 199
+      },
+      "officialUrl": "https://www.ugreen.com/",
+      "searchTerms": [
+        "hub usb c",
+        "adaptador usb c a hdmi",
+        "adaptador multipuerto"
+      ]
+    },
+    {
+      "id": "ugreen-mm101",
+      "category": "adaptadores",
+      "brand": "UGREEN",
+      "model": "MM101",
+      "name": "Adaptador Convertidor HDMI a VGA UGREEN MM101",
+      "shortDescription": "Convertidor HDMI a VGA para conectar laptops o PC a monitores y proyectores antiguos.",
+      "description": "Convertidor de UGREEN que transforma la señal HDMI en VGA para usar monitores o proyectores con entrada VGA. Hay variantes con salida de audio de 3.5 mm (MM103).",
+      "specs": [
+        {
+          "label": "Entrada",
+          "value": "HDMI"
+        },
+        {
+          "label": "Salida",
+          "value": "VGA"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 55,
+        "max": 75
+      },
+      "officialUrl": "https://www.ugreen.com/",
+      "searchTerms": [
+        "adaptador hdmi a vga",
+        "convertidor hdmi vga",
+        "adaptador para proyector"
+      ]
+    },
+    {
+      "id": "msi-geforce-rtx-3050-ventus-2x-6g-oc",
+      "category": "tarjetas-graficas",
+      "brand": "MSI",
+      "model": "GeForce RTX 3050 VENTUS 2X 6G OC",
+      "name": "Tarjeta de Video MSI GeForce RTX 3050 Ventus 2X 6GB OC",
+      "shortDescription": "GPU de entrada NVIDIA RTX 3050 con 6 GB GDDR6, doble ventilador, ideal para eSports a 1080p.",
+      "description": "Tarjeta gráfica MSI con chip NVIDIA GeForce RTX 3050 y 6 GB de memoria GDDR6 en bus de 96 bits. Tiene doble ventilador y es de las opciones dedicadas más económicas en tiendas peruanas.",
+      "specs": [
+        {
+          "label": "GPU",
+          "value": "NVIDIA GeForce RTX 3050"
+        },
+        {
+          "label": "Memoria",
+          "value": "6 GB GDDR6, 96 bits"
+        },
+        {
+          "label": "Núcleos CUDA",
+          "value": "2304"
+        },
+        {
+          "label": "Salidas",
+          "value": "DisplayPort 1.4a, 2× HDMI 2.1"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 858,
+        "max": 1029
+      },
+      "officialUrl": "https://www.msi.com/Graphics-Card/GeForce-RTX-3050-VENTUS-2X-6G-OC",
+      "searchTerms": [
+        "rtx 3050",
+        "tarjeta de video barata",
+        "tarjeta de video para gaming"
+      ]
+    },
+    {
+      "id": "gigabyte-geforce-rtx-5060-windforce-oc-8g-gv-n5060wf2oc-8gd",
+      "category": "tarjetas-graficas",
+      "brand": "Gigabyte",
+      "model": "GeForce RTX 5060 WINDFORCE OC 8G (GV-N5060WF2OC-8GD)",
+      "name": "Tarjeta de Video Gigabyte GeForce RTX 5060 Windforce OC 8GB GDDR7",
+      "shortDescription": "GPU NVIDIA RTX 5060 con 8 GB GDDR7, DLSS 4 y doble ventilador Windforce para gaming 1080p.",
+      "description": "Tarjeta gráfica Gigabyte con chip NVIDIA GeForce RTX 5060 (arquitectura Blackwell) y 8 GB GDDR7 en bus de 128 bits. Usa PCIe 5.0 y doble ventilador. En Perú también se venden versiones de ASUS (Dual, Prime, TUF) y MSI (Shadow 2X).",
+      "specs": [
+        {
+          "label": "GPU",
+          "value": "NVIDIA GeForce RTX 5060"
+        },
+        {
+          "label": "Memoria",
+          "value": "8 GB GDDR7, 128 bits"
+        },
+        {
+          "label": "Núcleos CUDA",
+          "value": "3840"
+        },
+        {
+          "label": "Interfaz",
+          "value": "PCIe 5.0"
+        },
+        {
+          "label": "Salidas",
+          "value": "3× DisplayPort, 1× HDMI 2.1b"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 1808,
+        "max": 1999
+      },
+      "officialUrl": "https://www.gigabyte.com/Graphics-Card/GV-N5060WF2OC-8GD",
+      "searchTerms": [
+        "rtx 5060",
+        "tarjeta de video rtx 5060",
+        "tarjeta gráfica nvidia"
+      ]
+    },
+    {
+      "id": "nvidia-ensambladores-varios-geforce-rtx-5060-ti-8gb",
+      "category": "tarjetas-graficas",
+      "brand": "NVIDIA (ensambladores varios)",
+      "model": "GeForce RTX 5060 Ti 8GB",
+      "name": "Tarjeta de Video GeForce RTX 5060 Ti 8GB GDDR7",
+      "shortDescription": "GPU NVIDIA RTX 5060 Ti con 8 GB GDDR7, un paso arriba de la RTX 5060 para gaming 1080p/1440p.",
+      "description": "Tarjeta gráfica con chip NVIDIA GeForce RTX 5060 Ti y 8 GB GDDR7. En Perú se vende en versiones de Gigabyte (Windforce, Eagle) y Zotac. También existe una versión de 16 GB, pero no se encontró su precio en Perú.",
+      "specs": [
+        {
+          "label": "GPU",
+          "value": "NVIDIA GeForce RTX 5060 Ti"
+        },
+        {
+          "label": "Memoria",
+          "value": "8 GB GDDR7 (existe versión de 16 GB)"
+        },
+        {
+          "label": "Interfaz",
+          "value": "PCIe 5.0"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 1999,
+        "max": 2249
+      },
+      "officialUrl": "https://www.nvidia.com/es-la/geforce/graphics-cards/50-series/rtx-5060-family/",
+      "searchTerms": [
+        "rtx 5060 ti",
+        "tarjeta de video 5060 ti",
+        "gpu nvidia"
+      ]
+    },
+    {
+      "id": "amd-xfx-gigabyte-asrock-radeon-rx-9060-xt-16gb",
+      "category": "tarjetas-graficas",
+      "brand": "AMD (XFX, Gigabyte, ASRock)",
+      "model": "Radeon RX 9060 XT 16GB",
+      "name": "Tarjeta de Video AMD Radeon RX 9060 XT 16GB GDDR6",
+      "shortDescription": "GPU AMD RX 9060 XT con 16 GB GDDR6 y arquitectura RDNA 4, mucha VRAM para gaming 1080p/1440p.",
+      "description": "Tarjeta gráfica con chip AMD Radeon RX 9060 XT (RDNA 4) y 16 GB GDDR6 en bus de 128 bits. En Perú se listan modelos de XFX (Swift, Mercury), Gigabyte (Gaming OC) y ASRock (Steel Legend). Existe una versión de 8 GB más barata.",
+      "specs": [
+        {
+          "label": "GPU",
+          "value": "AMD Radeon RX 9060 XT"
+        },
+        {
+          "label": "Memoria",
+          "value": "16 GB GDDR6, 128 bits"
+        },
+        {
+          "label": "Arquitectura",
+          "value": "RDNA 4"
+        },
+        {
+          "label": "Interfaz",
+          "value": "PCIe 5.0"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 2259,
+        "max": 2699
+      },
+      "officialUrl": "https://www.amd.com/es/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9060xt.html",
+      "searchTerms": [
+        "rx 9060 xt",
+        "tarjeta de video amd",
+        "tarjeta gráfica 16gb"
+      ]
+    },
+    {
+      "id": "nvidia-gigabyte-asus-msi-geforce-rtx-5070-12gb",
+      "category": "tarjetas-graficas",
+      "brand": "NVIDIA (Gigabyte, ASUS, MSI)",
+      "model": "GeForce RTX 5070 12GB",
+      "name": "Tarjeta de Video GeForce RTX 5070 12GB GDDR7",
+      "shortDescription": "GPU NVIDIA RTX 5070 con 12 GB GDDR7 en bus de 192 bits, para gaming en 1440p.",
+      "description": "Tarjeta gráfica con chip NVIDIA GeForce RTX 5070 y 12 GB GDDR7 en bus de 192 bits. En Perú aparecen modelos Gigabyte Eagle OC, ASUS Dual o TUF y MSI Ventus. Varios figuraban agotados.",
+      "specs": [
+        {
+          "label": "GPU",
+          "value": "NVIDIA GeForce RTX 5070"
+        },
+        {
+          "label": "Memoria",
+          "value": "12 GB GDDR7, 192 bits"
+        },
+        {
+          "label": "Núcleos CUDA",
+          "value": "6144"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 3436,
+        "max": 3800
+      },
+      "officialUrl": "https://www.nvidia.com/es-la/geforce/graphics-cards/50-series/rtx-5070-family/",
+      "searchTerms": [
+        "rtx 5070",
+        "tarjeta de video gama alta",
+        "gpu 12gb"
+      ]
+    },
+    {
+      "id": "kingston-nv3-1tb-snv3s-1000g",
+      "category": "ssd-nvme",
+      "brand": "Kingston",
+      "model": "NV3 1TB (SNV3S/1000G)",
+      "name": "Disco Sólido SSD Kingston NV3 1TB M.2 NVMe PCIe 4.0",
+      "shortDescription": "SSD M.2 NVMe PCIe 4.0 de 1 TB con lectura de hasta 6,000 MB/s.",
+      "description": "Unidad de estado sólido Kingston NV3 en formato M.2 2280 con interfaz NVMe PCIe 4.0 x4. Kingston especifica lecturas de hasta 6,000 MB/s y escrituras de hasta 4,000 MB/s en la versión de 1 TB.",
+      "specs": [
+        {
+          "label": "Capacidad",
+          "value": "1 TB"
+        },
+        {
+          "label": "Interfaz",
+          "value": "NVMe PCIe 4.0 x4"
+        },
+        {
+          "label": "Formato",
+          "value": "M.2 2280"
+        },
+        {
+          "label": "Lectura/Escritura",
+          "value": "Hasta 6,000 / 4,000 MB/s"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 700,
+        "max": 750
+      },
+      "officialUrl": "https://www.kingston.com/es/ssd/nv3-nvme-pcie-ssd",
+      "searchTerms": [
+        "ssd 1tb",
+        "disco sólido nvme",
+        "ssd m.2",
+        "kingston nv3"
+      ]
+    },
+    {
+      "id": "kingston-a400-480gb-sa400s37-480g",
+      "category": "ssd-nvme",
+      "brand": "Kingston",
+      "model": "A400 480GB (SA400S37/480G)",
+      "name": "Disco Sólido SSD Kingston A400 480GB SATA 2.5\"",
+      "shortDescription": "SSD SATA III de 2.5\" y 480 GB, ideal para revivir laptops y PC antiguas.",
+      "description": "Unidad de estado sólido Kingston A400 en formato 2.5\" con interfaz SATA III. Kingston especifica hasta 500 MB/s de lectura y 450 MB/s de escritura en la versión de 480 GB.",
+      "specs": [
+        {
+          "label": "Capacidad",
+          "value": "480 GB"
+        },
+        {
+          "label": "Interfaz",
+          "value": "SATA III"
+        },
+        {
+          "label": "Formato",
+          "value": "2.5\""
+        },
+        {
+          "label": "Lectura/Escritura",
+          "value": "Hasta 500 / 450 MB/s"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.kingston.com/es/ssd/a400-solid-state-drive",
+      "searchTerms": [
+        "ssd 480gb",
+        "disco sólido para laptop",
+        "ssd sata",
+        "kingston a400"
+      ]
+    },
+    {
+      "id": "wd-blue-sn5000-1tb-wds100t4b0e",
+      "category": "ssd-nvme",
+      "brand": "WD",
+      "model": "Blue SN5000 1TB (WDS100T4B0E)",
+      "name": "Disco Sólido SSD WD Blue SN5000 1TB M.2 NVMe PCIe 4.0",
+      "shortDescription": "SSD M.2 NVMe PCIe 4.0 de 1 TB con lectura de hasta 5,150 MB/s.",
+      "description": "Unidad de estado sólido Western Digital WD Blue SN5000 en formato M.2 2280 con interfaz NVMe PCIe 4.0. WD indica velocidades de hasta 5,150 MB/s de lectura y 4,900 MB/s de escritura en la versión de 1 TB.",
+      "specs": [
+        {
+          "label": "Capacidad",
+          "value": "1 TB"
+        },
+        {
+          "label": "Interfaz",
+          "value": "NVMe PCIe 4.0"
+        },
+        {
+          "label": "Formato",
+          "value": "M.2 2280"
+        },
+        {
+          "label": "Lectura/Escritura",
+          "value": "Hasta 5,150 / 4,900 MB/s"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.westerndigital.com/products/internal-drives/wd-blue-sn5000-nvme-ssd",
+      "searchTerms": [
+        "ssd wd",
+        "ssd nvme 1tb",
+        "wd blue sn5000"
+      ]
+    },
+    {
+      "id": "samsung-990-evo-plus-1tb-mz-v9s1t0",
+      "category": "ssd-nvme",
+      "brand": "Samsung",
+      "model": "990 EVO Plus 1TB (MZ-V9S1T0)",
+      "name": "Disco Sólido SSD Samsung 990 EVO Plus 1TB M.2 NVMe",
+      "shortDescription": "SSD M.2 NVMe de 1 TB compatible con PCIe 4.0 x4 y 5.0 x2, con lectura de hasta 7,150 MB/s.",
+      "description": "Unidad de estado sólido Samsung 990 EVO Plus en formato M.2 2280, compatible con PCIe 4.0 x4 y PCIe 5.0 x2. Samsung especifica lecturas de hasta 7,150 MB/s en la versión de 1 TB.",
+      "specs": [
+        {
+          "label": "Capacidad",
+          "value": "1 TB"
+        },
+        {
+          "label": "Interfaz",
+          "value": "NVMe PCIe 4.0 x4 / 5.0 x2"
+        },
+        {
+          "label": "Formato",
+          "value": "M.2 2280"
+        },
+        {
+          "label": "Lectura",
+          "value": "Hasta 7,150 MB/s"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://semiconductor.samsung.com/consumer-storage/internal-ssd/990-evo-plus/",
+      "searchTerms": [
+        "ssd samsung",
+        "samsung 990 evo plus",
+        "ssd rápido"
+      ]
+    },
+    {
+      "id": "kingston-fury-renegade-1tb-sfyrs-1000g",
+      "category": "ssd-nvme",
+      "brand": "Kingston",
+      "model": "FURY Renegade 1TB (SFYRS/1000G)",
+      "name": "Disco Sólido SSD Kingston FURY Renegade 1TB NVMe PCIe 4.0",
+      "shortDescription": "SSD NVMe PCIe 4.0 de alto rendimiento para gaming y edición, compatible con PS5.",
+      "description": "Unidad de estado sólido Kingston FURY Renegade en formato M.2 2280 con interfaz NVMe PCIe 4.0, orientada a gaming y creación de contenido. Consulta en la ficha oficial las velocidades exactas de cada capacidad.",
+      "specs": [
+        {
+          "label": "Capacidad",
+          "value": "1 TB"
+        },
+        {
+          "label": "Interfaz",
+          "value": "NVMe PCIe 4.0 x4"
+        },
+        {
+          "label": "Formato",
+          "value": "M.2 2280"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.kingston.com/es/ssd/gaming/kingston-fury-renegade-nvme-m2-ssd",
+      "searchTerms": [
+        "ssd gamer",
+        "ssd ps5",
+        "kingston fury renegade"
+      ]
+    },
+    {
+      "id": "kingston-fury-beast-ddr4-16gb-3200-kf432c16bb-16",
+      "category": "memoria-ram",
+      "brand": "Kingston",
+      "model": "FURY Beast DDR4 16GB 3200 (KF432C16BB/16)",
+      "name": "Memoria RAM Kingston FURY Beast 16GB DDR4 3200 MHz",
+      "shortDescription": "Módulo DIMM DDR4 de 16 GB a 3200 MHz, CL16, para PC de escritorio gamer.",
+      "description": "Memoria RAM Kingston FURY Beast DDR4 para PC de escritorio en módulo de 16 GB, 3200 MHz y latencia CL16. Hay una versión RGB (KF432C16BB2A/16).",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR4 DIMM (PC)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "16 GB (1×16)"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "3200 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL16"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.kingston.com/es/memory/gaming/kingston-fury-beast-ddr4-memory",
+      "searchTerms": [
+        "memoria ram ddr4 16gb",
+        "memoria ram 3200",
+        "kingston fury beast"
+      ]
+    },
+    {
+      "id": "kingston-fury-beast-ddr5-16gb-5600-kf556c40bb-16",
+      "category": "memoria-ram",
+      "brand": "Kingston",
+      "model": "FURY Beast DDR5 16GB 5600 (KF556C40BB-16)",
+      "name": "Memoria RAM Kingston FURY Beast 16GB DDR5 5600 MHz",
+      "shortDescription": "Módulo DIMM DDR5 de 16 GB a 5600 MHz, CL40, para PC de escritorio de nueva generación.",
+      "description": "Memoria RAM Kingston FURY Beast DDR5 para PC de escritorio en módulo de 16 GB, 5600 MHz y CL40. Es compatible con plataformas DDR5 de Intel y AMD. Hay variantes RGB y de 6000 MHz.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR5 DIMM (PC)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "16 GB (1×16)"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "5600 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL40"
+        }
+      ],
+      "priceRangePEN": {
+        "min": 1190,
+        "max": 1270
+      },
+      "officialUrl": "https://www.kingston.com/es/memory/gaming/kingston-fury-beast-ddr5-memory",
+      "searchTerms": [
+        "memoria ram ddr5",
+        "ram ddr5 16gb",
+        "kingston fury ddr5"
+      ]
+    },
+    {
+      "id": "kingston-fury-impact-ddr4-16gb-3200-sodimm-kf432s20ib-16",
+      "category": "memoria-ram",
+      "brand": "Kingston",
+      "model": "FURY Impact DDR4 16GB 3200 SODIMM (KF432S20IB/16)",
+      "name": "Memoria RAM Laptop Kingston FURY Impact 16GB DDR4 3200 SODIMM",
+      "shortDescription": "Módulo SODIMM DDR4 de 16 GB a 3200 MHz, CL20, para mejorar el rendimiento de laptops.",
+      "description": "Memoria RAM Kingston FURY Impact en formato SODIMM para laptops, de 16 GB, 3200 MHz y CL20. Es una de las mejoras más comunes para laptops con DDR4.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR4 SODIMM (laptop)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "16 GB"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "3200 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL20"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.kingston.com/es/memory/gaming/kingston-fury-impact-ddr4-memory",
+      "searchTerms": [
+        "memoria ram para laptop",
+        "ram sodimm 16gb",
+        "kingston fury impact"
+      ]
+    },
+    {
+      "id": "kingston-valueram-ddr4-8gb-3200-sodimm-kvr32s22s8-8",
+      "category": "memoria-ram",
+      "brand": "Kingston",
+      "model": "ValueRAM DDR4 8GB 3200 SODIMM (KVR32S22S8/8)",
+      "name": "Memoria RAM Laptop Kingston 8GB DDR4 3200 SODIMM",
+      "shortDescription": "Módulo SODIMM DDR4 de 8 GB a 3200 MHz para laptops de oficina y estudio.",
+      "description": "Memoria RAM Kingston ValueRAM en formato SODIMM para laptops, de 8 GB, 3200 MHz y CL22. Es la opción básica para ampliar la memoria de una laptop.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR4 SODIMM (laptop)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "8 GB"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "3200 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL22"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.kingston.com/es/memory/client/valueram",
+      "searchTerms": [
+        "memoria ram 8gb laptop",
+        "ram ddr4 8gb",
+        "memoria ram kingston"
+      ]
+    },
+    {
+      "id": "corsair-vengeance-ddr5-32gb-2x16gb-5600-cmk32gx5m2b5600c40",
+      "category": "memoria-ram",
+      "brand": "Corsair",
+      "model": "VENGEANCE DDR5 32GB (2x16GB) 5600 (CMK32GX5M2B5600C40)",
+      "name": "Memoria RAM Corsair Vengeance 32GB (2x16GB) DDR5 5600 MHz",
+      "shortDescription": "Kit DDR5 de 32 GB (2×16 GB) a 5600 MHz, CL40, para PC gamer y edición.",
+      "description": "Kit de memoria RAM Corsair Vengeance DDR5 de dos módulos de 16 GB a 5600 MHz con latencia CL40 y perfil XMP. Algunas tiendas extranjeras ya lo indican como descontinuado. Confirma la disponibilidad.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR5 DIMM (PC)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "32 GB (2×16)"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "5600 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL40"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.corsair.com/",
+      "searchTerms": [
+        "memoria ram 32gb",
+        "ram ddr5 32gb",
+        "corsair vengeance ddr5"
+      ]
+    },
+    {
+      "id": "teamgroup-t-force-vulcan-ddr5-16gb-5600",
+      "category": "memoria-ram",
+      "brand": "TeamGroup",
+      "model": "T-Force Vulcan DDR5 16GB 5600",
+      "name": "Memoria RAM TeamGroup T-Force Vulcan 16GB DDR5 5600 MHz",
+      "shortDescription": "Módulo DDR5 de 16 GB a 5600 MHz con disipador, alternativa económica para PC.",
+      "description": "Memoria RAM TeamGroup T-Force Vulcan DDR5 para PC de escritorio, módulo de 16 GB a 5600 MHz con disipador de aluminio. Las latencias listadas son CL36 o CL40 según la versión.",
+      "specs": [
+        {
+          "label": "Tipo",
+          "value": "DDR5 DIMM (PC)"
+        },
+        {
+          "label": "Capacidad",
+          "value": "16 GB"
+        },
+        {
+          "label": "Frecuencia",
+          "value": "5600 MHz"
+        },
+        {
+          "label": "Latencia",
+          "value": "CL36 / CL40 según versión"
+        }
+      ],
+      "priceRangePEN": null,
+      "officialUrl": "https://www.teamgroupinc.com/",
+      "searchTerms": [
+        "memoria ram ddr5 barata",
+        "teamgroup t-force vulcan",
+        "ram 16gb ddr5"
+      ]
+    }
+  ]
+}

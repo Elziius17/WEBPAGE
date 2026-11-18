@@ -8,6 +8,18 @@ import {
   phoneSchema,
   requiredEmail,
 } from "./common";
+import {
+  keysOf,
+  pcBudgets,
+  pcCpuPrefs,
+  pcExtras,
+  pcGpuPrefs,
+  pcRamPrefs,
+  pcResolutions,
+  pcStoragePrefs,
+  pcTimelines,
+  pcUses,
+} from "@/config/pc-build";
 
 export const requestKinds = [
   "SERVICE",
@@ -109,3 +121,31 @@ export const customerTestimonialSchema = z.object({
     .transform(() => true as const),
 });
 export type CustomerTestimonialInput = z.input<typeof customerTestimonialSchema>;
+
+// --- Cotizar PC completa ---
+
+export const pcBuildSchema = z.object({
+  use: z.enum(keysOf(pcUses), { message: "Elige el uso principal" }),
+  budget: z.enum(keysOf(pcBudgets), { message: "Elige un presupuesto aproximado" }),
+  cpu: z.enum(keysOf(pcCpuPrefs)).default("ANY"),
+  gpu: z.enum(keysOf(pcGpuPrefs)).default("RECOMMEND"),
+  ram: z.enum(keysOf(pcRamPrefs)).default("RECOMMEND"),
+  storage: z.enum(keysOf(pcStoragePrefs)).default("RECOMMEND"),
+  resolution: z.enum(keysOf(pcResolutions)).default("UNSURE"),
+  timeline: z.enum(keysOf(pcTimelines)).default("QUOTING"),
+  extras: z.preprocess(
+    (v) => (Array.isArray(v) ? v : typeof v === "string" && v ? [v] : []),
+    z.array(z.enum(keysOf(pcExtras))).max(8),
+  ),
+  software: optionalText(300),
+  reuse: optionalText(300),
+  notes: optionalText(1000),
+  name: nameSchema,
+  phone: phoneSchema,
+  email: optionalEmail,
+  city: optionalText(80),
+  preferredContact: optionalEnum(["WHATSAPP", "PHONE", "EMAIL"]),
+  consent: consentSchema,
+  website: z.string().max(0).optional(),
+});
+export type PcBuildInput = z.input<typeof pcBuildSchema>;

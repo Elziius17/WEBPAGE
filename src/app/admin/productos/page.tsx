@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Plus, Tags } from "lucide-react";
+import { Plus, Tags, TrendingUp } from "lucide-react";
 import {
   AdminPageHeader,
   DataTable,
@@ -63,6 +63,9 @@ export default async function ProductsAdmin({ searchParams }: PageProps<"/admin/
         actions={
           canWrite && (
             <>
+              <ButtonLink href="/admin/productos/sugerencias" variant="secondary">
+                <TrendingUp /> Sugeridos
+              </ButtonLink>
               <ButtonLink href="/admin/productos/categorias" variant="secondary">
                 <Tags /> Categorías
               </ButtonLink>

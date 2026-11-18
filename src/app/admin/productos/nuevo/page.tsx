@@ -8,13 +8,19 @@ import { requireStaffPage } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { cn } from "@/lib/utils/cn";
 import { isProductAiEnabled } from "@/lib/ai/client";
+import { findSuggestion } from "@/lib/market-suggestions";
+import { Alert } from "@/components/ui/alert";
 
 export const metadata: Metadata = { title: "Nuevo producto" };
 
 export default async function NewProduct({ searchParams }: PageProps<"/admin/productos/nuevo">) {
   await requireStaffPage("products:write");
   const aiEnabled = isProductAiEnabled();
-  const mode = aiEnabled && (await searchParams).modo === "foto" ? "foto" : "manual";
+  const params = await searchParams;
+  const mode = aiEnabled && params.modo === "foto" ? "foto" : "manual";
+  const suggestion = findSuggestion(
+    typeof params.sugerencia === "string" ? params.sugerencia : undefined,
+  );
   const [categories, suppliers] = await Promise.all([
     db.category.findMany({
       where: { deletedAt: null, active: true },
@@ -61,10 +67,38 @@ export default async function NewProduct({ searchParams }: PageProps<"/admin/pro
           ))}
         </nav>
       )}
+      {suggestion && (
+        <Alert tone="info" className="mb-6">
+          Precargado desde <strong>Productos sugeridos</strong>. Revisa los datos, define precio,
+          proveedor y stock, y sube las fotos antes de publicar.
+        </Alert>
+      )}
       {mode === "foto" ? (
         <PhotoProductWizard categories={categories} suppliers={suppliers} />
       ) : (
-        <ProductForm categories={categories} suppliers={suppliers} />
+        <ProductForm
+          key={suggestion?.id ?? "manual"}
+          categories={categories}
+          suppliers={suppliers}
+          draft={
+            suggestion && {
+              name: suggestion.name,
+              brand: suggestion.brand,
+              model: suggestion.model,
+              categoryId: categories.find((c) => c.slug === suggestion.category)?.id,
+              condition: "NEW",
+              shortDescription: suggestion.shortDescription,
+              description: suggestion.description,
+              specs: suggestion.specs,
+            }
+          }
+          reference={
+            suggestion && {
+              priceRangePEN: suggestion.priceRangePEN,
+              officialUrl: suggestion.officialUrl,
+            }
+          }
+        />
       )}
     </>
   );

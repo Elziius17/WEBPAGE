@@ -628,6 +628,7 @@ enum RequestKind {
   PRODUCT_INQUIRY
   WEB_PROJECT
   COMPLAINT
+  PC_BUILD
 }
 
 enum RequestStatus {
@@ -658,6 +659,11 @@ model ServiceRequest {
   preferredContact String?
   consentAt        DateTime
   handledNotes     String?
+  /// Respuestas estructuradas del formulario (p. ej. la cotización de PC completa).
+  details          Json?
+  /// Precio cotizado por ELZIIUS (interno, en céntimos).
+  quotedPriceCents Int?
+  quotedAt         DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 

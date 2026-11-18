@@ -50,8 +50,8 @@ export default function AboutPage() {
             </p>
             <p>
               Combinamos servicio técnico especializado de computadoras y laptops, la
-              comercialización de componentes, periféricos e impresoras, y el diseño y desarrollo de
-              páginas web.
+              comercialización de periféricos y componentes, la cotización de PC completas a medida
+              y el diseño y desarrollo de páginas web.
             </p>
             <p>
               Creemos en el trabajo transparente: cada equipo que recibimos tiene una orden de

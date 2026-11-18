@@ -391,6 +391,11 @@ export const requestUpdateSchema = z.object({
   handledNotes: optionalText(1000),
 });
 
+export const pcQuoteSchema = z.object({
+  requestId: idSchema,
+  quotedPriceCents: requiredSolesToCents,
+});
+
 export const testimonialSchema = z.object({
   id: optionalText(40),
   authorName: z.string().trim().min(2).max(100),

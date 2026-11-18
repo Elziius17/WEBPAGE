@@ -13,7 +13,12 @@ import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/utils/dates";
 import { whatsappLink } from "@/lib/whatsapp";
 import { requestKindLabel, requestStatusLabel } from "@/config/statuses";
-import { requestToCustomerAction, updateRequestAction } from "@/actions/admin/management";
+import {
+  requestToCustomerAction,
+  savePcQuoteAction,
+  updateRequestAction,
+} from "@/actions/admin/management";
+import { centsToSoles, formatPEN } from "@/lib/utils/money";
 import type { Prisma } from "@/generated/prisma/client";
 import type { RequestKind, RequestStatus } from "@/generated/prisma/enums";
 import { Inbox } from "lucide-react";
@@ -76,8 +81,13 @@ export default async function RequestsPage({ searchParams }: PageProps<"/admin/s
       )}
       <ul className="space-y-3">
         {requests.map((r) => {
+          const first = r.name.split(" ")[0];
           const wa = whatsappLink(
-            `Hola ${r.name.split(" ")[0]}, te escribimos de ELZIIUS por tu solicitud${r.service ? ` de ${r.service.name.toLowerCase()}` : ""}.`,
+            r.kind === "PC_BUILD"
+              ? r.quotedPriceCents != null
+                ? `Hola ${first}, te escribimos de ELZIIUS con la cotización de tu PC (${r.subject ?? "a medida"}): el precio es ${formatPEN(r.quotedPriceCents)}. Te comparto el detalle de componentes y la disponibilidad.`
+                : `Hola ${first}, te escribimos de ELZIIUS por la cotización de tu PC (${r.subject ?? "a medida"}).`
+              : `Hola ${first}, te escribimos de ELZIIUS por tu solicitud${r.service ? ` de ${r.service.name.toLowerCase()}` : ""}.`,
             r.phone,
           );
           return (
@@ -85,9 +95,20 @@ export default async function RequestsPage({ searchParams }: PageProps<"/admin/s
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone={r.kind === "COMPLAINT" ? "danger" : "accent"}>
+                    <Badge
+                      tone={
+                        r.kind === "COMPLAINT"
+                          ? "danger"
+                          : r.kind === "PC_BUILD"
+                            ? "info"
+                            : "accent"
+                      }
+                    >
                       {requestKindLabel[r.kind]}
                     </Badge>
+                    {r.quotedPriceCents != null && (
+                      <Badge tone="success">Cotizado: {formatPEN(r.quotedPriceCents)}</Badge>
+                    )}
                     <Badge
                       tone={
                         r.status === "NEW" ? "warning" : r.status === "CLOSED" ? "neutral" : "info"
@@ -152,8 +173,34 @@ export default async function RequestsPage({ searchParams }: PageProps<"/admin/s
               <p className="text-fg-muted mt-3 rounded-lg bg-white/3 p-3 text-sm whitespace-pre-line">
                 {r.message}
               </p>
+              {canWrite && r.kind === "PC_BUILD" && (
+                <ActionForm
+                  action={savePcQuoteAction}
+                  className="mt-3 flex flex-wrap items-end gap-2 space-y-0"
+                >
+                  <input type="hidden" name="requestId" value={r.id} />
+                  <label className="text-fg-muted flex items-center gap-2 text-sm">
+                    Precio de la PC (S/)
+                    <Input
+                      name="quotedPriceCents"
+                      inputMode="decimal"
+                      defaultValue={centsToSoles(r.quotedPriceCents)}
+                      placeholder="0.00"
+                      className="h-9 w-32"
+                      aria-label="Precio cotizado en soles"
+                    />
+                  </label>
+                  <SubmitButton size="sm">
+                    {r.quotedPriceCents != null ? "Actualizar precio" : "Guardar precio"}
+                  </SubmitButton>
+                  <span className="text-fg-subtle text-xs">
+                    Interno: el cliente lo recibe cuando le escribes por WhatsApp.
+                  </span>
+                </ActionForm>
+              )}
               {canWrite && (
                 <ActionForm
+                  key={`${r.id}-${r.status}`}
                   action={updateRequestAction}
                   className="mt-3 flex flex-wrap items-end gap-2 space-y-0"
                 >

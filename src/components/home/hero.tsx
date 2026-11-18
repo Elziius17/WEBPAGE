@@ -15,7 +15,7 @@ const quick = [
     href: "/tienda",
     icon: ShoppingBag,
     title: "Tienda",
-    text: "Componentes, periféricos e impresoras",
+    text: "Periféricos, componentes y PC a medida",
   },
   {
     href: "/seguimiento",
