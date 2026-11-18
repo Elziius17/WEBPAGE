@@ -44,6 +44,7 @@
 
   --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-pulse-glow: pulse-glow 3.5s ease-in-out infinite;
+  --animate-page-in: page-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes fade-up {
     from {
@@ -149,6 +150,91 @@
   }
   .prose-legal p {
     @apply my-3;
+  }
+}
+
+/* --- Animaciones de carga y entrada de módulos --- */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@layer components {
+  /* Bloque de esqueleto con brillo que recorre de derecha a izquierda. */
+  .skeleton {
+    border-radius: 0.75rem;
+    background-color: rgb(255 255 255 / 0.04);
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgb(0 210 255 / 0.07) 45%,
+      rgb(255 255 255 / 0.09) 50%,
+      rgb(0 210 255 / 0.07) 55%,
+      transparent 80%
+    );
+    background-size: 220% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Los hijos directos entran uno tras otro (tarjetas, paneles, filas). */
+  .stagger > * {
+    animation: page-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .stagger > :nth-child(2) {
+    animation-delay: 50ms;
+  }
+  .stagger > :nth-child(3) {
+    animation-delay: 100ms;
+  }
+  .stagger > :nth-child(4) {
+    animation-delay: 150ms;
+  }
+  .stagger > :nth-child(5) {
+    animation-delay: 200ms;
+  }
+  .stagger > :nth-child(6) {
+    animation-delay: 250ms;
+  }
+  .stagger > :nth-child(7) {
+    animation-delay: 300ms;
+  }
+  .stagger > :nth-child(n + 8) {
+    animation-delay: 350ms;
+  }
+
+  /* Secciones que aparecen al entrar en pantalla (solo navegadores compatibles). */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
   }
 }
 

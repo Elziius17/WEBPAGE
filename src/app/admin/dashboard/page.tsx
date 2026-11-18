@@ -88,7 +88,7 @@ export default async function DashboardPage() {
           </Link>
         </Alert>
       )}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {canMoney && (
           <StatCard
             label="Ventas del día"

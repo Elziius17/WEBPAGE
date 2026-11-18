@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import { siteConfig } from "@/config/site";
+import { Suspense } from "react";
 import { CookieConsent } from "@/components/layout/cookie-consent";
+import { RouteProgress } from "@/components/layout/route-progress";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
@@ -54,6 +56,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es-PE" className={`${inter.variable} ${montserrat.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <Suspense fallback={null}>
+          <RouteProgress />
+        </Suspense>
         {children}
         <CookieConsent />
       </body>

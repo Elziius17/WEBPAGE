@@ -101,7 +101,7 @@ export default async function HomePage() {
             title="Servicios IT para hogares y empresas"
             description="Desde un mantenimiento preventivo hasta soluciones empresariales completas."
           />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <ServiceCard key={s.id} service={s} />
             ))}
@@ -124,7 +124,7 @@ export default async function HomePage() {
           />
           <nav
             aria-label="Categorías de la tienda"
-            className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4"
+            className="stagger mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4"
           >
             {categories.map((c) => (
               <Link
@@ -140,7 +140,7 @@ export default async function HomePage() {
             ))}
           </nav>
           {products.length ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -165,7 +165,7 @@ export default async function HomePage() {
       <Section className="bg-ink-900/40">
         <Container>
           <SectionHeader eyebrow="Beneficios" title="¿Por qué trabajar con ELZIIUS?" />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {benefits.map((b) => (
               <div key={b.title} className="surface p-6">
                 <DynamicIcon name={b.icon} className="text-brand-cyan size-6" />
@@ -214,7 +214,7 @@ export default async function HomePage() {
         <Container>
           <SectionHeader eyebrow="Testimonios" title="Lo que dicen nuestros clientes" />
           {testimonials.length ? (
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="stagger grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {testimonials.map((t) => (
                 <figure key={t.id} className="surface p-6">
                   <div

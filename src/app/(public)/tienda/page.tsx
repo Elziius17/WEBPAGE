@@ -119,7 +119,7 @@ export default async function StorePage({ searchParams }: PageProps<"/tienda">) 
               <SortSelect params={params} />
             </div>
             {result.items.length ? (
-              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {result.items.map((p) => (
                   <ProductCard key={p.id} product={p} />
                 ))}

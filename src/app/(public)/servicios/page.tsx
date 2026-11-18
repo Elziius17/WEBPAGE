@@ -29,7 +29,7 @@ export default async function ServicesPage() {
       />
       <Section>
         <Container>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="stagger grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <ServiceCard key={s.id} service={s} />
             ))}

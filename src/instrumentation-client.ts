@@ -14,4 +14,17 @@ try {
   // idem
 }
 
-export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+/** Evento que escucha la barra de progreso de navegación (RouteProgress). */
+export const ROUTE_START_EVENT = "elziius:route-start";
+
+export function onRouterTransitionStart(
+  url: string,
+  navigationType: "push" | "replace" | "traverse",
+) {
+  try {
+    window.dispatchEvent(new CustomEvent(ROUTE_START_EVENT, { detail: { url } }));
+  } catch {
+    // nunca bloquear la navegación
+  }
+  Sentry.captureRouterTransitionStart(url, navigationType);
+}
