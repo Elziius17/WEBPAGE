@@ -113,6 +113,29 @@ describe("formularios del panel", () => {
       }).success,
     ).toBe(false);
   });
+  it("permite omitir el precio solo en productos 'Precio a consultar'", () => {
+    const base = {
+      name: "Laptop gamer",
+      sku: "lap-01",
+      brand: "X",
+      categoryId: "c1",
+      description: "Descripción suficiente",
+      status: "ACTIVE",
+      condition: "NEW",
+    };
+    expect(productSchema.safeParse(base).success).toBe(false);
+    const r = productSchema.safeParse({
+      ...base,
+      priceOnRequest: "on",
+      isDropshipping: "on",
+      leadTime: "7 a 15 días hábiles",
+    });
+    expect(r.success).toBe(true);
+    expect(r.success && r.data.priceCents).toBe(0);
+    expect(r.success && r.data.priceOnRequest).toBe(true);
+    expect(r.success && r.data.isDropshipping).toBe(true);
+    expect(r.success && r.data.leadTime).toBe("7 a 15 días hábiles");
+  });
   it("solo permite tipos de movimiento manuales", () => {
     expect(movementSchema.safeParse({ productId: "p", type: "SALE", quantity: "1" }).success).toBe(
       false,

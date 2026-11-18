@@ -5,9 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { formatPEN } from "@/lib/utils/money";
 import type { ProductCardData } from "@/services/catalog";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
+import { whatsappMessages } from "@/lib/whatsapp";
 
-export function stockInfo(p: { stock: number; reserved: number }) {
+export function stockInfo(p: { stock: number; reserved: number; isDropshipping?: boolean }) {
   const available = Math.max(0, p.stock - p.reserved);
+  if (p.isDropshipping) return { available, label: "Bajo pedido", tone: "info" as const };
   if (available === 0) return { available, label: "Agotado", tone: "danger" as const };
   if (available <= 3)
     return { available, label: `Últimas ${available} unidades`, tone: "warning" as const };
@@ -48,7 +51,9 @@ export function ProductImage({
 export function ProductCard({ product }: { product: ProductCardData }) {
   const stock = stockInfo(product);
   const discount =
-    product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents
+    !product.priceOnRequest &&
+    product.compareAtPriceCents &&
+    product.compareAtPriceCents > product.priceCents
       ? Math.round((1 - product.priceCents / product.compareAtPriceCents) * 100)
       : null;
   return (
@@ -78,7 +83,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         </h3>
         <div className="mt-3 flex items-baseline gap-2">
           <span className="font-display text-fg text-xl font-bold">
-            {formatPEN(product.priceCents)}
+            {product.priceOnRequest ? "Precio a consultar" : formatPEN(product.priceCents)}
           </span>
           {discount && (
             <span className="text-fg-subtle text-sm line-through">
@@ -86,10 +91,21 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             </span>
           )}
         </div>
+        {product.isDropshipping && product.leadTime && (
+          <p className="text-fg-subtle mt-1 text-xs">Entrega estimada: {product.leadTime}</p>
+        )}
         <div className="mt-auto flex items-center justify-between gap-2 pt-4">
           <Badge tone={stock.tone}>{stock.label}</Badge>
           <div className="relative z-10">
-            <AddToCartButton productId={product.id} available={stock.available} compact />
+            {product.priceOnRequest ? (
+              <WhatsAppButton
+                message={whatsappMessages.priceInquiry(product.name)}
+                label="Consultar"
+                size="sm"
+              />
+            ) : (
+              <AddToCartButton productId={product.id} available={stock.available} compact />
+            )}
           </div>
         </div>
       </div>

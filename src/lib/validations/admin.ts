@@ -182,44 +182,56 @@ export const closeSchema = z.object({
 });
 
 // --- Productos ---
-export const productSchema = z.object({
-  id: optionalText(40),
-  name: z.string().trim().min(3, "Nombre requerido").max(150),
-  sku: z
-    .string()
-    .trim()
-    .min(2, "SKU requerido")
-    .max(40)
-    .regex(/^[A-Za-z0-9._-]+$/, "Solo letras, números, guiones y puntos")
-    .transform((v) => v.toUpperCase()),
-  slug: optionalText(120),
-  brand: z.string().trim().min(1, "Marca requerida").max(60),
-  model: optionalText(80),
-  categoryId: idSchema,
-  supplierId: optionalText(40),
-  shortDescription: optionalText(300),
-  description: z.string().trim().min(10, "Descripción mínima de 10 caracteres").max(5000),
-  specs: z.string().max(5000).optional().default(""),
-  priceCents: requiredSolesToCents,
-  compareAtPriceCents: optionalSolesToCents,
-  costCents: optionalSolesToCents,
-  minStock: z.coerce.number().int().min(0).max(10000).default(1),
-  status: z.enum(["DRAFT", "ACTIVE", "INACTIVE", "DISCONTINUED"]),
-  condition: z.enum(["NEW", "REFURBISHED", "USED"]),
-  featured: checkbox,
-  warrantyMonths: z.coerce.number().int().min(0).max(120).default(0),
-  warrantyNotes: optionalText(500),
-  weightGrams: optionalInt,
-  /** Solo al crear: stock inicial, registrado como movimiento de entrada. */
-  initialStock: optionalInt,
-  /** Solo al crear: fotos ya subidas por el registro con IA. */
-  pendingImageKeys: z
-    .union([z.string(), z.array(z.string())])
-    .optional()
-    .transform((v) =>
-      v === undefined || v === "" ? [] : (Array.isArray(v) ? v : [v]).filter(Boolean).slice(0, 4),
-    ),
-});
+export const productSchema = z
+  .object({
+    id: optionalText(40),
+    name: z.string().trim().min(3, "Nombre requerido").max(150),
+    sku: z
+      .string()
+      .trim()
+      .min(2, "SKU requerido")
+      .max(40)
+      .regex(/^[A-Za-z0-9._-]+$/, "Solo letras, números, guiones y puntos")
+      .transform((v) => v.toUpperCase()),
+    slug: optionalText(120),
+    brand: z.string().trim().min(1, "Marca requerida").max(60),
+    model: optionalText(80),
+    categoryId: idSchema,
+    supplierId: optionalText(40),
+    shortDescription: optionalText(300),
+    description: z.string().trim().min(10, "Descripción mínima de 10 caracteres").max(5000),
+    specs: z.string().max(5000).optional().default(""),
+    /** Opcional cuando el producto es "Precio a consultar" (se valida en superRefine). */
+    priceCents: optionalSolesToCents,
+    priceOnRequest: checkbox,
+    isDropshipping: checkbox,
+    leadTime: optionalText(80),
+    compareAtPriceCents: optionalSolesToCents,
+    costCents: optionalSolesToCents,
+    minStock: z.coerce.number().int().min(0).max(10000).default(1),
+    status: z.enum(["DRAFT", "ACTIVE", "INACTIVE", "DISCONTINUED"]),
+    condition: z.enum(["NEW", "REFURBISHED", "USED"]),
+    featured: checkbox,
+    warrantyMonths: z.coerce.number().int().min(0).max(120).default(0),
+    warrantyNotes: optionalText(500),
+    weightGrams: optionalInt,
+    /** Solo al crear: stock inicial, registrado como movimiento de entrada. */
+    initialStock: optionalInt,
+    /** Solo al crear: fotos ya subidas por el registro con IA. */
+    pendingImageKeys: z
+      .union([z.string(), z.array(z.string())])
+      .optional()
+      .transform((v) =>
+        v === undefined || v === "" ? [] : (Array.isArray(v) ? v : [v]).filter(Boolean).slice(0, 4),
+      ),
+  })
+  .superRefine((d, ctx) => {
+    // Con "Precio a consultar" el precio puede quedar vacío; si no, es obligatorio y > 0.
+    if (!d.priceOnRequest && (d.priceCents === undefined || d.priceCents <= 0)) {
+      ctx.addIssue({ code: "custom", path: ["priceCents"], message: "Ingresa un monto mayor a 0" });
+    }
+  })
+  .transform((d) => ({ ...d, priceCents: d.priceCents ?? 0 }));
 
 export const movementSchema = z.object({
   productId: idSchema,

@@ -288,7 +288,14 @@ model Product {
   description         String
   /// Lista de especificaciones [{ label, value }].
   specs               Json             @default("[]")
+  /// Precio de venta en céntimos. Es 0 cuando `priceOnRequest` está activo.
   priceCents          Int
+  /// "Precio a consultar": se oculta el precio y el carrito; se consulta por WhatsApp.
+  priceOnRequest      Boolean          @default(false)
+  /// Producto bajo pedido (dropshipping): no depende del stock físico.
+  isDropshipping      Boolean          @default(false)
+  /// Tiempo de entrega estimado para productos bajo pedido (p. ej. "7 a 15 días hábiles").
+  leadTime            String?
   /// Precio anterior para mostrar promociones (opcional).
   compareAtPriceCents Int?
   costCents           Int?

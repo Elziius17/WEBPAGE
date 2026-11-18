@@ -7,6 +7,7 @@ export const whatsappMessages = {
     `Hola, deseo solicitar un servicio de ${serviceName.toLowerCase()} con ELZIIUS.`,
   product: (productName: string) =>
     `Hola, estoy interesado en el producto ${productName}. Deseo consultar disponibilidad y modalidades de entrega.`,
+  priceInquiry: (productName: string) => `Hola, me interesa ${productName}, ¿me das el precio?`,
   tracking: (code: string) => `Hola, deseo consultar el estado de mi orden ${code}.`,
   order: (code: string, total: string) =>
     `Hola, acabo de registrar el pedido ${code} por ${total} en ELZIIUS. Deseo coordinar la confirmación y la entrega.`,

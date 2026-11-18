@@ -69,9 +69,12 @@ export async function saveProductAction(_: S, fd: FormData) {
       shortDescription: d.shortDescription ?? null,
       description: d.description,
       specs: parseSpecs(d.specs),
-      priceCents: d.priceCents,
+      priceCents: d.priceOnRequest ? 0 : d.priceCents,
+      priceOnRequest: d.priceOnRequest,
+      isDropshipping: d.isDropshipping,
+      leadTime: d.isDropshipping ? (d.leadTime ?? null) : null,
       compareAtPriceCents:
-        d.compareAtPriceCents && d.compareAtPriceCents > d.priceCents
+        !d.priceOnRequest && d.compareAtPriceCents && d.compareAtPriceCents > d.priceCents
           ? d.compareAtPriceCents
           : null,
       costCents: d.costCents ?? null,
