@@ -132,7 +132,7 @@ export default async function ProductsAdmin({ searchParams }: PageProps<"/admin/
               </td>
               <td className="text-fg-muted font-mono text-xs">{p.sku}</td>
               <td className="text-fg-muted">{p.category.name}</td>
-              <td>{formatPEN(p.priceCents)}</td>
+              <td>{p.priceOnRequest ? "A consultar" : formatPEN(p.priceCents)}</td>
               <td>
                 <span
                   className={available <= p.minStock ? "text-warning font-semibold" : "text-fg"}

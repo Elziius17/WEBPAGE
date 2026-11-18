@@ -109,15 +109,18 @@ export async function createOrder(
             name: string;
             sku: string;
             priceCents: number;
+            priceOnRequest: boolean;
             stock: number;
             reserved: number;
             status: string;
             deletedAt: Date | null;
           }[]
-        >`SELECT "id","name","sku","priceCents","stock","reserved","status","deletedAt" FROM "Product" WHERE "id" = ${item.productId} FOR UPDATE`;
+        >`SELECT "id","name","sku","priceCents","priceOnRequest","stock","reserved","status","deletedAt" FROM "Product" WHERE "id" = ${item.productId} FOR UPDATE`;
         const p = rows[0];
         if (!p || p.deletedAt || p.status !== "ACTIVE")
           throw new BusinessError("Uno de los productos ya no está disponible.");
+        if (p.priceOnRequest)
+          throw new BusinessError(`"${p.name}" es de precio a consultar: escríbenos por WhatsApp.`);
         const available = p.stock - p.reserved;
         if (available <= 0) throw new BusinessError(`"${p.name}" está agotado.`);
         if (item.quantity > available)

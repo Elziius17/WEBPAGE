@@ -55,18 +55,20 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
     image: product.images.map((i) =>
       i.url.startsWith("http") ? i.url : `${siteConfig.url}${i.url}`,
     ),
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "PEN",
-      price: (product.priceCents / 100).toFixed(2),
-      availability:
-        stock.available > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      itemCondition:
-        product.condition === "NEW"
-          ? "https://schema.org/NewCondition"
-          : "https://schema.org/RefurbishedCondition",
-      url: `${siteConfig.url}/tienda/${product.slug}`,
-    },
+    offers: product.priceOnRequest
+      ? undefined
+      : {
+          "@type": "Offer",
+          priceCurrency: "PEN",
+          price: (product.priceCents / 100).toFixed(2),
+          availability:
+            stock.available > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+          itemCondition:
+            product.condition === "NEW"
+              ? "https://schema.org/NewCondition"
+              : "https://schema.org/RefurbishedCondition",
+          url: `${siteConfig.url}/tienda/${product.slug}`,
+        },
   };
 
   return (
@@ -103,31 +105,63 @@ export default async function ProductPage({ params }: PageProps<"/tienda/[slug]"
               <Badge>{productConditionLabel[product.condition]}</Badge>
               <Badge>SKU {product.sku}</Badge>
             </div>
-            <div className="mt-6 flex items-baseline gap-3">
-              <span className="font-display text-fg text-4xl font-extrabold">
-                {formatPEN(product.priceCents)}
-              </span>
-              {product.compareAtPriceCents && product.compareAtPriceCents > product.priceCents && (
-                <span className="text-fg-subtle text-lg line-through">
-                  {formatPEN(product.compareAtPriceCents)}
-                </span>
-              )}
-            </div>
-            <p className="text-fg-subtle mt-1 text-xs">
-              Precio en soles, incluye IGV salvo indicación contraria.
-            </p>
+            {product.priceOnRequest ? (
+              <>
+                <p className="font-display text-fg mt-6 text-3xl font-extrabold">
+                  Precio a consultar
+                </p>
+                <p className="text-fg-subtle mt-1 text-xs">
+                  Escríbenos por WhatsApp y te damos el precio actualizado.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="mt-6 flex items-baseline gap-3">
+                  <span className="font-display text-fg text-4xl font-extrabold">
+                    {formatPEN(product.priceCents)}
+                  </span>
+                  {product.compareAtPriceCents &&
+                    product.compareAtPriceCents > product.priceCents && (
+                      <span className="text-fg-subtle text-lg line-through">
+                        {formatPEN(product.compareAtPriceCents)}
+                      </span>
+                    )}
+                </div>
+                <p className="text-fg-subtle mt-1 text-xs">
+                  Precio en soles, incluye IGV salvo indicación contraria.
+                </p>
+              </>
+            )}
+            {product.isDropshipping && (
+              <Alert tone="info" title="Bajo pedido / dropshipping" className="mt-5">
+                Este producto se importa a pedido.
+                {product.leadTime
+                  ? ` Tiempo de entrega estimado: ${product.leadTime}.`
+                  : " Te confirmamos el tiempo de entrega al consultar."}
+              </Alert>
+            )}
             {product.shortDescription && (
               <p className="text-fg-muted mt-6 leading-relaxed">{product.shortDescription}</p>
             )}
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <AddToCartButton productId={product.id} available={stock.available} />
-              <WhatsAppButton
-                message={whatsappMessages.product(product.name)}
-                label="Consultar por WhatsApp"
-                size="lg"
-                variant="secondary"
-              />
+              {product.priceOnRequest ? (
+                <WhatsAppButton
+                  message={whatsappMessages.priceInquiry(product.name)}
+                  label="Consultar por WhatsApp"
+                  size="lg"
+                />
+              ) : (
+                <>
+                  <AddToCartButton productId={product.id} available={stock.available} />
+                  <WhatsAppButton
+                    message={whatsappMessages.product(product.name)}
+                    label="Consultar por WhatsApp"
+                    size="lg"
+                    variant="secondary"
+                  />
+                </>
+              )}
             </div>
 
             <ul className="mt-8 grid gap-3 sm:grid-cols-3">

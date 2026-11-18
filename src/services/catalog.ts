@@ -34,6 +34,9 @@ export const productCardSelect = {
   brand: true,
   model: true,
   priceCents: true,
+  priceOnRequest: true,
+  isDropshipping: true,
+  leadTime: true,
   compareAtPriceCents: true,
   stock: true,
   reserved: true,
@@ -67,8 +70,10 @@ export async function listProducts(f: CatalogFilters) {
   }
   if (f.category) and.push({ category: { slug: f.category } });
   if (f.brand) and.push({ brand: { equals: f.brand, mode: "insensitive" } });
-  if (f.minPrice !== undefined) and.push({ priceCents: { gte: f.minPrice } });
-  if (f.maxPrice !== undefined) and.push({ priceCents: { lte: f.maxPrice } });
+  if (f.minPrice !== undefined)
+    and.push({ priceOnRequest: false, priceCents: { gte: f.minPrice } });
+  if (f.maxPrice !== undefined)
+    and.push({ priceOnRequest: false, priceCents: { lte: f.maxPrice } });
   if (f.inStock) and.push({ stock: { gt: 0 } });
   if (f.promo) and.push({ compareAtPriceCents: { not: null } });
   if (and.length) where.AND = and;
@@ -160,7 +165,8 @@ export async function getBrands() {
 export async function getCartProducts(ids: string[]) {
   if (!ids.length) return [];
   const rows = await db.product.findMany({
-    where: { id: { in: ids.slice(0, 30) }, ...publicWhere },
+    // Los productos "Precio a consultar" no se venden por carrito.
+    where: { id: { in: ids.slice(0, 30) }, ...publicWhere, priceOnRequest: false },
     select: productCardSelect,
   });
   return rows;

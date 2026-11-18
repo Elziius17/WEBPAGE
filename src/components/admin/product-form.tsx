@@ -148,12 +148,16 @@ export function ProductForm({
       <section className="surface space-y-4 p-6">
         <h2 className="text-fg font-semibold">Precio, stock y garantía</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <FormField name="priceCents" label="Precio de venta (S/)" required>
+          <FormField
+            name="priceCents"
+            label="Precio de venta (S/)"
+            hint="Déjalo vacío si el producto es «Precio a consultar»."
+          >
             <Input
               id="priceCents"
               name="priceCents"
               inputMode="decimal"
-              defaultValue={centsToSoles(product?.priceCents)}
+              defaultValue={product?.priceOnRequest ? "" : centsToSoles(product?.priceCents)}
             />
           </FormField>
           <FormField name="compareAtPriceCents" label="Precio anterior (promoción)">
@@ -226,6 +230,24 @@ export function ProductForm({
               <Checkbox name="featured" defaultChecked={product?.featured} /> Destacado en inicio
             </label>
           </div>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <label className="text-fg-muted flex items-center gap-2 text-sm">
+            <Checkbox name="priceOnRequest" defaultChecked={product?.priceOnRequest} /> Precio a
+            consultar (oculta precio y carrito; consulta por WhatsApp)
+          </label>
+          <label className="text-fg-muted flex items-center gap-2 text-sm">
+            <Checkbox name="isDropshipping" defaultChecked={product?.isDropshipping} /> Bajo pedido
+            / dropshipping
+          </label>
+          <FormField name="leadTime" label="Tiempo de entrega estimado (bajo pedido)">
+            <Input
+              id="leadTime"
+              name="leadTime"
+              placeholder="Ej.: 7 a 15 días hábiles"
+              defaultValue={product?.leadTime ?? ""}
+            />
+          </FormField>
         </div>
         <FormField name="warrantyNotes" label="Notas de garantía">
           <Input
