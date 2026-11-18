@@ -18,6 +18,7 @@ import {
   supplierSchema,
 } from "@/lib/validations/admin";
 import { registerManualMovement } from "@/services/inventory";
+import { productReadiness } from "@/services/product-readiness";
 import { Prisma } from "@/generated/prisma/client";
 
 type S = ActionResult<unknown> | null;
@@ -54,6 +55,22 @@ function uniqueViolation(e: unknown, msg: string): never {
   if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002")
     throw new BusinessError(msg);
   throw e;
+}
+
+/** Si el producto quedó "Activo" pero no está listo para venderse, lo deja en borrador. */
+async function enforceReadiness(id: string): Promise<string | null> {
+  const p = await db.product.findUnique({
+    where: { id },
+    include: {
+      category: { select: { active: true, deletedAt: true } },
+      _count: { select: { images: true } },
+    },
+  });
+  if (!p || p.status !== "ACTIVE") return null;
+  const { missing } = productReadiness(p);
+  if (!missing.length) return null;
+  await db.product.update({ where: { id }, data: { status: "DRAFT" } });
+  return `Quedó en borrador porque falta: ${missing.map((m) => m.label.toLowerCase()).join(", ")}. Complétalo y pulsa «Publicar en la tienda».`;
 }
 
 export async function saveProductAction(_: S, fd: FormData) {
@@ -96,9 +113,11 @@ export async function saveProductAction(_: S, fd: FormData) {
           before,
           after,
         });
+        const held = await enforceReadiness(d.id);
         revalidatePath(`/admin/productos/${d.id}`);
         revalidatePath(`/tienda/${after.slug}`);
-        return { ok: true, data: { id: d.id }, message: "Producto actualizado." };
+        revalidatePath("/admin/dashboard");
+        return { ok: true, data: { id: d.id }, message: held ?? "Producto actualizado." };
       }
       // Fotos del registro con IA: deben ser claves de productos aún no asociadas.
       const keys = d.pendingImageKeys.filter((k) => isValidKey(k) && k.startsWith("products/"));
@@ -143,12 +162,75 @@ export async function saveProductAction(_: S, fd: FormData) {
         entityId: p.id,
         after: { ...p, initialStock: d.initialStock ?? 0, photos: keys.length },
       });
+      const held = await enforceReadiness(p.id);
       revalidatePath("/admin/productos");
-      return { ok: true, data: { id: p.id }, message: "Producto creado." };
+      revalidatePath("/admin/dashboard");
+      return {
+        ok: true,
+        data: { id: p.id },
+        message:
+          held ??
+          (data.status === "ACTIVE"
+            ? "Producto creado y publicado en la tienda."
+            : "Producto creado en borrador. Sube las fotos y pulsa «Publicar en la tienda»."),
+      };
     } catch (e) {
       uniqueViolation(e, "Ya existe un producto con ese SKU o URL (slug).");
     }
   });
+}
+
+/** Publica (o vuelve a borrador) un producto, validando que esté listo para venderse. */
+export async function setProductStatusAction(_: S, fd: FormData): Promise<ActionResult> {
+  try {
+    const user = await authorize("products:write");
+    const id = String(fd.get("id") ?? "");
+    const to = String(fd.get("status") ?? "");
+    if (!id || !["ACTIVE", "DRAFT", "INACTIVE"].includes(to))
+      return { ok: false, error: "Solicitud inválida." };
+    const p = await db.product.findFirst({
+      where: { id, deletedAt: null },
+      include: {
+        category: { select: { active: true, deletedAt: true } },
+        _count: { select: { images: true } },
+      },
+    });
+    if (!p) return { ok: false, error: "Producto no encontrado." };
+    if (to === "ACTIVE") {
+      const { missing } = productReadiness(p);
+      if (missing.length)
+        return {
+          ok: false,
+          error: `Falta: ${missing.map((m) => m.label.toLowerCase()).join(", ")}.`,
+        };
+    }
+    await db.product.update({
+      where: { id },
+      data: { status: to as "ACTIVE" | "DRAFT" | "INACTIVE" },
+    });
+    await audit({
+      userId: user.id,
+      action: "product.status",
+      entity: "Product",
+      entityId: id,
+      before: { status: p.status },
+      after: { status: to },
+    });
+    revalidatePath(`/admin/productos/${id}`);
+    revalidatePath("/admin/productos");
+    revalidatePath("/admin/dashboard");
+    revalidatePath("/tienda");
+    revalidatePath(`/tienda/${p.slug}`);
+    return {
+      ok: true,
+      message:
+        to === "ACTIVE"
+          ? "¡Publicado! Ya aparece en la tienda."
+          : "Producto retirado de la tienda.",
+    };
+  } catch (e) {
+    return handleActionError(e);
+  }
 }
 
 /** Elimina definitivamente si nunca tuvo ventas ni movimientos; si no, lo desactiva (borrado lógico). */

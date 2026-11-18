@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -109,12 +110,14 @@ export function CheckoutForm({
   const onSubmit = (data: Out) =>
     start(async () => {
       setError(null);
-      const res = await placeOrder({
-        ...data,
-        idempotencyKey,
-        consent: true,
-        items: rows.map((r) => ({ productId: r.id, quantity: r.quantity })),
-      });
+      const res = await safeAction(() =>
+        placeOrder({
+          ...data,
+          idempotencyKey,
+          consent: true,
+          items: rows.map((r) => ({ productId: r.id, quantity: r.quantity })),
+        }),
+      );
       if (res.ok && res.data) {
         setDone(res.data);
         cart.clear();

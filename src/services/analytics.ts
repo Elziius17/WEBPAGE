@@ -18,6 +18,7 @@ export async function getDashboardKpis() {
     activeProducts,
     lowStock,
     serviceIncome,
+    catalog,
   ] = await Promise.all([
     db.order.aggregate({
       _sum: { totalCents: true },
@@ -46,6 +47,12 @@ export async function getDashboardKpis() {
         SELECT SUM(a."budgetCents")::bigint AS total FROM "ServiceApproval" a
         JOIN "ServiceOrder" o ON o."id" = a."orderId"
         WHERE a."decision"='APPROVED' AND o."status"='DELIVERED' AND o."deliveredAt" >= ${month}`,
+    db.$queryRaw<{ drafts: bigint; units: bigint; value: bigint | null }[]>`
+        SELECT
+          COUNT(*) FILTER (WHERE "status"='DRAFT')::bigint AS drafts,
+          COALESCE(SUM("stock" - "reserved"), 0)::bigint AS units,
+          SUM(("stock" - "reserved") * "priceCents")::bigint AS value
+        FROM "Product" WHERE "deletedAt" IS NULL AND "isDemo" = false`,
   ]);
   return {
     salesTodayCents: salesToday._sum.totalCents ?? 0,
@@ -59,6 +66,9 @@ export async function getDashboardKpis() {
     pendingApproval,
     activeProducts: Number(activeProducts[0]?.n ?? 0),
     lowStock: Number(lowStock[0]?.n ?? 0),
+    draftProducts: Number(catalog[0]?.drafts ?? 0),
+    inventoryUnits: Number(catalog[0]?.units ?? 0),
+    inventoryValueCents: Number(catalog[0]?.value ?? 0),
     serviceIncomeMonthCents: Number(serviceIncome[0]?.total ?? 0),
     productIncomeMonthCents: salesMonth._sum.totalCents ?? 0,
   };

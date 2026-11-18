@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +59,7 @@ export function TestimonialForm({
   const onSubmit = (d: Out) =>
     start(async () => {
       setResult(null);
-      const r = await submitTestimonialAction(d);
+      const r = await safeAction(() => submitTestimonialAction(d));
       if (r.ok) {
         setStatus("pending");
         setValue("consent", false);
@@ -69,7 +70,7 @@ export function TestimonialForm({
   const onDelete = () => {
     if (!confirm("¿Eliminar tu opinión? Dejará de mostrarse en la página.")) return;
     start(async () => {
-      const r = await deleteOwnTestimonialAction();
+      const r = await safeAction(() => deleteOwnTestimonialAction());
       if (r.ok) {
         setStatus("none");
         reset({

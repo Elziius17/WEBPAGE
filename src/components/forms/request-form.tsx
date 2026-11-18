@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,7 +57,7 @@ export function RequestForm({
 
   const onSubmit = (data: Out) =>
     start(async () => {
-      const res = await submitPublicRequest({ ...data, consent: true });
+      const res = await safeAction(() => submitPublicRequest({ ...data, consent: true }));
       if (res.ok) {
         setResult({ ok: true, message: res.message ?? "Solicitud enviada." });
         reset({ kind, serviceSlug, productSlug, message: "", preferredContact: "WHATSAPP" });

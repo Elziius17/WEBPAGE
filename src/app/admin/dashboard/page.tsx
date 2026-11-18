@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   AlertTriangle,
+  Boxes,
   ClipboardCheck,
   Inbox,
   Package,
@@ -13,6 +14,7 @@ import {
   Hourglass,
 } from "lucide-react";
 import { AdminPageHeader, Panel, StatCard } from "@/components/admin/ui";
+import { Alert } from "@/components/ui/alert";
 import { HorizontalBars, InventoryLine, MonthlySalesChart } from "@/components/admin/charts";
 import { OrderStatusBadge, ServiceStatusBadge } from "@/components/ui/status-badge";
 import { requireStaffPage } from "@/lib/auth/session";
@@ -75,6 +77,17 @@ export default async function DashboardPage() {
         title="Dashboard"
         description={`Hola, ${user.name.split(" ")[0]}. Resumen de la operación de ELZIIUS (hora de Lima).`}
       />
+      {k.draftProducts > 0 && (
+        <Alert tone="warning" className="mb-6">
+          Tienes {k.draftProducts} producto{k.draftProducts === 1 ? "" : "s"} en{" "}
+          <strong>borrador</strong>: no se muestra{k.draftProducts === 1 ? "" : "n"} en la tienda ni
+          cuenta{k.draftProducts === 1 ? "" : "n"} como disponible
+          {k.draftProducts === 1 ? "" : "s"}.{" "}
+          <Link href="/admin/productos?estado=DRAFT" className="font-semibold underline">
+            Revisar y publicar
+          </Link>
+        </Alert>
+      )}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {canMoney && (
           <StatCard
@@ -127,11 +140,23 @@ export default async function DashboardPage() {
           href="/admin/ordenes?estado=aprobacion"
         />
         <StatCard
-          label="Productos disponibles"
+          label="Productos publicados con stock"
           value={k.activeProducts}
-          hint={`${k.lowStock} con stock bajo`}
+          hint={`${k.lowStock} con stock bajo${k.draftProducts ? ` · ${k.draftProducts} en borrador` : ""}`}
           icon={Package}
           tone={k.lowStock ? "danger" : "success"}
+          href="/admin/productos?estado=ACTIVE"
+        />
+        <StatCard
+          label="Unidades en inventario"
+          value={k.inventoryUnits}
+          hint={
+            canMoney
+              ? `Valor de venta: ${formatPEN(k.inventoryValueCents)}`
+              : "Incluye productos en borrador"
+          }
+          icon={Boxes}
+          tone="info"
           href="/admin/inventario"
         />
         {canMoney && (

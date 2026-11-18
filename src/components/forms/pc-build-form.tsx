@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,7 +75,7 @@ export function PcBuildForm({
 
   const onSubmit = (data: Out) =>
     start(async () => {
-      const res = await submitPcBuildQuote({ ...data, consent: true });
+      const res = await safeAction(() => submitPcBuildQuote({ ...data, consent: true }));
       if (res.ok) {
         setResult({ ok: true, message: res.message ?? "Cotización enviada." });
         reset();

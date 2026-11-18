@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +46,7 @@ export function ComplaintForm() {
   const onSubmit = (d: Out) =>
     start(async () => {
       setError(null);
-      const r = await submitComplaint({ ...d, consent: true });
+      const r = await safeAction(() => submitComplaint({ ...d, consent: true }));
       if (r.ok && r.data) setDone(r.data);
       else if (!r.ok) setError(r.error);
     });

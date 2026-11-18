@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/form";
 import type { ActionResult } from "@/lib/actions";
 import { cn } from "@/lib/utils/cn";
+import { isStaleDeployError, STALE_DEPLOY_MESSAGE } from "@/lib/safe-action";
 
 type State = ActionResult<unknown> | null;
 type Action = (prev: State, fd: FormData) => Promise<State>;
@@ -46,7 +47,14 @@ export function ActionForm({
   confirm?: string;
   successMessage?: boolean;
 }) {
-  const [state, formAction] = useActionState<State, FormData>(action, null);
+  const [state, formAction] = useActionState<State, FormData>(async (prev, fd) => {
+    try {
+      return await action(prev, fd);
+    } catch (e) {
+      if (isStaleDeployError(e)) return { ok: false, error: STALE_DEPLOY_MESSAGE };
+      throw e;
+    }
+  }, null);
   const ref = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
@@ -127,7 +135,9 @@ export function SubmitButton({
   size = "md",
   className,
   pendingLabel = "Guardando…",
+  disabled,
 }: {
+  disabled?: boolean;
   children: ReactNode;
   variant?: "primary" | "secondary" | "danger" | "ghost";
   size?: "sm" | "md" | "lg";
@@ -136,7 +146,13 @@ export function SubmitButton({
 }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" variant={variant} size={size} disabled={pending} className={className}>
+    <Button
+      type="submit"
+      variant={variant}
+      size={size}
+      disabled={pending || disabled}
+      className={className}
+    >
       {pending ? pendingLabel : children}
     </Button>
   );

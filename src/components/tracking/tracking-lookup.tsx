@@ -1,4 +1,5 @@
 "use client";
+import { safeAction } from "@/lib/safe-action";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,7 +52,7 @@ export function TrackingLookup({ initialCode }: { initialCode?: string }) {
   const onSubmit = (v: Out) =>
     start(async () => {
       setError(null);
-      const res = await lookupTracking(v);
+      const res = await safeAction(() => lookupTracking(v));
       if (res.ok && res.data) setData(res.data);
       else if (!res.ok) {
         setData(null);

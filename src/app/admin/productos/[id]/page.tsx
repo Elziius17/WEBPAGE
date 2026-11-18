@@ -12,6 +12,8 @@ import { hasPermission } from "@/lib/security/permissions";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/utils/dates";
 import { movementTypeLabel } from "@/config/statuses";
+import { productReadiness } from "@/services/product-readiness";
+import { ProductPublishPanel } from "@/components/admin/product-publish-panel";
 import {
   deleteProductAction,
   deleteProductImageAction,
@@ -27,6 +29,8 @@ export default async function ProductDetail({ params }: PageProps<"/admin/produc
     where: { id },
     include: {
       images: { orderBy: { sortOrder: "asc" } },
+      category: { select: { active: true, deletedAt: true } },
+      _count: { select: { images: true } },
       movements: {
         orderBy: { createdAt: "desc" },
         take: 15,
@@ -39,11 +43,12 @@ export default async function ProductDetail({ params }: PageProps<"/admin/produc
     db.category.findMany({
       where: { deletedAt: null },
       orderBy: { sortOrder: "asc" },
-      select: { id: true, name: true },
+      select: { id: true, name: true, slug: true },
     }),
     db.supplier.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
   ]);
   const canWrite = hasPermission(user.role, "products:write") && !product.deletedAt;
+  const readiness = productReadiness(product);
   return (
     <>
       <AdminPageHeader
@@ -72,6 +77,13 @@ export default async function ProductDetail({ params }: PageProps<"/admin/produc
           </Panel>
         )}
         <div className="space-y-6">
+          <ProductPublishPanel
+            id={product.id}
+            status={product.status}
+            checks={readiness.checks}
+            ready={readiness.ready}
+            canWrite={canWrite}
+          />
           <Panel title="Fotografías" description="JPG, PNG o WEBP · máx. 5 MB · hasta 10">
             <ul className="mb-4 grid grid-cols-3 gap-2">
               {product.images.map((img) => (
