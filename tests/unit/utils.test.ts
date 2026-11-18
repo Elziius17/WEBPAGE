@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { warrantyNoteFor } from "@/config/warranty-notes";
 import { formatWarranty, maxCostForMargin, suggestedSalePrice } from "@/lib/utils/pricing";
 import {
   generateTrackingCode,
@@ -113,5 +114,19 @@ describe("precios de dropshipping", () => {
     expect(formatWarranty(30)).toBe("1 mes");
     expect(formatWarranty(360)).toBe("12 meses");
     expect(formatWarranty(0)).toBe("Consultar");
+  });
+});
+
+describe("notas de garantía automáticas", () => {
+  it("usa la plantilla de la categoría con los días de garantía", () => {
+    expect(warrantyNoteFor("ssd-nvme", 45)).toContain("45 días");
+    expect(warrantyNoteFor("ssd-nvme", 45)).toContain("recuperación de datos");
+    expect(warrantyNoteFor("mouse", 30)).toMatch(/^Garantía de 1 mes/);
+    expect(warrantyNoteFor(undefined, 90)).toContain("3 meses");
+    expect(warrantyNoteFor("mouse", 0)).toBe("");
+  });
+  it("todas las plantillas caben en el límite de 500 caracteres", () => {
+    for (const slug of ["audifonos", "adaptadores", "tarjetas-graficas", "ssd-nvme", "memoria-ram"])
+      expect(warrantyNoteFor(slug, 1095).length).toBeLessThanOrEqual(500);
   });
 });

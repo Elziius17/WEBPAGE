@@ -4,6 +4,7 @@ import { saveProductAction } from "@/actions/admin/catalog";
 import { centsToSoles, marginPercent } from "@/lib/utils/money";
 import { productConditionLabel, productStatusLabel } from "@/config/statuses";
 import type { Product } from "@/generated/prisma/client";
+import { WarrantyNotesField } from "./warranty-notes-field";
 
 /** Valores sugeridos por el registro con foto (IA). */
 export type ProductFormDraft = {
@@ -31,7 +32,7 @@ export function ProductForm({
   defaultWarrantyDays = 45,
 }: {
   product?: Product;
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; slug?: string }[];
   suppliers: { id: string; name: string }[];
   /** Borrador de la IA (solo al crear). */
   draft?: ProductFormDraft;
@@ -265,11 +266,21 @@ export function ProductForm({
             </label>
           </div>
         </div>
-        <FormField name="warrantyNotes" label="Notas de garantía">
-          <Input
-            id="warrantyNotes"
-            name="warrantyNotes"
-            defaultValue={product?.warrantyNotes ?? ""}
+        <FormField
+          name="warrantyNotes"
+          label="Notas de garantía"
+          hint={
+            product
+              ? "Se muestran en la ficha del producto."
+              : "Se completan según la categoría y los días de garantía. Puedes editarlas."
+          }
+        >
+          <WarrantyNotesField
+            initial={product?.warrantyNotes ?? ""}
+            auto={!product}
+            categorySlugs={Object.fromEntries(
+              categories.filter((c) => c.slug).map((c) => [c.id, c.slug as string]),
+            )}
           />
         </FormField>
       </section>
